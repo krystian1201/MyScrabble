@@ -25,6 +25,8 @@ namespace MyScrabble.View
             DefineGridRowsAndColumns();
             AddCells();
             ColorBonusCells();
+
+            InitializeBoardSideMarkers();
         }
 
         private void DefineGridRowsAndColumns()
@@ -210,7 +212,86 @@ namespace MyScrabble.View
             Grid.SetColumn(tileToPlaceOnBoard.TileImage, xPosition);
 
             BoardGrid.Children.Add(tileToPlaceOnBoard.TileImage);
-
         }
+
+
+        public void InitializeBoardSideMarkers()
+        {
+
+            for (int row = 0; row < Board.boardSize; row++)
+            {
+                BoardLeftSideMarksGrid.RowDefinitions.Add(new RowDefinition());
+                Label boardSideMarkLabel = CreateBoardSideLabel(row, BoardSide.Left);
+                BoardLeftSideMarksGrid.Children.Add(boardSideMarkLabel);
+
+
+                BoardRightSideMarksGrid.RowDefinitions.Add(new RowDefinition());
+                boardSideMarkLabel = CreateBoardSideLabel(row, BoardSide.Right);
+                BoardRightSideMarksGrid.Children.Add(boardSideMarkLabel);
+            }
+
+            for (int column = 0; column < Board.boardSize; column++)
+            {
+                BoardTopSideMarksGrid.ColumnDefinitions.Add(new ColumnDefinition());
+                Label boardSideMarkLabel = CreateBoardSideLabel(column, BoardSide.Top);
+                BoardTopSideMarksGrid.Children.Add(boardSideMarkLabel);
+
+                BoardBottomSideMarksGrid.ColumnDefinitions.Add(new ColumnDefinition());
+                boardSideMarkLabel = CreateBoardSideLabel(column, BoardSide.Bottom);
+                BoardBottomSideMarksGrid.Children.Add(boardSideMarkLabel);
+            }
+        }
+
+        private Label CreateBoardSideLabel(int rowColumn, BoardSide boardSide)
+        {
+            Label labelToAdd = new Label();
+            labelToAdd.FontSize = 15;
+            labelToAdd.Foreground = new SolidColorBrush(Colors.White);
+
+            if (boardSide == BoardSide.Left)
+            {
+                SetVerticalBoardSideLabel(labelToAdd, rowColumn);
+
+                labelToAdd.HorizontalAlignment = HorizontalAlignment.Right;
+            }
+            else if (boardSide == BoardSide.Right)
+            {
+                SetVerticalBoardSideLabel(labelToAdd, rowColumn);
+
+                labelToAdd.HorizontalAlignment = HorizontalAlignment.Left;
+            }
+            else if (boardSide == BoardSide.Top)
+            {
+                SetHorizontalBoardSideLabel(labelToAdd, rowColumn);
+
+                labelToAdd.VerticalAlignment = VerticalAlignment.Bottom;
+            }
+            else if (boardSide == BoardSide.Bottom)
+            {
+                SetHorizontalBoardSideLabel(labelToAdd, rowColumn);
+
+                labelToAdd.VerticalAlignment = VerticalAlignment.Top;
+            }
+
+
+            return labelToAdd;
+        }
+
+        private void SetHorizontalBoardSideLabel(Label labelToAdd, int column)
+        {
+            labelToAdd.Content = (char)('A' + column);
+            Grid.SetColumn(labelToAdd, column);
+        }
+
+        private void SetVerticalBoardSideLabel(Label labelToAdd, int row)
+        {
+            labelToAdd.Content = (row + 1).ToString();
+            Grid.SetRow(labelToAdd, row);
+        }
+    }
+
+    enum BoardSide
+    {
+        Left, Right, Top, Bottom
     }
 }

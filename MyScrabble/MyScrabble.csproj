@@ -63,7 +63,6 @@
     <Compile Include="View\TileUC.xaml.cs">
       <DependentUpon>TileUC.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\BoardView.cs" />
     <Page Include="View\BoardUC.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

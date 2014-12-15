@@ -30,12 +30,6 @@ namespace MyScrabble
 
             //view stuff
 
-            BoardView.Initialize(BoardLeftSideMarksGrid,
-                BoardRightSideMarksGrid, BoardTopSideMarksGrid,
-                BoardBottomSideMarksGrid);
-
-            BoardView.InitializeBoardSideMarkers();
-
             boardUC = new BoardUC();
 
             tilesRackUC = new TilesRackUC();

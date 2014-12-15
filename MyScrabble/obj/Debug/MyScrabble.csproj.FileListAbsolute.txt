@@ -39,3 +39,23 @@ C:\Users\lol\Documents\Visual Studio 2013\Projects\MyScrabble\MyScrabble\obj\Deb
 C:\Users\lol\Documents\Visual Studio 2013\Projects\MyScrabble\MyScrabble\obj\Debug\MyScrabble.g.resources
 C:\Users\lol\Documents\Visual Studio 2013\Projects\MyScrabble\MyScrabble\obj\Debug\MyScrabble.Properties.Resources.resources
 C:\Users\lol\Documents\Visual Studio 2013\Projects\MyScrabble\MyScrabble\obj\Debug\MyScrabble.csproj.GenerateResource.Cache
+C:\Users\lol\Source\Repos\MyScrabble\MyScrabble\bin\Debug\MyScrabble.exe.config
+C:\Users\lol\Source\Repos\MyScrabble\MyScrabble\obj\Debug\MyScrabble.exe
+C:\Users\lol\Source\Repos\MyScrabble\MyScrabble\obj\Debug\MyScrabble.pdb
+C:\Users\lol\Source\Repos\MyScrabble\MyScrabble\bin\Debug\MyScrabble.exe
+C:\Users\lol\Source\Repos\MyScrabble\MyScrabble\bin\Debug\MyScrabble.pdb
+C:\Users\lol\Source\Repos\MyScrabble\MyScrabble\obj\Debug\View\BoardUC.baml
+C:\Users\lol\Source\Repos\MyScrabble\MyScrabble\obj\Debug\View\TilesRackUC.baml
+C:\Users\lol\Source\Repos\MyScrabble\MyScrabble\obj\Debug\View\TileUC.baml
+C:\Users\lol\Source\Repos\MyScrabble\MyScrabble\obj\Debug\View\BoardUC.g.cs
+C:\Users\lol\Source\Repos\MyScrabble\MyScrabble\obj\Debug\View\MainWindow.g.cs
+C:\Users\lol\Source\Repos\MyScrabble\MyScrabble\obj\Debug\View\TilesRackUC.g.cs
+C:\Users\lol\Source\Repos\MyScrabble\MyScrabble\obj\Debug\View\TileUC.g.cs
+C:\Users\lol\Source\Repos\MyScrabble\MyScrabble\obj\Debug\App.g.cs
+C:\Users\lol\Source\Repos\MyScrabble\MyScrabble\obj\Debug\GeneratedInternalTypeHelper.g.cs
+C:\Users\lol\Source\Repos\MyScrabble\MyScrabble\obj\Debug\MyScrabble_MarkupCompile.cache
+C:\Users\lol\Source\Repos\MyScrabble\MyScrabble\obj\Debug\MyScrabble_MarkupCompile.lref
+C:\Users\lol\Source\Repos\MyScrabble\MyScrabble\obj\Debug\View\MainWindow.baml
+C:\Users\lol\Source\Repos\MyScrabble\MyScrabble\obj\Debug\MyScrabble.g.resources
+C:\Users\lol\Source\Repos\MyScrabble\MyScrabble\obj\Debug\MyScrabble.Properties.Resources.resources
+C:\Users\lol\Source\Repos\MyScrabble\MyScrabble\obj\Debug\MyScrabble.csproj.GenerateResource.Cache
