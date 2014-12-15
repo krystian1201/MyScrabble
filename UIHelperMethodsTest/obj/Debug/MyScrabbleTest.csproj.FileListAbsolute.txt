@@ -1,0 +1,14 @@
+C:\Users\Krystian\Documents\Visual Studio 2012\Projects\MyScrabble\UIHelperMethodsTest\bin\Debug\UIHelperMethodsTest.dll
+C:\Users\Krystian\Documents\Visual Studio 2012\Projects\MyScrabble\UIHelperMethodsTest\bin\Debug\UIHelperMethodsTest.pdb
+C:\Users\Krystian\Documents\Visual Studio 2012\Projects\MyScrabble\UIHelperMethodsTest\bin\Debug\MyScrabble.exe
+C:\Users\Krystian\Documents\Visual Studio 2012\Projects\MyScrabble\UIHelperMethodsTest\bin\Debug\MyScrabble.pdb
+C:\Users\Krystian\Documents\Visual Studio 2012\Projects\MyScrabble\UIHelperMethodsTest\obj\Debug\MyScrabbleTest.csprojResolveAssemblyReference.cache
+C:\Users\Krystian\Documents\Visual Studio 2012\Projects\MyScrabble\UIHelperMethodsTest\obj\Debug\UIHelperMethodsTest.dll
+C:\Users\Krystian\Documents\Visual Studio 2012\Projects\MyScrabble\UIHelperMethodsTest\obj\Debug\UIHelperMethodsTest.pdb
+C:\Users\lol\Documents\Visual Studio 2013\Projects\MyScrabble\UIHelperMethodsTest\bin\Debug\UIHelperMethodsTest.dll
+C:\Users\lol\Documents\Visual Studio 2013\Projects\MyScrabble\UIHelperMethodsTest\bin\Debug\UIHelperMethodsTest.pdb
+C:\Users\lol\Documents\Visual Studio 2013\Projects\MyScrabble\UIHelperMethodsTest\bin\Debug\MyScrabble.exe
+C:\Users\lol\Documents\Visual Studio 2013\Projects\MyScrabble\UIHelperMethodsTest\bin\Debug\MyScrabble.pdb
+C:\Users\lol\Documents\Visual Studio 2013\Projects\MyScrabble\UIHelperMethodsTest\obj\Debug\MyScrabbleTest.csprojResolveAssemblyReference.cache
+C:\Users\lol\Documents\Visual Studio 2013\Projects\MyScrabble\UIHelperMethodsTest\obj\Debug\UIHelperMethodsTest.dll
+C:\Users\lol\Documents\Visual Studio 2013\Projects\MyScrabble\UIHelperMethodsTest\obj\Debug\UIHelperMethodsTest.pdb
