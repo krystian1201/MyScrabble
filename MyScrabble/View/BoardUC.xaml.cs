@@ -229,33 +229,39 @@ namespace MyScrabble.View
 
                     TestLabel.Content = letter + " " + column + "," + row;
 
-                    _board.PlaceATile(tileUC.Tile, column, row);
 
                     RemoveTileFromTilesRack(tileUC);
-                    PlaceATile(tileUC.Tile.ImageURI, column, row);
+                    PlaceATileOnBoard(tileUC, column, row);
                 }
             }
 
             dragEventArgs.Handled = true;
         }
 
-        private void PlaceATile(string tileImageURI, int xPosition, int yPosition)
+        private void PlaceATileOnBoard(TileUC tileUC, int xPosition, int yPosition)
         {
-            //TODO: a given tile/letter image should be placed on board in a given position
-
+            //UI side
             Image tileImage = new Image();
-            tileImage.Source = new BitmapImage(new Uri(tileImageURI, UriKind.RelativeOrAbsolute));
+            tileImage.Source = new BitmapImage(new Uri(tileUC.Tile.ImageURI, UriKind.RelativeOrAbsolute));
 
             Grid.SetRow(tileImage, yPosition);
             Grid.SetColumn(tileImage, xPosition);
 
             BoardGrid.Children.Add(tileImage);
+
+            //Controller-logic side
+            _board.PlaceATile(tileUC.Tile, xPosition, yPosition);
         }
 
         private void RemoveTileFromTilesRack(TileUC tileUC)
         {
+            //UI side
             Grid tilesRackGrid = (Grid)tileUC.Parent;
             tilesRackGrid.Children.Remove(tileUC);
+
+            //Controller-logic side
+            TilesRackUC tilesRackUC = (TilesRackUC) tilesRackGrid.Parent;
+            tilesRackUC.TilesRack.RemoveTileFromTilesList(tileUC.Tile);
         }
 
 

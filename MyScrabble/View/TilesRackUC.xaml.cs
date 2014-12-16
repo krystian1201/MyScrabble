@@ -9,6 +9,11 @@ namespace MyScrabble.View
     {
         private TilesRack tilesRack;
 
+        public TilesRack TilesRack
+        {
+            get { return tilesRack; }
+        }
+
         public TilesRackUC()
         {
             InitializeComponent();
@@ -18,10 +23,14 @@ namespace MyScrabble.View
                 TilesRackGrid.ColumnDefinitions.Add(new ColumnDefinition());
             }
 
-            //TilesRackGrid.Children.Clear(); //necessary?
+            populateTilesRackUC();
+            
+        }
 
+        private void populateTilesRackUC()
+        {
             tilesRack = new TilesRack();
-            tilesRack.populateTilesRack();
+            tilesRack.PopulateTilesRack();
 
 
             for (int column = 0; column < tilesRack.TilesList.Count; column++)
