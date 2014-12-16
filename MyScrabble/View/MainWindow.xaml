@@ -33,10 +33,16 @@
 
         <local:BoardUC Grid.Row="1" Grid.Column="1"/>
 
-        
-        <local:TilesRackUC Grid.Column="2" Grid.Row="2"/>
 
-        
+        <local:TilesRackUC Grid.Row="2" Grid.Column="1" />
+
+
+        <!--<Label x:Name="LabelLetter" Content="Letter" HorizontalAlignment="Left" Margin="10,7,0,0" 
+        	VerticalAlignment="Top" Foreground="White" Grid.Row="1" Grid.Column="4"/>
+
+        <ComboBox x:Name="ComboBoxLetters" 
+        	VerticalAlignment="Top" Width="50" Margin="10,30,102,0" Grid.Row="1" Grid.Column="2"/>
+
         <ComboBox x:Name="ComboBoxX" HorizontalAlignment="Left" 
         	VerticalAlignment="Top" Width="50" RenderTransformOrigin="1.92,-6.333" 
                   Margin="10,76,0,0" Grid.Row="1" Grid.Column="4"/>
@@ -44,23 +50,19 @@
         <ComboBox x:Name="ComboBoxY" Width="50" RenderTransformOrigin="1.74,0.619" 
                   Margin="69,76,43,305" Grid.Row="1" Grid.Column="4"/>
         
-        <ComboBox x:Name="ComboBoxLetters" 
-        	VerticalAlignment="Top" Width="50" Margin="10,30,102,0" Grid.Row="1" Grid.Column="4"/>
-        
         <Label x:Name="LabelY" Content="Y" HorizontalAlignment="Left" Margin="93,53,0,0" 
         	VerticalAlignment="Top" Foreground="White" Grid.Row="1" RenderTransformOrigin="42.062,-12.435" Grid.Column="4"/>
         
         <Label x:Name="LabelX" Content="X" HorizontalAlignment="Left" Margin="23,53,0,0" 
         	VerticalAlignment="Top" Foreground="White" Grid.Row="1" RenderTransformOrigin="39.562,-13.087" Grid.Column="4"/>
         
-        <Label x:Name="LabelLetter" Content="Letter" HorizontalAlignment="Left" Margin="10,7,0,0" 
-        	VerticalAlignment="Top" Foreground="White" Grid.Row="1" Grid.Column="4"/>
+        
         
         <Button x:Name="ButtonPlaceATile" Content="GO!" HorizontalAlignment="Right" Margin="0,121,43,0" 
         	VerticalAlignment="Top" Width="109" Grid.Row="1" Grid.Column="4" Height="45" Click="ButtonPlaceATile_Click"/>
         
         <TextBox x:Name="textBox1" Grid.Column="4" HorizontalAlignment="Left" Height="23" Margin="10,211,0,0" Grid.Row="1" 
-                 TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+                 TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>-->
 
     </Grid>
 

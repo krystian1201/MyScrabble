@@ -9,13 +9,25 @@ namespace MyScrabble.Controller.Tiles
     public abstract class Tile
     {
         private readonly char letter;
+        public char Letter
+        {
+            get { return letter; }
+        }
 
         private readonly int points;
+        public int Points
+        {
+            get { return points; }
+        }
 
         private readonly string imageURI;
 
-        private readonly Image tileImage = new Image();
+        public string ImageURI
+        {
+            get { return imageURI; }
+        }
 
+        private readonly Image tileImage = new Image();
 
         public Image TileImage 
         {
@@ -29,7 +41,8 @@ namespace MyScrabble.Controller.Tiles
             this.points = points;
             this.imageURI = imageURI;
 
-            this.tileImage.Source = new BitmapImage(new Uri(imageURI, UriKind.Relative));
+            this.tileImage.Source = new BitmapImage(new Uri(imageURI, UriKind.RelativeOrAbsolute));
         }
+
     }
 }

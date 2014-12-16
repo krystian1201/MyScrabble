@@ -59,3 +59,4 @@ C:\Users\lol\Source\Repos\MyScrabble\MyScrabble\obj\Debug\View\MainWindow.baml
 C:\Users\lol\Source\Repos\MyScrabble\MyScrabble\obj\Debug\MyScrabble.g.resources
 C:\Users\lol\Source\Repos\MyScrabble\MyScrabble\obj\Debug\MyScrabble.Properties.Resources.resources
 C:\Users\lol\Source\Repos\MyScrabble\MyScrabble\obj\Debug\MyScrabble.csproj.GenerateResource.Cache
+C:\Users\lol\Source\Repos\MyScrabble\MyScrabble\obj\Debug\MyScrabble.csprojResolveAssemblyReference.cache

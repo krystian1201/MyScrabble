@@ -24,7 +24,7 @@ namespace MyScrabble.View
             tilesRack.populateTilesRack();
 
 
-            for (int column = 0; column < 4; column++)
+            for (int column = 0; column < tilesRack.TilesList.Count; column++)
             {
                 TileUC tileUC = new TileUC(tilesRack.TilesList[column]);
                 Grid.SetColumn(tileUC, column);

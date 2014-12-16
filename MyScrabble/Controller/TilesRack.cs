@@ -22,6 +22,9 @@ namespace MyScrabble.Controller
             TilesList.Add(new TileA());
             TilesList.Add(new TileC());
             TilesList.Add(new TileA());
+            TilesList.Add(new TileC());
+            TilesList.Add(new TileA());
+            TilesList.Add(new TileB());
         }
 
     }
