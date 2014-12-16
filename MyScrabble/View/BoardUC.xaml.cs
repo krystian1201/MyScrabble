@@ -8,8 +8,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Media.Imaging;
 using MyScrabble.Controller;
-using MyScrabble.Controller.Tiles;
-
 
 
 namespace MyScrabble.View
@@ -17,7 +15,10 @@ namespace MyScrabble.View
 
     public partial class BoardUC : UserControl
     {
-        
+        private Board _board;
+
+        //otherwise the project doesn't compile
+        //"no default constructor for BoardUC"
         public BoardUC()
         {
             InitializeComponent();
@@ -29,7 +30,10 @@ namespace MyScrabble.View
             InitializeBoardSideMarkers();
 
             BoardGrid.Drop += BoardGrid_Drop;
+
+            _board = new Board();
         }
+
 
         private void DefineGridRowsAndColumns()
         {
@@ -205,7 +209,37 @@ namespace MyScrabble.View
 
         }
 
-        public void PlaceATile(string tileImageURI, int xPosition, int yPosition)
+
+        private void BoardGrid_Drop(object sender, DragEventArgs dragEventArgs)
+        {
+            base.OnDrop(dragEventArgs);
+
+            // If the DataObject contains Tile object, extract it. 
+            if (dragEventArgs.Data.GetDataPresent("TileUC"))
+            {
+                UIElement uiElement = (UIElement)dragEventArgs.Source;
+                int column = Grid.GetColumn(uiElement);
+                int row = Grid.GetRow(uiElement);
+
+                if (_board.canTileBePlacedHere(column, row))
+                {
+                    TileUC tileUC = (TileUC)dragEventArgs.Data.GetData("TileUC");
+
+                    char letter = tileUC.Tile.Letter;
+
+                    TestLabel.Content = letter + " " + column + "," + row;
+
+                    _board.PlaceATile(tileUC.Tile, column, row);
+
+                    RemoveTileFromTilesRack(tileUC);
+                    PlaceATile(tileUC.Tile.ImageURI, column, row);
+                }
+            }
+
+            dragEventArgs.Handled = true;
+        }
+
+        private void PlaceATile(string tileImageURI, int xPosition, int yPosition)
         {
             //TODO: a given tile/letter image should be placed on board in a given position
 
@@ -218,34 +252,10 @@ namespace MyScrabble.View
             BoardGrid.Children.Add(tileImage);
         }
 
-
-        private void BoardGrid_Drop(object sender, DragEventArgs dragEventArgs)
+        private void RemoveTileFromTilesRack(TileUC tileUC)
         {
-            base.OnDrop(dragEventArgs);
-
-
-            // If the DataObject contains Tile object, extract it. 
-            if (dragEventArgs.Data.GetDataPresent("TileUC"))
-            {
-                TileUC tileUC = (TileUC)dragEventArgs.Data.GetData("TileUC");
-
-                char letter = tileUC.Tile.Letter;
-
-                UIElement uiElement = (UIElement)dragEventArgs.Source;
-                int column = Grid.GetColumn(uiElement);
-                int row = Grid.GetRow(uiElement);
-
-                TestLabel.Content = letter + " " + column + "," + row;
-
-                //TileUC tileUC = (TileUC) sender;
-                //Grid grid = (Grid) tileUC.Parent;
-                //grid.Children.Remove(tileUC);
-
-                PlaceATile(tileUC.Tile.ImageURI, column, row);
-
-            }
-
-            dragEventArgs.Handled = true;
+            Grid tilesRackGrid = (Grid)tileUC.Parent;
+            tilesRackGrid.Children.Remove(tileUC);
         }
 
 

@@ -6,8 +6,8 @@
              mc:Ignorable="d" 
              d:DesignWidth="300">
     
-    <Grid x:Name="TilesRackGrid" Width="301" Background="LightGray" 
-          VerticalAlignment="Center" Height="Auto">
+    <Grid x:Name="TilesRackGrid" Width="305" Background="LightGray" 
+          VerticalAlignment="Center" Height="50">
         
 
     </Grid>
