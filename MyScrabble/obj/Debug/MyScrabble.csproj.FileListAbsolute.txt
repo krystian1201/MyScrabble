@@ -60,3 +60,6 @@ C:\Users\lol\Source\Repos\MyScrabble\MyScrabble\obj\Debug\MyScrabble.g.resources
 C:\Users\lol\Source\Repos\MyScrabble\MyScrabble\obj\Debug\MyScrabble.Properties.Resources.resources
 C:\Users\lol\Source\Repos\MyScrabble\MyScrabble\obj\Debug\MyScrabble.csproj.GenerateResource.Cache
 C:\Users\lol\Source\Repos\MyScrabble\MyScrabble\obj\Debug\MyScrabble.csprojResolveAssemblyReference.cache
+C:\Users\Krystian\Documents\Visual Studio 2013\Projects\MyScrabble\MyScrabble\bin\Debug\MyScrabble.exe.config
+C:\Users\Krystian\Documents\Visual Studio 2013\Projects\MyScrabble\MyScrabble\obj\Debug\MyScrabble.exe
+C:\Users\Krystian\Documents\Visual Studio 2013\Projects\MyScrabble\MyScrabble\obj\Debug\MyScrabble.pdb

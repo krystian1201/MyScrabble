@@ -27,7 +27,7 @@ namespace MyScrabble.View
             AddCells();
             ColorBonusCells();
 
-            InitializeBoardSideMarkers();
+            InitializeBoardSideMarkers();                                                                                   
 
             BoardGrid.Drop += BoardGrid_Drop;
 
