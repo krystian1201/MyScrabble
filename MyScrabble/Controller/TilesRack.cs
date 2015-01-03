@@ -21,8 +21,10 @@ namespace MyScrabble.Controller
    
         }
 
-        public void PopulateTilesRack()
+        public void PopulateWithTiles()
         {
+            TilesList.Clear();
+
             Random random = new Random();
 
             for (int i = 0; i < 7; i++)

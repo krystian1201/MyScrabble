@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" xmlns:dm1="http://schemas.microsoft.com/dsltools/Kernel" xmlns:dm2="http://schemas.microsoft.com/dsltools/Component" xmlns:dm3="http://schemas.microsoft.com/dsltools/Activity" xmlns:dm4="http://schemas.microsoft.com/dsltools/Interaction" xmlns:dm5="http://schemas.microsoft.com/dsltools/UseCase" xmlns:dm6="http://schemas.microsoft.com/dsltools/UmlModelLibrary" xmlns:dm7="http://schemas.microsoft.com/dsltools/UmlDiagrams" xmlns:dm8="http://schemas.microsoft.com/dsltools/LogicalClassDesigner"
+  dslVersion="1.0.0.0"
+  Id="bbc7aedd-d585-40c1-be87-52ccc53a070f"
+  name="Controller"
+  visibility="Private" xmlns="http://schemas.microsoft.com/dsltools/ModelStore">
+  <referencesInternal>
+    <reference
+      Id="2aa5e980-bc84-4d4c-8374-44aedbb33069"
+      handle="viewcode://./CodeSchema_Namespace?Namespace%3DMyScrabble.Controller"
+      tag="ViewCode" />
+  </referencesInternal>
+  <profileInstances>
+    <packageHasProfileInstances
+      Id="d0a02dd8-534d-4200-8dce-3dc7387fdb23">
+      <profileInstance
+        Id="dee839ef-3aee-4f48-94d2-28586dbb0bbe"
+        name="CSharpProfile" />
+    </packageHasProfileInstances>
+  </profileInstances>
+  <packagedElements>
+    <packageHasNamedElement>
+      <class
+        Id="b27a8c36-9bab-4a5c-8c71-c2ca360fa9d8"
+        name="Board"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false">
+        <referencesInternal>
+          <reference
+            Id="5a387553-1a4c-4535-a32f-b966e1c1424c"
+            handle="viewcode://./CodeSchema_Class?Assembly%3D&quot;file:%2F%2F%2FC:%2FUsers%2FKrystian%2FDocuments%2FVisual Studio 2013%2FProjects%2FMyScrabble%2FMyScrabble%2Fbin%2FDebug%2FMyScrabble.exe&quot; Namespace%3DMyScrabble.Controller Type%3DBoard"
+            tag="ViewCode" />
+        </referencesInternal>
+        <appliedStereotypesInternal>
+          <stereotypeInstance
+            Id="f205848c-1cc4-495c-b0b0-364790353d34"
+            name="class"
+            profile="CSharpProfile">
+            <propertyInstances>
+              <stereotypeInstanceHasPropertyInstances
+                Id="114158a4-97e0-4050-b064-2d76e611dadf">
+                <propertyInstance
+                  Id="45d66b34-39a3-4aea-8acb-d3672b461e88"
+                  name="ClrAttributes" />
+              </stereotypeInstanceHasPropertyInstances>
+              <stereotypeInstanceHasPropertyInstances
+                Id="1a1355f5-944b-46eb-af6b-ed8e43bc677b">
+                <propertyInstance
+                  Id="f07ffad8-2a1b-4919-8996-f6a051f74f4c"
+                  name="IsPartial"
+                  value="false" />
+              </stereotypeInstanceHasPropertyInstances>
+              <stereotypeInstanceHasPropertyInstances
+                Id="9d2f083a-d0df-42d5-83fc-86f82cdcebfd">
+                <propertyInstance
+                  Id="d29b4db7-6dcd-49bb-a825-8d2235810cd1"
+                  name="IsStatic"
+                  value="False" />
+              </stereotypeInstanceHasPropertyInstances>
+              <stereotypeInstanceHasPropertyInstances
+                Id="43053425-f45e-4173-892b-fd44a898d0b3">
+                <propertyInstance
+                  Id="abb0a572-9a94-4e17-9f3e-85b455a66529"
+                  name="IsUnsafe"
+                  value="false" />
+              </stereotypeInstanceHasPropertyInstances>
+              <stereotypeInstanceHasPropertyInstances
+                Id="b9fe8daf-3c84-4c8e-8a4a-55c4c4b399fc">
+                <propertyInstance
+                  Id="f428814f-7ed8-46b7-9312-01daad3c19f5"
+                  name="PackageVisibility"
+                  value="internal" />
+              </stereotypeInstanceHasPropertyInstances>
+            </propertyInstances>
+          </stereotypeInstance>
+        </appliedStereotypesInternal>
+      </class>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="958a34f7-c147-4055-aaf5-d44da129ec36"
+        name="TilesBag"
+        visibility="Package"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false">
+        <referencesInternal>
+          <reference
+            Id="97356add-ed28-474e-a910-b0af623cbb29"
+            handle="viewcode://./CodeSchema_Class?Assembly%3D&quot;file:%2F%2F%2FC:%2FUsers%2FKrystian%2FDocuments%2FVisual Studio 2013%2FProjects%2FMyScrabble%2FMyScrabble%2Fbin%2FDebug%2FMyScrabble.exe&quot; Namespace%3DMyScrabble.Controller Type%3DTilesBag"
+            tag="ViewCode" />
+        </referencesInternal>
+        <appliedStereotypesInternal>
+          <stereotypeInstance
+            Id="dcf7363e-e07b-4f4e-95a7-3be6aa1dcea1"
+            name="class"
+            profile="CSharpProfile">
+            <propertyInstances>
+              <stereotypeInstanceHasPropertyInstances
+                Id="5151c554-4360-43c7-8787-38a937557899">
+                <propertyInstance
+                  Id="9fff2a71-431d-4760-973f-e9e50845ecdf"
+                  name="ClrAttributes" />
+              </stereotypeInstanceHasPropertyInstances>
+              <stereotypeInstanceHasPropertyInstances
+                Id="a5efc1d9-cd9d-445b-9304-a87f951e4ff3">
+                <propertyInstance
+                  Id="01be4c3f-c03f-4985-9363-a0dd25d07aab"
+                  name="IsPartial"
+                  value="false" />
+              </stereotypeInstanceHasPropertyInstances>
+              <stereotypeInstanceHasPropertyInstances
+                Id="78a5c743-73f5-4600-852a-eb463f5be8e7">
+                <propertyInstance
+                  Id="f9518924-0554-4a84-b865-68f62c5d41b0"
+                  name="IsStatic"
+                  value="False" />
+              </stereotypeInstanceHasPropertyInstances>
+              <stereotypeInstanceHasPropertyInstances
+                Id="fa497a91-5877-4c92-b698-a08eccbec7da">
+                <propertyInstance
+                  Id="ade4fafb-e813-4c1c-afe2-0c2327e61e14"
+                  name="IsUnsafe"
+                  value="false" />
+              </stereotypeInstanceHasPropertyInstances>
+              <stereotypeInstanceHasPropertyInstances
+                Id="e47d04cc-5e27-4176-9229-a14f0c89361f">
+                <propertyInstance
+                  Id="5e6e7d4f-5da5-47e5-b901-a338eb738f18"
+                  name="PackageVisibility"
+                  value="internal" />
+              </stereotypeInstanceHasPropertyInstances>
+            </propertyInstances>
+          </stereotypeInstance>
+        </appliedStereotypesInternal>
+      </class>
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <packageMoniker
+        Id="bb4d1aaa-2658-461c-87ab-c1ff39080cb4"
+        LastKnownName="Tiles"
+        LastKnownLocation="Package9_1734.uml" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <class
+        Id="00230a89-6d30-48d2-a023-b4c81fe930a8"
+        name="TilesRack"
+        isAbstract="false"
+        isLeaf="false"
+        isActiveClass="false">
+        <referencesInternal>
+          <reference
+            Id="cd2536c6-d31c-4c07-ae33-b3ea33f08848"
+            handle="viewcode://./CodeSchema_Class?Assembly%3D&quot;file:%2F%2F%2FC:%2FUsers%2FKrystian%2FDocuments%2FVisual Studio 2013%2FProjects%2FMyScrabble%2FMyScrabble%2Fbin%2FDebug%2FMyScrabble.exe&quot; Namespace%3DMyScrabble.Controller Type%3DTilesRack"
+            tag="ViewCode" />
+        </referencesInternal>
+        <appliedStereotypesInternal>
+          <stereotypeInstance
+            Id="3171cbb1-8985-4c18-95ad-d79182ae94a5"
+            name="class"
+            profile="CSharpProfile">
+            <propertyInstances>
+              <stereotypeInstanceHasPropertyInstances
+                Id="a59b7ff9-3d0c-42f9-af20-538e495bbd6c">
+                <propertyInstance
+                  Id="e441b33e-e35f-46aa-9e85-74ee23a4a3b0"
+                  name="ClrAttributes" />
+              </stereotypeInstanceHasPropertyInstances>
+              <stereotypeInstanceHasPropertyInstances
+                Id="8f793f5f-8713-4407-9cde-1ade365e4500">
+                <propertyInstance
+                  Id="612511b8-3dc3-4d63-b9aa-8db55014437b"
+                  name="IsPartial"
+                  value="false" />
+              </stereotypeInstanceHasPropertyInstances>
+              <stereotypeInstanceHasPropertyInstances
+                Id="0cc38939-68d2-468f-90fe-bd6c7537e319">
+                <propertyInstance
+                  Id="b87234bf-221a-432d-9ed0-11ad33a8a78f"
+                  name="IsStatic"
+                  value="False" />
+              </stereotypeInstanceHasPropertyInstances>
+              <stereotypeInstanceHasPropertyInstances
+                Id="38f27485-ed41-4e00-b5a3-825dc4cea67a">
+                <propertyInstance
+                  Id="d5e48442-e406-47eb-943d-331564ec7882"
+                  name="IsUnsafe"
+                  value="false" />
+              </stereotypeInstanceHasPropertyInstances>
+              <stereotypeInstanceHasPropertyInstances
+                Id="9bec2704-74d6-46c5-bb79-948cd4644957">
+                <propertyInstance
+                  Id="24ed653d-03b3-495a-b853-436073a4298e"
+                  name="PackageVisibility"
+                  value="internal" />
+              </stereotypeInstanceHasPropertyInstances>
+            </propertyInstances>
+          </stereotypeInstance>
+        </appliedStereotypesInternal>
+      </class>
+    </packageHasNamedElement>
+  </packagedElements>
+</package>

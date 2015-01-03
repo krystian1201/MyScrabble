@@ -3,10 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-                mc:Ignorable="d" x:Class="MyScrabble.MainWindow"
+                mc:Ignorable="d" x:Class="MyScrabble.View.MainWindow"
         xmlns:local="clr-namespace:MyScrabble.View"
         Title="MyScrabble" ResizeMode="CanMinimize" Width="800" Height="700" Foreground="White" >
-    
+
     <Window.Background>
         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
             <GradientStop Color="Black" Offset="0"/>
@@ -18,23 +18,37 @@
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="140*"/>
-            <!--<ColumnDefinition Width="30*"/>-->
             <ColumnDefinition Width="500"/>
-            <!--<ColumnDefinition Width="30*"/>-->
             <ColumnDefinition Width="140*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="45*"/>
             <RowDefinition Height="500"/>
-            <!--<RowDefinition Height="29*"/>-->
             <RowDefinition Height="45*"/>
         </Grid.RowDefinitions>
 
 
-        <local:BoardUC Grid.Row="1" Grid.Column="1"/>
+        <local:BoardUC x:Name="boardUC" Grid.Row="1" Grid.Column="1"/>
 
 
-        <local:TilesRackUC Grid.Row="2" Grid.Column="1" />
+        <local:TilesRackUC x:Name="tilesRackUC" Grid.Row="2" Grid.Column="1" />
+        
+ 
+        <StackPanel Grid.Column="2" Margin="10,50,20,0" Grid.Row="1" 
+                    VerticalAlignment="Top" Height="200">
+            
+            <Button x:Name="DoneButton" Content="Done" Margin="0,0,0,20"
+                    VerticalAlignment="Top" Height="25" Click="DoneButton_Click"/>
+            <Button x:Name="PassButton" Content="Pass"
+                    Margin="0,0,0,20" VerticalAlignment="Top" Height="25"/>
+            <Button x:Name="ExchangeTilesButton" Content="Exchange Tiles" 
+                    Margin="0,0,0,20" VerticalAlignment="Top" Width="127" Height="25" Click="ExchangeTilesButton_Click"/>
+            <Button x:Name="ResetTilesButton" Content="Reset Tiles" 
+                    HorizontalAlignment="Left" Margin="0" 
+                    VerticalAlignment="Top" Width="127" Height="25"/>
+            
+        </StackPanel>
+                    
 
     </Grid>
 

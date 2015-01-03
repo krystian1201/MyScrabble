@@ -23,14 +23,14 @@ namespace MyScrabble.View
                 TilesRackGrid.ColumnDefinitions.Add(new ColumnDefinition());
             }
 
-            populateTilesRackUC();
-            
+            tilesRack = new TilesRack();
         }
 
-        private void populateTilesRackUC()
+        public void PopulateTilesRackUC()
         {
-            tilesRack = new TilesRack();
-            tilesRack.PopulateTilesRack();
+            TilesRackGrid.Children.Clear();
+           
+            tilesRack.PopulateWithTiles();
 
 
             for (int column = 0; column < tilesRack.TilesList.Count; column++)
@@ -40,5 +40,6 @@ namespace MyScrabble.View
                 TilesRackGrid.Children.Add(tileUC);
             }
         }
+
     }
 }

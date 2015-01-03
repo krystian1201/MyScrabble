@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" xmlns:dm1="http://schemas.microsoft.com/dsltools/Kernel" xmlns:dm2="http://schemas.microsoft.com/dsltools/Component" xmlns:dm3="http://schemas.microsoft.com/dsltools/Activity" xmlns:dm4="http://schemas.microsoft.com/dsltools/Interaction" xmlns:dm5="http://schemas.microsoft.com/dsltools/UseCase" xmlns:dm6="http://schemas.microsoft.com/dsltools/UmlModelLibrary" xmlns:dm7="http://schemas.microsoft.com/dsltools/UmlDiagrams" xmlns:dm8="http://schemas.microsoft.com/dsltools/LogicalClassDesigner"
+  dslVersion="1.0.0.0"
+  Id="bb4d1aaa-2658-461c-87ab-c1ff39080cb4"
+  name="Tiles"
+  visibility="Private" xmlns="http://schemas.microsoft.com/dsltools/ModelStore">
+  <referencesInternal>
+    <reference
+      Id="22156020-7710-4a41-a76a-140b1eaba26e"
+      handle="viewcode://./CodeSchema_Namespace?Namespace%3DMyScrabble.Controller.Tiles"
+      tag="ViewCode" />
+  </referencesInternal>
+  <packagedElements>
+    <packageHasNamedElement>
+      <class
+        Id="a69a4449-6562-47c2-84dd-04f52c66262c"
+        name="Tile"
+        isAbstract="true"
+        isLeaf="false"
+        isActiveClass="false">
+        <referencesInternal>
+          <reference
+            Id="5a2c87fb-2c7c-4479-98bd-ffde4614af43"
+            handle="viewcode://./CodeSchema_Class?Assembly%3D&quot;file:%2F%2F%2FC:%2FUsers%2FKrystian%2FDocuments%2FVisual Studio 2013%2FProjects%2FMyScrabble%2FMyScrabble%2Fbin%2FDebug%2FMyScrabble.exe&quot; Namespace%3DMyScrabble.Controller.Tiles Type%3DTile"
+            tag="ViewCode" />
+        </referencesInternal>
+        <appliedStereotypesInternal>
+          <stereotypeInstance
+            Id="176f7bbe-399c-4928-8b9d-da22e7be361f"
+            name="class"
+            profile="CSharpProfile">
+            <propertyInstances>
+              <stereotypeInstanceHasPropertyInstances
+                Id="32aced0c-aa2a-4f1a-93e9-ca9961661604">
+                <propertyInstance
+                  Id="393f9c77-3d81-4f87-bed5-9b7466bceea8"
+                  name="ClrAttributes" />
+              </stereotypeInstanceHasPropertyInstances>
+              <stereotypeInstanceHasPropertyInstances
+                Id="db9ed500-757b-4985-8178-2a831284aac0">
+                <propertyInstance
+                  Id="681c8852-6c90-4b5c-af93-df0faa32c087"
+                  name="IsPartial"
+                  value="false" />
+              </stereotypeInstanceHasPropertyInstances>
+              <stereotypeInstanceHasPropertyInstances
+                Id="c7db0dc7-f413-4e18-97cd-a8a715f0f904">
+                <propertyInstance
+                  Id="6e060308-e647-40cb-86b9-c9279eb98cb2"
+                  name="IsStatic"
+                  value="False" />
+              </stereotypeInstanceHasPropertyInstances>
+              <stereotypeInstanceHasPropertyInstances
+                Id="644f7e8b-96cc-4a69-9bfe-dc0ea409d2e5">
+                <propertyInstance
+                  Id="560cf689-bf8f-4ab5-a6f6-4ff327e7d0b6"
+                  name="IsUnsafe"
+                  value="false" />
+              </stereotypeInstanceHasPropertyInstances>
+              <stereotypeInstanceHasPropertyInstances
+                Id="d2a70646-e033-4c41-815d-0531a6ecfc16">
+                <propertyInstance
+                  Id="86282607-4ff6-420d-b242-d180c02adb0e"
+                  name="PackageVisibility"
+                  value="internal" />
+              </stereotypeInstanceHasPropertyInstances>
+            </propertyInstances>
+          </stereotypeInstance>
+        </appliedStereotypesInternal>
+      </class>
+    </packageHasNamedElement>
+  </packagedElements>
+</package>

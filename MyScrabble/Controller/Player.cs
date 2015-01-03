@@ -1,14 +1,24 @@
 ﻿
+using System;
 
 using MyScrabble.Controller.Tiles;
 
 namespace MyScrabble.Controller
 {
-    class Player
+    public class Player
     {
-        public void PlaceATile(Tile tileToPlace, int X, int Y)
+        public int Score { get; set; }
+        public String Name { get; set; }
+
+        public Player()
         {
-            
+            Score = 0;
+            Name = "Player With No Name";
+        }
+
+        public void MakeAMove()
+        {
+
         }
     }
 }

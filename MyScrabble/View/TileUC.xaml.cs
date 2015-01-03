@@ -2,10 +2,11 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+
 using MyScrabble.Controller.Tiles;
 
 
-namespace MyScrabble
+namespace MyScrabble.View
 {
     public partial class TileUC : UserControl
     {

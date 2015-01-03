@@ -8,39 +8,39 @@ using System.Windows.Controls;
 
 using MyScrabble.Controller;
 using MyScrabble.Controller.Tiles;
-using MyScrabble.View;
 
 
-namespace MyScrabble
+namespace MyScrabble.View
 {
     
     public partial class MainWindow : Window
     {
         private TilesBag tilesBag;
-        private readonly Board board;
-        //private readonly Player player;
-        private readonly TilesRackUC tilesRackUC;
-        private readonly BoardUC boardUC;
-        
+        private readonly Player player1;
 
         public MainWindow()
         {
             InitializeComponent();
 
-            //control stuff
 
-            //board = new Board();
-
+            //tiles bag is not visible so it
+            //doesn't have a UI representation
             tilesBag = new TilesBag();
             tilesBag.PopulateWithTiles();
 
-            //view stuff
+            player1 = new Player();
 
-            boardUC = new BoardUC();
-            
+            tilesRackUC.PopulateTilesRackUC();
+        }
 
-            tilesRackUC = new TilesRackUC();
+        private void DoneButton_Click(object sender, RoutedEventArgs e)
+        {
+            player1.MakeAMove();
+        }
 
+        private void ExchangeTilesButton_Click(object sender, RoutedEventArgs e)
+        {
+            tilesRackUC.PopulateTilesRackUC();
         }
 
     }

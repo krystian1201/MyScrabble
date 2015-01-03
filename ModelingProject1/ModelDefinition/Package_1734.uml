@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" xmlns:dm1="http://schemas.microsoft.com/dsltools/Kernel" xmlns:dm2="http://schemas.microsoft.com/dsltools/Component" xmlns:dm3="http://schemas.microsoft.com/dsltools/Activity" xmlns:dm4="http://schemas.microsoft.com/dsltools/Interaction" xmlns:dm5="http://schemas.microsoft.com/dsltools/UseCase" xmlns:dm6="http://schemas.microsoft.com/dsltools/UmlModelLibrary" xmlns:dm7="http://schemas.microsoft.com/dsltools/UmlDiagrams" xmlns:dm8="http://schemas.microsoft.com/dsltools/LogicalClassDesigner"
+  dslVersion="1.0.0.0"
+  Id="456a6130-cc0f-4ce7-b2fa-8b16d0c94a37"
+  name="MyScrabble"
+  visibility="Private" xmlns="http://schemas.microsoft.com/dsltools/ModelStore">
+  <referencesInternal>
+    <reference
+      Id="fe934a5f-281f-48ca-8412-6ba7acd784f1"
+      handle="viewcode://./CodeSchema_Namespace?Namespace%3DMyScrabble"
+      tag="ViewCode" />
+  </referencesInternal>
+  <packagedElements>
+    <packageHasNamedElement>
+      <packageMoniker
+        Id="4f4797a9-8747-4766-bbc4-126f386f202e"
+        LastKnownName="View"
+        LastKnownLocation="Package1_1734.uml" />
+    </packageHasNamedElement>
+    <packageHasNamedElement>
+      <packageMoniker
+        Id="bbc7aedd-d585-40c1-be87-52ccc53a070f"
+        LastKnownName="Controller"
+        LastKnownLocation="Package7_1734.uml" />
+    </packageHasNamedElement>
+  </packagedElements>
+</package>
