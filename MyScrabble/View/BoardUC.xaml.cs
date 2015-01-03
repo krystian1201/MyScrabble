@@ -214,12 +214,16 @@ namespace MyScrabble.View
         {
             base.OnDrop(dragEventArgs);
 
-            // If the DataObject contains Tile object, extract it. 
+            // If the DataObject contains TileUC object, extract it. 
             if (dragEventArgs.Data.GetDataPresent("TileUC"))
             {
+               
+                //cannot cast to Rectangle or any other specific control
+                //because we don't know where a tile will be dropped
                 UIElement uiElement = (UIElement)dragEventArgs.Source;
                 int column = Grid.GetColumn(uiElement);
                 int row = Grid.GetRow(uiElement);
+
 
                 if (_board.CanTileBePlacedHere(column, row))
                 {
@@ -229,14 +233,31 @@ namespace MyScrabble.View
 
                     TestLabel.Content = letter + " " + column + "," + row;
 
+                    RemoveTileFromItsSource(tileUC);
 
-                    RemoveTileFromTilesRack(tileUC);
                     PlaceATileOnBoard(tileUC, column, row);
                 }
             }
 
             dragEventArgs.Handled = true;
         }
+
+        private void RemoveTileFromItsSource(TileUC tileUC)
+        {
+            //if a tile was dragged from tiles rack
+            if (tileUC.Tile.XPositionOnBoard == null &&
+                tileUC.Tile.YPositionOnBoard == null)
+            {
+                RemoveTileFromTilesRack(tileUC);
+            }
+            //if a tile was dragged from one place on the board to another
+            else if (tileUC.Tile.XPositionOnBoard != null &&
+                tileUC.Tile.YPositionOnBoard != null)
+            {
+                RemoveTileFromBoard(tileUC);
+            }
+        }
+
 
         private void PlaceATileOnBoard(TileUC tileUC, int xPosition, int yPosition)
         {
@@ -250,7 +271,7 @@ namespace MyScrabble.View
             _board.PlaceATile(tileUC.Tile, xPosition, yPosition);
         }
 
-        private void RemoveATileFromBoard(TileUC tileUC)
+        private void RemoveTileFromBoard(TileUC tileUC)
         {
             //UI side
             BoardGrid.Children.Remove(tileUC); 
@@ -267,7 +288,7 @@ namespace MyScrabble.View
 
             //Controller-logic side
             TilesRackUC tilesRackUC = (TilesRackUC) tilesRackGrid.Parent;
-            tilesRackUC.TilesRack.RemoveTileFromTilesList(tileUC.Tile);
+            tilesRackUC.TilesRack.RemoveTileFromTilesArray(tileUC.Tile);
         }
 
 
@@ -282,14 +303,9 @@ namespace MyScrabble.View
 
             foreach (TileUC tileUC in lastTilesOnBoard)
             {
-                RemoveATileFromBoard(tileUC);
+                RemoveTileFromBoard(tileUC);
                 tilesRackUC.PlaceATileInTilesRack(tileUC, tileUC.Tile.PositionInTilesRack);  
             }
-
-            //lastTilesOnBoard.ForEach(tileUC => BoardGrid.Children.Remove(tileUC));
-
-            //lastTilesOnBoard.
-            //    ForEach(tileUC => tilesRackUC.PlaceATileInTilesRack(tileUC, tileUC.Tile.PositionInTilesRack));
 
         }
 

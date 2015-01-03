@@ -34,13 +34,13 @@ namespace MyScrabble.Controller
                 switch (UniqueTilesList[tileIndex])
                 {
                     case 'A':
-                        TilesArray[i] = new TileA() { PositionInTilesRack = i };
+                        InsertTileIntoTilesArray(new TileA() { PositionInTilesRack = i }, i);
                         break;
                     case 'B':
-                        TilesArray[i] = new TileB() { PositionInTilesRack = i };
+                        InsertTileIntoTilesArray(new TileB() { PositionInTilesRack = i }, i);
                         break;
                     case 'C':
-                        TilesArray[i] = new TileC() { PositionInTilesRack = i };
+                        InsertTileIntoTilesArray(new TileC() { PositionInTilesRack = i }, i);
                         break;
                     default:
                         throw new Exception("Tile doesn't belong to the valid set of tiles");
@@ -49,7 +49,7 @@ namespace MyScrabble.Controller
 
         }
 
-        public void RemoveTileFromTilesList(Tile tileToRemove)
+        public void RemoveTileFromTilesArray(Tile tileToRemove)
         {
             TilesArray[(int)tileToRemove.PositionInTilesRack] = null; 
         }

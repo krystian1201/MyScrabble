@@ -22,10 +22,10 @@ namespace MyScrabble.Controller
 
         public void PlaceATile(Tile tileToPlaceOnBoard, int xPosition, int yPosition)
         {
-            //TODO: check if tile can be placed in a given position
 
             //we assume that it is check in BoardUC whether or not a tile
             //can be placed in a given cell
+            //I don't know where it makes bigger sense
             //if (canTileBePlacedHere(xPosition, yPosition))
             //{
                 tileToPlaceOnBoard.XPositionOnBoard = xPosition;
@@ -41,6 +41,9 @@ namespace MyScrabble.Controller
                 tileToRemoveFromBoard.YPositionOnBoard != null)
             {
                 _boardArray[(int)tileToRemoveFromBoard.XPositionOnBoard, (int)tileToRemoveFromBoard.YPositionOnBoard] = null;
+
+                tileToRemoveFromBoard.XPositionOnBoard = null;
+                tileToRemoveFromBoard.YPositionOnBoard = null;
             }
             else
             {
