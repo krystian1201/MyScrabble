@@ -39,9 +39,7 @@ namespace MyScrabble.View
             {
                 // Package the data.
                 DataObject data = new DataObject();
-                //data.SetData(DataFormats.StringFormat, "A");
-                //data.SetData("Double", circleUI.Height);
-
+                
                 data.SetData("TileUC", this);
 
                 // Inititate the drag-and-drop operation.

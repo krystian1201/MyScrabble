@@ -241,13 +241,10 @@ namespace MyScrabble.View
         private void PlaceATileOnBoard(TileUC tileUC, int xPosition, int yPosition)
         {
             //UI side
-            Image tileImage = new Image();
-            tileImage.Source = new BitmapImage(new Uri(tileUC.Tile.ImageURI, UriKind.RelativeOrAbsolute));
+            Grid.SetRow(tileUC, yPosition);
+            Grid.SetColumn(tileUC, xPosition);
 
-            Grid.SetRow(tileImage, yPosition);
-            Grid.SetColumn(tileImage, xPosition);
-
-            BoardGrid.Children.Add(tileImage);
+            BoardGrid.Children.Add(tileUC);
 
             //Controller-logic side
             _board.PlaceATile(tileUC.Tile, xPosition, yPosition);
@@ -264,6 +261,24 @@ namespace MyScrabble.View
             tilesRackUC.TilesRack.RemoveTileFromTilesList(tileUC.Tile);
         }
 
+
+        public void GetLastTilesFromBoardToTilesRack()
+        {
+            List<TileUC> lastTilesOnBoard =
+                BoardGrid.Children.OfType<TileUC>().Where(TileUC => TileUC.Tile.MoveMade == false).ToList<TileUC>();
+
+            lastTilesOnBoard.ForEach(tileUC => BoardGrid.Children.Remove(tileUC));
+
+           
+            Grid MainGrid = (Grid)this.Parent;
+
+            TilesRackUC tilesRackUC = MainGrid.Children.OfType<TilesRackUC>().FirstOrDefault();
+
+
+            lastTilesOnBoard.
+                ForEach(tileUC => tilesRackUC.PlaceATileInTilesRack(tileUC, tileUC.Tile.PositionInTilesRack));
+
+        }
 
         public void InitializeBoardSideMarkers()
         {

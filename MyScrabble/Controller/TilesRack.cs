@@ -10,20 +10,20 @@ namespace MyScrabble.Controller
     {
         
         //TODO: setter/getter needed?
-        public List<Tile> TilesList;
+        public Tile[] TilesArray;
 
         private readonly List<char> UniqueTilesList =
             new List<char>() {'A', 'B', 'C'};
 
+
         public TilesRack()
         {
-            TilesList = new List<Tile>();
-   
+            TilesArray = new Tile[7];
         }
 
         public void PopulateWithTiles()
         {
-            TilesList.Clear();
+            Array.ForEach(TilesArray, tile => tile = null);
 
             Random random = new Random();
 
@@ -34,13 +34,13 @@ namespace MyScrabble.Controller
                 switch (UniqueTilesList[tileIndex])
                 {
                     case 'A':
-                        TilesList.Add(new TileA());
+                        TilesArray[i] = new TileA() { PositionInTilesRack = i };
                         break;
                     case 'B':
-                        TilesList.Add(new TileB());
+                        TilesArray[i] = new TileB() { PositionInTilesRack = i };
                         break;
                     case 'C':
-                        TilesList.Add(new TileC());
+                        TilesArray[i] = new TileC() { PositionInTilesRack = i };
                         break;
                     default:
                         throw new Exception("Tile doesn't belong to the valid set of tiles");
@@ -51,7 +51,12 @@ namespace MyScrabble.Controller
 
         public void RemoveTileFromTilesList(Tile tileToRemove)
         {
-            TilesList.Remove(tileToRemove);
+            TilesArray[(int)tileToRemove.PositionInTilesRack] = null; 
+        }
+
+        public void InsertTileIntoTilesArray(Tile tileToInsert, int position)
+        {
+            TilesArray[position] = tileToInsert;
         }
     }
 }

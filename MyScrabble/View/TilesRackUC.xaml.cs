@@ -1,7 +1,9 @@
 ﻿
+using System;
+using System.Windows.Controls;
+
 using MyScrabble.Controller;
 
-using System.Windows.Controls;
 
 namespace MyScrabble.View
 {
@@ -33,12 +35,27 @@ namespace MyScrabble.View
             tilesRack.PopulateWithTiles();
 
 
-            for (int column = 0; column < tilesRack.TilesList.Count; column++)
+            for (int column = 0; column < tilesRack.TilesArray.Length; column++)
             {
-                TileUC tileUC = new TileUC(tilesRack.TilesList[column]);
+                TileUC tileUC = new TileUC(tilesRack.TilesArray[column]);
                 Grid.SetColumn(tileUC, column);
                 TilesRackGrid.Children.Add(tileUC);
             }
+        }
+
+        public void PlaceATileInTilesRack(TileUC tileUC, int? position)
+        {
+            if (position != null)
+            {
+                Grid.SetColumn(tileUC, (int)position);
+                TilesRackGrid.Children.Add(tileUC);
+
+                tilesRack.InsertTileIntoTilesArray(tileUC.Tile, (int)position);
+            }
+            else
+            {
+                throw new Exception("Position in the tiles rack for the tile was not filled");
+            }  
         }
 
     }

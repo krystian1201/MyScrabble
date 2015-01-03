@@ -43,5 +43,10 @@ namespace MyScrabble.View
             tilesRackUC.PopulateTilesRackUC();
         }
 
+        private void ResetTilesButton_Click(object sender, RoutedEventArgs e)
+        {
+            boardUC.GetLastTilesFromBoardToTilesRack();
+        }
+
     }
 }

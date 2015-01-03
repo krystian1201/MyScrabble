@@ -35,6 +35,10 @@ namespace MyScrabble.Controller.Tiles
             
         }
 
+        public bool MoveMade { get; set; }
+
+        public int? PositionInTilesRack { get; set; }
+
         protected Tile(char letter, int points, string imageURI)
         {
             this.letter = letter;
@@ -42,6 +46,10 @@ namespace MyScrabble.Controller.Tiles
             this.imageURI = imageURI;
 
             this.tileImage.Source = new BitmapImage(new Uri(imageURI, UriKind.RelativeOrAbsolute));
+
+            this.MoveMade = false;
+
+            this.PositionInTilesRack = null;
         }
 
     }
