@@ -221,7 +221,7 @@ namespace MyScrabble.View
                 int column = Grid.GetColumn(uiElement);
                 int row = Grid.GetRow(uiElement);
 
-                if (_board.canTileBePlacedHere(column, row))
+                if (_board.CanTileBePlacedHere(column, row))
                 {
                     TileUC tileUC = (TileUC)dragEventArgs.Data.GetData("TileUC");
 
@@ -250,6 +250,15 @@ namespace MyScrabble.View
             _board.PlaceATile(tileUC.Tile, xPosition, yPosition);
         }
 
+        private void RemoveATileFromBoard(TileUC tileUC)
+        {
+            //UI side
+            BoardGrid.Children.Remove(tileUC); 
+
+            //Controller-logic side
+            _board.RemoveATile(tileUC.Tile);
+        }
+
         private void RemoveTileFromTilesRack(TileUC tileUC)
         {
             //UI side
@@ -267,16 +276,20 @@ namespace MyScrabble.View
             List<TileUC> lastTilesOnBoard =
                 BoardGrid.Children.OfType<TileUC>().Where(TileUC => TileUC.Tile.MoveMade == false).ToList<TileUC>();
 
-            lastTilesOnBoard.ForEach(tileUC => BoardGrid.Children.Remove(tileUC));
-
-           
             Grid MainGrid = (Grid)this.Parent;
 
             TilesRackUC tilesRackUC = MainGrid.Children.OfType<TilesRackUC>().FirstOrDefault();
 
+            foreach (TileUC tileUC in lastTilesOnBoard)
+            {
+                RemoveATileFromBoard(tileUC);
+                tilesRackUC.PlaceATileInTilesRack(tileUC, tileUC.Tile.PositionInTilesRack);  
+            }
 
-            lastTilesOnBoard.
-                ForEach(tileUC => tilesRackUC.PlaceATileInTilesRack(tileUC, tileUC.Tile.PositionInTilesRack));
+            //lastTilesOnBoard.ForEach(tileUC => BoardGrid.Children.Remove(tileUC));
+
+            //lastTilesOnBoard.
+            //    ForEach(tileUC => tilesRackUC.PlaceATileInTilesRack(tileUC, tileUC.Tile.PositionInTilesRack));
 
         }
 

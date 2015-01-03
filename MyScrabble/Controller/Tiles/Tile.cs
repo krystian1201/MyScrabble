@@ -39,6 +39,10 @@ namespace MyScrabble.Controller.Tiles
 
         public int? PositionInTilesRack { get; set; }
 
+        public int? XPositionOnBoard { get; set; }
+
+        public int? YPositionOnBoard { get; set; }
+
         protected Tile(char letter, int points, string imageURI)
         {
             this.letter = letter;
@@ -50,6 +54,8 @@ namespace MyScrabble.Controller.Tiles
             this.MoveMade = false;
 
             this.PositionInTilesRack = null;
+            this.XPositionOnBoard = null;
+            this.YPositionOnBoard = null;
         }
 
     }

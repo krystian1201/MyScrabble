@@ -1,4 +1,6 @@
 ﻿
+using System;
+
 using MyScrabble.Controller.Tiles;
 using MyScrabble.View;
 
@@ -10,7 +12,7 @@ namespace MyScrabble.Controller
     {
         public const int BOARD_SIZE = 15;
 
-        private readonly Tile[,] _boardArray = new Tile[BOARD_SIZE, BOARD_SIZE];
+        private Tile[,] _boardArray = new Tile[BOARD_SIZE, BOARD_SIZE];
 
 
         public Board()
@@ -26,13 +28,28 @@ namespace MyScrabble.Controller
             //can be placed in a given cell
             //if (canTileBePlacedHere(xPosition, yPosition))
             //{
+                tileToPlaceOnBoard.XPositionOnBoard = xPosition;
+                tileToPlaceOnBoard.YPositionOnBoard = yPosition;
                 _boardArray[xPosition, yPosition] = tileToPlaceOnBoard;
             //}
 
         }
 
+        public void RemoveATile(Tile tileToRemoveFromBoard)
+        {
+            if (tileToRemoveFromBoard.XPositionOnBoard != null &&
+                tileToRemoveFromBoard.YPositionOnBoard != null)
+            {
+                _boardArray[(int)tileToRemoveFromBoard.XPositionOnBoard, (int)tileToRemoveFromBoard.YPositionOnBoard] = null;
+            }
+            else
+            {
+                throw new Exception("The tile to remove doesn't have position on board.");
+            }
+            
+        }
         
-        public bool canTileBePlacedHere(int xPosition, int yPosition)
+        public bool CanTileBePlacedHere(int xPosition, int yPosition)
         {
 
             //TODO for now we just check if a tile has already been placed at
@@ -45,8 +62,6 @@ namespace MyScrabble.Controller
 
             return false;
         }
-
-        
 
     }
 }
