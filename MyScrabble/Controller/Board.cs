@@ -88,7 +88,7 @@ namespace MyScrabble.Controller
             {
                 validationMessages.Add("The tiles are not in one row or column");
             }
-            else if (!AreTilesNextToEachOther(tilesInMove))
+            else if (!AreTilesNextToEachOther())
             {
                 validationMessages.Add("The tiles are not next to each other");
             }
@@ -135,19 +135,27 @@ namespace MyScrabble.Controller
             return areInSameRow || areInSameColumn;
         }
 
-        private bool AreTilesNextToEachOther(List<Tile> tilesInMove)
+        private bool AreTilesNextToEachOther()
         {
-            //here we assume that there was at least one tile in a move and that
-            //tiles are in one row or column
-            if (tilesInMove == null || tilesInMove.Count == 0)
+            List<Tile> tilesOnBoard = _boardArray.Cast<Tile>().
+                Where(tile => tile != null).
+                ToList();
+
+            //here we assume that there was at least one tile on the board and that
+            //tiles are in the same row or column
+            if (tilesOnBoard == null || tilesOnBoard.Count == 0)
             {
                 throw new
-                    Exception("There should be at least one tile placed in a move to check" +
+                    Exception("There should be at least one tile on board to check" +
                                 "if tiles are next to each other");
             }
 
             int? commonColumn = null;
             int? commonRow = null;
+
+            List<Tile> tilesInMove = 
+                tilesOnBoard.Where(tile => tile.WasMoveMade == false).
+                ToList();
 
             GetTilesCommonRowOrColumn(tilesInMove, ref commonColumn, ref commonRow);
 
@@ -156,20 +164,20 @@ namespace MyScrabble.Controller
 
             if (commonColumn != null)
             {
-                areTilesNextToEachOtherInColumn = AreTilesNextToEachOtherInColumn(tilesInMove);
+                areTilesNextToEachOtherInColumn = AreTilesNextToEachOtherInColumn(tilesOnBoard, (int)commonColumn);
             }
-            else if (commonRow != null)
+            if (commonRow != null)
             {
-                areTilesNextToEachOtherInRow = AreTilesNextToEachOtherInRow(tilesInMove);
+                areTilesNextToEachOtherInRow = AreTilesNextToEachOtherInRow(tilesOnBoard, (int)commonRow);
             }
-            else
+            if (commonColumn == null && commonRow == null)
             {
                 throw new 
                     Exception("Cannot check if tiles are next to each other because" +
                                 "they are not in the same row or column");
             }
 
-            return areTilesNextToEachOtherInColumn ^ areTilesNextToEachOtherInRow;
+            return areTilesNextToEachOtherInColumn || areTilesNextToEachOtherInRow;
         }
 
         private void GetTilesCommonRowOrColumn(List<Tile> tilesInMove, ref int? commonColumn, ref int? commonRow)
@@ -188,46 +196,67 @@ namespace MyScrabble.Controller
             else if (tilesInMove.Count == 1)
             {
                 commonColumn = (int)tilesInMove[0].PositionOnBoard.Value.X;
+                commonRow = (int)tilesInMove[0].PositionOnBoard.Value.Y;
             }
         }
 
-        private bool AreTilesNextToEachOtherInColumn(List<Tile> tilesInMove)
+        private bool AreTilesNextToEachOtherInColumn(List<Tile> tilesOnBoard, int column)
         {
             bool result = true;
 
-            List<Tile> sortedTilesInMove =
-                    tilesInMove.OrderBy(tile => tile.PositionOnBoard.Value.Y).ToList();
+            List<Tile> sortedTilesOnBoardInColumn =
+                    tilesOnBoard.
+                    Where(tile => tile.PositionOnBoard.Value.X == column).
+                    OrderBy(tile => tile.PositionOnBoard.Value.Y).
+                    ToList();
 
-            for (int i = 0; i < tilesInMove.Count-1; i++)
+            if (sortedTilesOnBoardInColumn.Count == 1)
             {
-                if (sortedTilesInMove[i + 1].PositionOnBoard.Value.Y !=
-                    sortedTilesInMove[i].PositionOnBoard.Value.Y + 1)
+                result = false;
+            }
+            else
+            {
+                for (int i = 0; i < sortedTilesOnBoardInColumn.Count - 1; i++)
                 {
-                    result = false;
-                    break;
+                    if (sortedTilesOnBoardInColumn[i + 1].PositionOnBoard.Value.Y !=
+                        sortedTilesOnBoardInColumn[i].PositionOnBoard.Value.Y + 1)
+                    {
+                        result = false;
+                        break;
+                    }
                 }
             }
 
             return result;
         }
 
-        private bool AreTilesNextToEachOtherInRow(List<Tile> tilesInMove)
+        private bool AreTilesNextToEachOtherInRow(List<Tile> tilesOnBoard, int row)
         {
             bool result = true;
 
-            List<Tile> sortedTilesInMove =
-                    tilesInMove.OrderBy(tile => tile.PositionOnBoard.Value.X).ToList();
+            List<Tile> sortedTilesOnBoardInRow =
+                    tilesOnBoard.
+                    Where(tile => tile.PositionOnBoard.Value.Y == row).
+                    OrderBy(tile => tile.PositionOnBoard.Value.X).
+                    ToList();
 
-            for (int i = 0; i < tilesInMove.Count - 1; i++)
+            if (sortedTilesOnBoardInRow.Count == 1)
             {
-                if (sortedTilesInMove[i + 1].PositionOnBoard.Value.X !=
-                    sortedTilesInMove[i].PositionOnBoard.Value.X + 1)
+                result = false;
+            }
+            else
+            {
+                for (int i = 0; i < sortedTilesOnBoardInRow.Count - 1; i++)
                 {
-                    result = false;
-                    break;
+                    if (sortedTilesOnBoardInRow[i + 1].PositionOnBoard.Value.X !=
+                        sortedTilesOnBoardInRow[i].PositionOnBoard.Value.X + 1)
+                    {
+                        result = false;
+                        break;
+                    }
                 }
             }
-
+            
             return result;
         }
 
