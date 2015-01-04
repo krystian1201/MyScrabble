@@ -6,9 +6,10 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Windows.Media.Imaging;
-using MyScrabble.Controller;
 
+using MyScrabble.Controller;
 
 namespace MyScrabble.View
 {
@@ -245,14 +246,12 @@ namespace MyScrabble.View
         private void RemoveTileFromItsSource(TileUC tileUC)
         {
             //if a tile was dragged from tiles rack
-            if (tileUC.Tile.XPositionOnBoard == null &&
-                tileUC.Tile.YPositionOnBoard == null)
+            if (tileUC.Tile.PositionOnBoard == null)
             {
                 RemoveTileFromTilesRack(tileUC);
             }
             //if a tile was dragged from one place on the board to another
-            else if (tileUC.Tile.XPositionOnBoard != null &&
-                tileUC.Tile.YPositionOnBoard != null)
+            else
             {
                 RemoveTileFromBoard(tileUC);
             }
@@ -295,7 +294,7 @@ namespace MyScrabble.View
         public void GetLastTilesFromBoardToTilesRack()
         {
             List<TileUC> lastTilesOnBoard =
-                BoardGrid.Children.OfType<TileUC>().Where(TileUC => TileUC.Tile.MoveMade == false).ToList<TileUC>();
+                BoardGrid.Children.OfType<TileUC>().Where(TileUC => TileUC.Tile.WasMoveMade == false).ToList<TileUC>();
 
             Grid MainGrid = (Grid)this.Parent;
 
@@ -307,6 +306,25 @@ namespace MyScrabble.View
                 tilesRackUC.PlaceATileInTilesRack(tileUC, tileUC.Tile.PositionInTilesRack);  
             }
 
+        }
+
+
+        public void MakeAMove()
+        {
+            List<string> validationMessages = _board.ValidateMove();
+
+            StringBuilder stringBuilder = new StringBuilder();
+
+
+            if (validationMessages.Count > 0)
+            {
+                foreach (string validationMessage in validationMessages)
+                {
+                    stringBuilder.Append(validationMessage + "\n");
+                }
+
+                MessageBox.Show(stringBuilder.ToString(), "Invalid move");
+            }
         }
 
         public void InitializeBoardSideMarkers()
@@ -381,9 +399,7 @@ namespace MyScrabble.View
         {
             labelToAdd.Content = (row + 1).ToString();
             Grid.SetRow(labelToAdd, row);
-        }
-
-        
+        }    
     }
 
 

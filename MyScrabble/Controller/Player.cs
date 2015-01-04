@@ -10,6 +10,7 @@ namespace MyScrabble.Controller
         public int Score { get; set; }
         public String Name { get; set; }
 
+
         public Player()
         {
             Score = 0;

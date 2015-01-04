@@ -1,6 +1,7 @@
 ﻿
 
 using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 
@@ -35,13 +36,13 @@ namespace MyScrabble.Controller.Tiles
             
         }
 
-        public bool MoveMade { get; set; }
+        public bool WasMoveMade { get; set; }
 
         public int? PositionInTilesRack { get; set; }
 
-        public int? XPositionOnBoard { get; set; }
 
-        public int? YPositionOnBoard { get; set; }
+        public Point? PositionOnBoard { get; set; }
+
 
         protected Tile(char letter, int points, string imageURI)
         {
@@ -51,11 +52,10 @@ namespace MyScrabble.Controller.Tiles
 
             this.tileImage.Source = new BitmapImage(new Uri(imageURI, UriKind.RelativeOrAbsolute));
 
-            this.MoveMade = false;
+            this.WasMoveMade = false;
 
             this.PositionInTilesRack = null;
-            this.XPositionOnBoard = null;
-            this.YPositionOnBoard = null;
+            this.PositionOnBoard = null;
         }
 
     }

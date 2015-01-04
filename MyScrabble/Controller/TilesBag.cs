@@ -9,11 +9,11 @@ namespace MyScrabble.Controller
 {
     class TilesBag
     {
-        private List<Tile> tiles;
+        private List<Tile> tilesList;
 
         public TilesBag()
         {
-            tiles = new List<Tile>();
+            tilesList = new List<Tile>();
   
         }
 
@@ -23,21 +23,21 @@ namespace MyScrabble.Controller
             {
                 Tile tileToAdd = new TileA();
 
-                tiles.Add(tileToAdd);
+                tilesList.Add(tileToAdd);
             }
 
             for (int i = 0; i < 2; i++)
             {
                 Tile tileToAdd = new TileB();
 
-                tiles.Add(tileToAdd);
+                tilesList.Add(tileToAdd);
             }
 
             for (int i = 0; i < 2; i++)
             {
                 Tile tileToAdd = new TileC();
 
-                tiles.Add(tileToAdd);
+                tilesList.Add(tileToAdd);
             }
 
             //TODO: not all tiles have been added yet

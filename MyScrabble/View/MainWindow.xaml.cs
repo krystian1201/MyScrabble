@@ -35,7 +35,7 @@ namespace MyScrabble.View
 
         private void DoneButton_Click(object sender, RoutedEventArgs e)
         {
-            player1.MakeAMove();
+            boardUC.MakeAMove();
         }
 
         private void ExchangeTilesButton_Click(object sender, RoutedEventArgs e)
