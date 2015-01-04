@@ -313,18 +313,25 @@ namespace MyScrabble.View
         {
             List<string> validationMessages = _board.ValidateMove();
 
-            StringBuilder stringBuilder = new StringBuilder();
-
-
             if (validationMessages.Count > 0)
             {
-                foreach (string validationMessage in validationMessages)
-                {
-                    stringBuilder.Append(validationMessage + "\n");
-                }
+                ShowMoveValidationMessages(validationMessages);
 
-                MessageBox.Show(stringBuilder.ToString(), "Invalid move");
+                GetLastTilesFromBoardToTilesRack();
             }
+            
+        }
+
+        private void ShowMoveValidationMessages(List<string> validationMessages)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+
+            foreach (string validationMessage in validationMessages)
+            {
+                stringBuilder.Append(validationMessage + "\n");
+            }
+
+            MessageBox.Show(stringBuilder.ToString(), "Invalid move");
         }
 
         public void InitializeBoardSideMarkers()
