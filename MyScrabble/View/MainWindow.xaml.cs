@@ -22,31 +22,43 @@ namespace MyScrabble.View
         {
             InitializeComponent();
 
-
-            //tiles bag is not visible so it
-            //doesn't have a UI representation
-            tilesBag = new TilesBag();
-            tilesBag.PopulateWithTiles();
-
             player1 = new Player();
 
             tilesRackUC.PopulateTilesRackUC();
+
+            UpdateTilesBagListBox();
         }
 
         private void DoneButton_Click(object sender, RoutedEventArgs e)
         {
             boardUC.MakeAMove();
+            UpdateTilesBagListBox();
         }
 
-        private void ExchangeTilesButton_Click(object sender, RoutedEventArgs e)
-        {
-            tilesRackUC.PopulateTilesRackUC();
-        }
+        //Echange tiles functionality was suspended for the moment
+        //private void ExchangeTilesButton_Click(object sender, RoutedEventArgs e)
+        //{
+        //    tilesRackUC.PopulateTilesRackUC();
+        //    tilesRackUC.GetTilesFromTilesRackToTilesBag();
+        //    UpdateTilesBagListBox();
+        //}
 
         private void ResetTilesButton_Click(object sender, RoutedEventArgs e)
         {
             boardUC.GetLastTilesFromBoardToTilesRack();
         }
 
+        //just for testing/debugging
+        private void UpdateTilesBagListBox()
+        {
+            TilesBagListBox.Items.Clear();
+
+            List<Tile> tilesInBag = tilesRackUC.GetAllTilesFromTilesBag();
+
+            foreach (Tile tile in tilesInBag)
+            {
+                TilesBagListBox.Items.Add(tile.Letter);
+            }
+        }
     }
 }

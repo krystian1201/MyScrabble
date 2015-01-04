@@ -1,15 +1,21 @@
 ﻿
+using System;
 using System.Collections.Generic;
-
 
 using MyScrabble.Controller.Tiles;
 
 
 namespace MyScrabble.Controller
 {
-    class TilesBag
+    public class TilesBag
     {
         private List<Tile> tilesList;
+
+        //just for testing
+        public List<Tile> TilesList
+        {
+            get { return tilesList; }
+        }
 
         public TilesBag()
         {
@@ -41,6 +47,25 @@ namespace MyScrabble.Controller
             }
 
             //TODO: not all tiles have been added yet
+        }
+
+        public Tile GetRandomTile()
+        {
+            Tile tileToReturn = null;
+
+            if (tilesList.Count > 0)
+            {
+                Random random = new Random();
+
+                int tileIndex = random.Next(0, tilesList.Count);
+
+                tileToReturn = tilesList[tileIndex];
+
+                tilesList.RemoveAt(tileIndex);
+
+            }
+
+            return tileToReturn;
         }
     }
 }

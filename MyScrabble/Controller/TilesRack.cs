@@ -9,43 +9,73 @@ namespace MyScrabble.Controller
     public class TilesRack
     {
         
+        private const int TILES_RACK_SIZE = 7;
+
         //TODO: setter/getter needed?
         public Tile[] TilesArray;
 
         private readonly List<char> UniqueTilesList =
             new List<char>() {'A', 'B', 'C'};
 
+        private TilesBag _tilesBag;
 
-        public TilesRack()
+        public TilesRack(TilesBag tilesBag)
         {
-            TilesArray = new Tile[7];
+            TilesArray = new Tile[TILES_RACK_SIZE];
+
+            _tilesBag = tilesBag;
         }
+
+
 
         public void PopulateWithTiles()
         {
-            Array.ForEach(TilesArray, tile => tile = null);
+
+            for (int i = 0; i < TILES_RACK_SIZE; i++)
+            {
+                Tile randomTileFromTilesBag = _tilesBag.GetRandomTile();
+
+                if (randomTileFromTilesBag != null)
+                {
+                    InsertTileIntoTilesArray(randomTileFromTilesBag, i);
+                } 
+                //there are no more tiles in tiles rack
+                else
+                {
+                    SetTilesArrayPositionAsEmpty(i);
+                }
+            }
+
+        }
+
+        public void PopulateWithRandomTiles()
+        {
 
             Random random = new Random();
 
-            for (int i = 0; i < 7; i++)
+            for (int i = 0; i < TILES_RACK_SIZE; i++)
             {
                 int tileIndex = random.Next(0, UniqueTilesList.Count);
 
                 switch (UniqueTilesList[tileIndex])
                 {
                     case 'A':
-                        InsertTileIntoTilesArray(new TileA() { PositionInTilesRack = i }, i);
+                        InsertTileIntoTilesArray(new TileA(), i);
                         break;
                     case 'B':
-                        InsertTileIntoTilesArray(new TileB() { PositionInTilesRack = i }, i);
+                        InsertTileIntoTilesArray(new TileB(), i);
                         break;
                     case 'C':
-                        InsertTileIntoTilesArray(new TileC() { PositionInTilesRack = i }, i);
+                        InsertTileIntoTilesArray(new TileC(), i);
                         break;
                     default:
                         throw new Exception("Tile doesn't belong to the valid set of tiles");
                 }
             }
+        }
+
+        public void GetTilesFromTilesRackToTilesBag()
+        {
 
         }
 
@@ -56,7 +86,13 @@ namespace MyScrabble.Controller
 
         public void InsertTileIntoTilesArray(Tile tileToInsert, int position)
         {
+            tileToInsert.PositionInTilesRack = position;
             TilesArray[position] = tileToInsert;
+        }
+
+        private void SetTilesArrayPositionAsEmpty(int position)
+        {
+            TilesArray[position] = null;
         }
     }
 }

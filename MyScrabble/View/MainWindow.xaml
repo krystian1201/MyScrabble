@@ -32,23 +32,27 @@
 
 
         <local:TilesRackUC x:Name="tilesRackUC" Grid.Row="2" Grid.Column="1" />
-        
- 
+
+
         <StackPanel Grid.Column="2" Margin="10,50,20,0" Grid.Row="1" 
                     VerticalAlignment="Top" Height="200">
-            
+
             <Button x:Name="DoneButton" Content="Done" Margin="0,0,0,20"
                     VerticalAlignment="Top" Height="25" Click="DoneButton_Click"/>
             <Button x:Name="PassButton" Content="Pass"
                     Margin="0,0,0,20" VerticalAlignment="Top" Height="25"/>
-            <Button x:Name="ExchangeTilesButton" Content="Exchange Tiles" 
-                    Margin="0,0,0,20" VerticalAlignment="Top" Width="127" Height="25" Click="ExchangeTilesButton_Click"/>
+            
+            <!--Exchange tiles functionality suspended for now-->
+            <!--<Button x:Name="ExchangeTilesButton" Content="Exchange Tiles" 
+                    Margin="0,0,0,20" VerticalAlignment="Top" Width="127" Height="25" 
+                    Click="ExchangeTilesButton_Click"/>-->
             <Button x:Name="ResetTilesButton" Content="Reset Tiles" 
                     HorizontalAlignment="Left" Margin="0" 
                     VerticalAlignment="Top" Width="127" Height="25" Click="ResetTilesButton_Click"/>
-            
+
         </StackPanel>
-                    
+        <ListBox x:Name="TilesBagListBox" Height="300" Margin="20,0" Grid.Row="1" VerticalAlignment="Top"/>
+
 
     </Grid>
 

@@ -1,19 +1,22 @@
 ﻿
 using System;
 using System.Windows.Controls;
+using System.Collections.Generic;
 
 using MyScrabble.Controller;
+using MyScrabble.Controller.Tiles;
 
 
 namespace MyScrabble.View
 {
     public partial class TilesRackUC : UserControl
     {
-        private TilesRack tilesRack;
+        private TilesRack _tilesRack;
+        private TilesBag _tilesBag;
 
         public TilesRack TilesRack
         {
-            get { return tilesRack; }
+            get { return _tilesRack; }
         }
 
         public TilesRackUC()
@@ -25,23 +28,32 @@ namespace MyScrabble.View
                 TilesRackGrid.ColumnDefinitions.Add(new ColumnDefinition());
             }
 
-            tilesRack = new TilesRack();
+            _tilesBag = new TilesBag();
+            _tilesBag.PopulateWithTiles();
+
+            _tilesRack = new TilesRack(_tilesBag);
         }
 
         public void PopulateTilesRackUC()
         {
             TilesRackGrid.Children.Clear();
-           
-            tilesRack.PopulateWithTiles();
+
+            _tilesRack.PopulateWithTiles();
 
 
-            for (int column = 0; column < tilesRack.TilesArray.Length; column++)
+            for (int column = 0; column < _tilesRack.TilesArray.Length; column++)
             {
-                TileUC tileUC = new TileUC(tilesRack.TilesArray[column]);
-                Grid.SetColumn(tileUC, column);
-                TilesRackGrid.Children.Add(tileUC);
+                //it can happen that the tiles rack will
+                //contain less than 7 tiles
+                if (_tilesRack.TilesArray[column] != null)
+                {
+                    TileUC tileUC = new TileUC(_tilesRack.TilesArray[column]);
+                    Grid.SetColumn(tileUC, column);
+                    TilesRackGrid.Children.Add(tileUC);
+                }    
             }
         }
+
 
         public void PlaceATileInTilesRack(TileUC tileUC, int? position)
         {
@@ -50,7 +62,7 @@ namespace MyScrabble.View
                 Grid.SetColumn(tileUC, (int)position);
                 TilesRackGrid.Children.Add(tileUC);
 
-                tilesRack.InsertTileIntoTilesArray(tileUC.Tile, (int)position);
+                _tilesRack.InsertTileIntoTilesArray(tileUC.Tile, (int)position);
             }
             else
             {
@@ -58,5 +70,17 @@ namespace MyScrabble.View
             }  
         }
 
+        //just for testing
+        public List<Tile> GetAllTilesFromTilesBag()
+        {
+            return _tilesBag.TilesList;
+        }
+
+        //just a wrapper
+        //becasue MainWindow doesn't contain TilesRack but TilesRackUC
+        public void GetTilesFromTilesRackToTilesBag()
+        {
+            _tilesRack.GetTilesFromTilesRackToTilesBag();
+        }
     }
 }
