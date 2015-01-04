@@ -56,7 +56,20 @@ namespace MyScrabble.Controller
 
         public void MakeAMove()
         {
-            
+            List<Tile> tilesInMove = _boardArray.Cast<Tile>().
+                 Where(tile => tile != null && tile.WasMoveMade == false).
+                 ToList();
+
+
+            MarkTilesAfterMoveWasMade(tilesInMove);
+        }
+
+        private void MarkTilesAfterMoveWasMade(List<Tile> tilesInMove)
+        {
+            foreach (Tile tile in tilesInMove)
+            {
+                tile.WasMoveMade = true;
+            }
         }
 
         public List<string> ValidateMove()

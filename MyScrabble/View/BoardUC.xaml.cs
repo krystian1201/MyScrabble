@@ -293,14 +293,16 @@ namespace MyScrabble.View
 
         public void GetLastTilesFromBoardToTilesRack()
         {
-            List<TileUC> lastTilesOnBoard =
-                BoardGrid.Children.OfType<TileUC>().Where(TileUC => TileUC.Tile.WasMoveMade == false).ToList<TileUC>();
+            List<TileUC> tileUCsInMove =
+                BoardGrid.Children.OfType<TileUC>().
+                Where(TileUC => TileUC.Tile.WasMoveMade == false).
+                ToList<TileUC>();
 
             Grid MainGrid = (Grid)this.Parent;
 
             TilesRackUC tilesRackUC = MainGrid.Children.OfType<TilesRackUC>().FirstOrDefault();
 
-            foreach (TileUC tileUC in lastTilesOnBoard)
+            foreach (TileUC tileUC in tileUCsInMove)
             {
                 RemoveTileFromBoard(tileUC);
                 tilesRackUC.PlaceATileInTilesRack(tileUC, tileUC.Tile.PositionInTilesRack);  
@@ -317,7 +319,15 @@ namespace MyScrabble.View
             {
                 ShowMoveValidationMessages(validationMessages);
 
+                //if move was invalid, tiles go back to the tiles rack
                 GetLastTilesFromBoardToTilesRack();
+            }
+            else
+            {
+                //you cannot change position of a tile after move was made
+                MakeTileUCsInMoveNonDraggable();
+
+                _board.MakeAMove();
             }
             
         }
@@ -332,6 +342,19 @@ namespace MyScrabble.View
             }
 
             MessageBox.Show(stringBuilder.ToString(), "Invalid move");
+        }
+
+        private void MakeTileUCsInMoveNonDraggable()
+        {
+            List<TileUC> tileUCsInMove =
+                BoardGrid.Children.OfType<TileUC>().
+                Where(TileUC => TileUC.Tile.WasMoveMade == false).
+                ToList<TileUC>();
+
+            foreach (TileUC tileUC in tileUCsInMove)
+            {
+                tileUC.MakeTileUCNonDraggable();
+            }
         }
 
         public void InitializeBoardSideMarkers()

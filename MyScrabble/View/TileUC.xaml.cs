@@ -46,6 +46,11 @@ namespace MyScrabble.View
                 DragDrop.DoDragDrop(this, data, DragDropEffects.Move);
             }
         }
+
+        public void MakeTileUCNonDraggable()
+        {
+            this.MouseMove -= TileUC_MouseMove;
+        }
     }
 }
 

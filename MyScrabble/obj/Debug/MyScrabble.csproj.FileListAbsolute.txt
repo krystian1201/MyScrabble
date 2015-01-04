@@ -80,3 +80,4 @@ C:\Users\Krystian\Documents\Visual Studio 2013\Projects\MyScrabble\MyScrabble\ob
 C:\Users\Krystian\Documents\Visual Studio 2013\Projects\MyScrabble\MyScrabble\obj\Debug\MyScrabble.csproj.GenerateResource.Cache
 C:\Users\Krystian\Documents\Visual Studio 2013\Projects\MyScrabble\MyScrabble\obj\Debug\MyScrabble.exe
 C:\Users\Krystian\Documents\Visual Studio 2013\Projects\MyScrabble\MyScrabble\obj\Debug\MyScrabble.pdb
+C:\Users\Krystian\Documents\Visual Studio 2013\Projects\MyScrabble\MyScrabble\obj\Debug\MyScrabble.csprojResolveAssemblyReference.cache
