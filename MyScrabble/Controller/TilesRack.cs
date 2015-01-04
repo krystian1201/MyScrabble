@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using MyScrabble.Controller.Tiles;
 
@@ -25,8 +26,6 @@ namespace MyScrabble.Controller
 
             _tilesBag = tilesBag;
         }
-
-
 
         public void PopulateWithTiles()
         {
@@ -74,9 +73,28 @@ namespace MyScrabble.Controller
             }
         }
 
+        public void RefillTilesFromTilesBag()
+        {
+            //Tile[] emptyPositionsInTilesRack = 
+            //    TilesArray.Where(tile => tile == null).ToArray();
+
+            for (int i = 0; i < TILES_RACK_SIZE; i++)
+            {
+                if (TilesArray[i] == null)
+                {
+                    Tile randomTileFromTilesBag = _tilesBag.GetRandomTile();
+
+                    if (randomTileFromTilesBag != null)
+                    {
+                        InsertTileIntoTilesArray(randomTileFromTilesBag, i);
+                    } 
+                }
+            }
+        }
+
         public void GetTilesFromTilesRackToTilesBag()
         {
-
+            throw new NotImplementedException();
         }
 
         public void RemoveTileFromTilesArray(Tile tileToRemove)

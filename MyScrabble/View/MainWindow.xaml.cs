@@ -32,6 +32,8 @@ namespace MyScrabble.View
         private void DoneButton_Click(object sender, RoutedEventArgs e)
         {
             boardUC.MakeAMove();
+            tilesRackUC.RefillTilesFromTilesBag();
+
             UpdateTilesBagListBox();
         }
 

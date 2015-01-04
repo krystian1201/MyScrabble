@@ -305,7 +305,7 @@ namespace MyScrabble.View
             foreach (TileUC tileUC in tileUCsInMove)
             {
                 RemoveTileFromBoard(tileUC);
-                tilesRackUC.PlaceATileInTilesRack(tileUC, tileUC.Tile.PositionInTilesRack);  
+                tilesRackUC.PlaceATileFromBoardInTilesRack(tileUC, tileUC.Tile.PositionInTilesRack);  
             }
 
         }

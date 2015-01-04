@@ -11,6 +11,7 @@ namespace MyScrabble.View
 {
     public partial class TilesRackUC : UserControl
     {
+
         private TilesRack _tilesRack;
         private TilesBag _tilesBag;
 
@@ -23,15 +24,16 @@ namespace MyScrabble.View
         {
             InitializeComponent();
 
-            for (int i = 0; i < 7; i++)
-            {
-                TilesRackGrid.ColumnDefinitions.Add(new ColumnDefinition());
-            }
-
             _tilesBag = new TilesBag();
             _tilesBag.PopulateWithTiles();
 
             _tilesRack = new TilesRack(_tilesBag);
+
+
+            for (int i = 0; i < _tilesRack.TilesArray.Length; i++)
+            {
+                TilesRackGrid.ColumnDefinitions.Add(new ColumnDefinition());
+            }  
         }
 
         public void PopulateTilesRackUC()
@@ -41,21 +43,26 @@ namespace MyScrabble.View
             _tilesRack.PopulateWithTiles();
 
 
-            for (int column = 0; column < _tilesRack.TilesArray.Length; column++)
+            for (int position = 0; position < _tilesRack.TilesArray.Length; position++)
             {
                 //it can happen that the tiles rack will
                 //contain less than 7 tiles
-                if (_tilesRack.TilesArray[column] != null)
+                if (_tilesRack.TilesArray[position] != null)
                 {
-                    TileUC tileUC = new TileUC(_tilesRack.TilesArray[column]);
-                    Grid.SetColumn(tileUC, column);
-                    TilesRackGrid.Children.Add(tileUC);
+                    ShowATileFromTilesRackInTilesRackUC(position);
                 }    
             }
         }
 
+        private void ShowATileFromTilesRackInTilesRackUC(int position)
+        {
+            TileUC tileUC = new TileUC(_tilesRack.TilesArray[position]);
 
-        public void PlaceATileInTilesRack(TileUC tileUC, int? position)
+            Grid.SetColumn(tileUC, position);
+            TilesRackGrid.Children.Add(tileUC);
+        }
+
+        public void PlaceATileFromBoardInTilesRack(TileUC tileUC, int? position)
         {
             if (position != null)
             {
@@ -81,6 +88,24 @@ namespace MyScrabble.View
         public void GetTilesFromTilesRackToTilesBag()
         {
             _tilesRack.GetTilesFromTilesRackToTilesBag();
+        }
+
+        public void RefillTilesFromTilesBag()
+        {
+            if (_tilesBag.TilesList.Count > 0)
+            {
+                _tilesRack.RefillTilesFromTilesBag();
+
+                TilesRackGrid.Children.Clear();
+
+                for (int position = 0; position < _tilesRack.TilesArray.Length; position++)
+                {
+                    if (_tilesRack.TilesArray[position] != null)
+                    {
+                        ShowATileFromTilesRackInTilesRackUC(position);
+                    }
+                }
+            } 
         }
     }
 }
