@@ -63,39 +63,38 @@ namespace MyScrabble.Controller
         {
             List<string> validationMessages = new List<string>();
 
-            if (!AreTilesInLine())
+            List<Tile> tilesInMove = _boardArray.Cast<Tile>().
+                 Where(tile => tile != null && tile.WasMoveMade == false).
+                 ToList();
+
+            if (IsMoveEmpty(tilesInMove))
             {
-                validationMessages.Add("The tiles are not in one line");
+                validationMessages.Add("You didn't place any tiles on board");
+            }
+            else if (!AreTilesInSameRowOrColumn(tilesInMove))
+            {
+                validationMessages.Add("The tiles are not in one row or column");
+            }
+            else if (!AreTilesNextToEachOther(tilesInMove))
+            {
+                validationMessages.Add("The tiles are not next to each other");
             }
 
             return validationMessages;
         }
 
 
-        private bool AreTilesInLine()
-        {
-            List<Tile> tilesInMove = _boardArray.Cast<Tile>().
-                 Where(tile => tile != null && tile.WasMoveMade == false).
-                 ToList();
-
-            bool areInLine = false;
-
-            if (tilesInMove.Count > 0)
-            {
-                areInLine = AreTilesInSameRowOrColumn(tilesInMove);
-                
-            }
-            else
-            {
-                throw new Exception("No tile was placed on board in the move");
-            }
-
-             return areInLine;
-        }
 
         private bool AreTilesInSameRowOrColumn(List<Tile> tilesInMove)
         {
-            //here we assume that tilesInMove contains at least one element
+            //here we assume that there was at least one tile in a move
+            if (tilesInMove == null || tilesInMove.Count == 0)
+            {
+                throw new 
+                    Exception("There should be at least one tile placed in a move to check" +
+                                "if tiles are in the same row or column");
+            }
+
             int xPosition = (int)tilesInMove[0].PositionOnBoard.Value.X;
             int yPosition = (int)tilesInMove[0].PositionOnBoard.Value.Y;
 
@@ -125,16 +124,118 @@ namespace MyScrabble.Controller
 
         private bool AreTilesNextToEachOther(List<Tile> tilesInMove)
         {
-            return false;
+            //here we assume that there was at least one tile in a move and that
+            //tiles are in one row or column
+            if (tilesInMove == null || tilesInMove.Count == 0)
+            {
+                throw new
+                    Exception("There should be at least one tile placed in a move to check" +
+                                "if tiles are next to each other");
+            }
+
+            int? commonColumn = null;
+            int? commonRow = null;
+
+            GetTilesCommonRowOrColumn(tilesInMove, ref commonColumn, ref commonRow);
+
+            bool areTilesNextToEachOtherInColumn = false;
+            bool areTilesNextToEachOtherInRow = false;
+
+            if (commonColumn != null)
+            {
+                areTilesNextToEachOtherInColumn = AreTilesNextToEachOtherInColumn(tilesInMove);
+            }
+            else if (commonRow != null)
+            {
+                areTilesNextToEachOtherInRow = AreTilesNextToEachOtherInRow(tilesInMove);
+            }
+            else
+            {
+                throw new 
+                    Exception("Cannot check if tiles are next to each other because" +
+                                "they are not in the same row or column");
+            }
+
+            return areTilesNextToEachOtherInColumn ^ areTilesNextToEachOtherInRow;
         }
 
-        public bool CanTileBePlacedHere(int xPosition, int yPosition)
+        private void GetTilesCommonRowOrColumn(List<Tile> tilesInMove, ref int? commonColumn, ref int? commonRow)
         {
+            if (tilesInMove.Count > 1)
+            {
+                if (tilesInMove[0].PositionOnBoard.Value.X == tilesInMove[1].PositionOnBoard.Value.X)
+                {
+                    commonColumn = (int)tilesInMove[0].PositionOnBoard.Value.X;
+                }
+                else if (tilesInMove[0].PositionOnBoard.Value.Y == tilesInMove[1].PositionOnBoard.Value.Y)
+                {
+                    commonRow = (int)tilesInMove[0].PositionOnBoard.Value.Y;
+                }
+            }
+            else if (tilesInMove.Count == 1)
+            {
+                commonColumn = (int)tilesInMove[0].PositionOnBoard.Value.X;
+            }
+        }
 
-            //TODO for now we just check if a tile has already been placed at
-            //a given spot
-            //later also more complex conditions will be checked
-            //or not - this applies to just a single tile - not whole words
+        private bool AreTilesNextToEachOtherInColumn(List<Tile> tilesInMove)
+        {
+            bool result = true;
+
+            List<Tile> sortedTilesInMove =
+                    tilesInMove.OrderBy(tile => tile.PositionOnBoard.Value.Y).ToList();
+
+            for (int i = 0; i < tilesInMove.Count-1; i++)
+            {
+                if (sortedTilesInMove[i + 1].PositionOnBoard.Value.Y !=
+                    sortedTilesInMove[i].PositionOnBoard.Value.Y + 1)
+                {
+                    result = false;
+                    break;
+                }
+            }
+
+            return result;
+        }
+
+        private bool AreTilesNextToEachOtherInRow(List<Tile> tilesInMove)
+        {
+            bool result = true;
+
+            List<Tile> sortedTilesInMove =
+                    tilesInMove.OrderBy(tile => tile.PositionOnBoard.Value.X).ToList();
+
+            for (int i = 0; i < tilesInMove.Count - 1; i++)
+            {
+                if (sortedTilesInMove[i + 1].PositionOnBoard.Value.X !=
+                    sortedTilesInMove[i].PositionOnBoard.Value.X + 1)
+                {
+                    result = false;
+                    break;
+                }
+            }
+
+            return result;
+        }
+
+        private bool IsMoveEmpty(List<Tile> tilesInMove)
+        {
+            if(tilesInMove != null)
+            {
+                if (tilesInMove.Count > 0)
+                {
+                    return false;
+                }
+
+                return true;
+                
+            }
+
+            return true;
+        }
+
+        public bool IsThePlaceOnBoardOccupied(int xPosition, int yPosition)
+        {
             if (_boardArray[xPosition, yPosition] == null)
             {
                 return true;

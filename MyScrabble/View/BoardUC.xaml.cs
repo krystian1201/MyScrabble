@@ -226,7 +226,7 @@ namespace MyScrabble.View
                 int row = Grid.GetRow(uiElement);
 
 
-                if (_board.CanTileBePlacedHere(column, row))
+                if (_board.IsThePlaceOnBoardOccupied(column, row))
                 {
                     TileUC tileUC = (TileUC)dragEventArgs.Data.GetData("TileUC");
 
