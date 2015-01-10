@@ -8,10 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("assets/a.jpg")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("assets/b.jpg")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("assets/c.jpg")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("assets/d.jpg")]
-[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("assets/e.jpg")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("assets/sowpods.txt")]
 
 

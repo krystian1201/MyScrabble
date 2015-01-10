@@ -1,4 +1,8 @@
 ﻿
+using System;
+using System.Windows;
+using System.IO;
+
 using System.Collections.Generic;
 
 
@@ -12,10 +16,42 @@ namespace MyScrabble.Controller
         {
             wordList = new List<string>();
 
-            PopulateWordList();
+            //for tests
+            //PopulateWordListWithSetWords();
+
+            //proper method
+            PopulateWordListWithWordsFromDictionary();
         }
 
-        private void PopulateWordList()
+
+        private void PopulateWordListWithWordsFromDictionary()
+        {
+            string[] lines = null;
+
+            try
+            {
+                lines = System.IO.File.ReadAllLines(@"sowpods.txt");
+
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("The dictionary file could not be read:\n" + e.Message);
+            }
+
+            if (lines != null && lines.Length > 0)
+            {
+                wordList.AddRange(lines);
+            }
+            else
+            {
+                MessageBox.Show("The dictionary file was not read correctly");
+            }
+           
+        }
+
+
+        //just for tests
+        private void PopulateWordListWithSetWords()
         {
             wordList.Add("baba");
             wordList.Add("baca");
