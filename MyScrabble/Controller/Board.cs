@@ -101,7 +101,7 @@ namespace MyScrabble.Controller
             {
                 validationMessages.Add("The tiles are not next to each other");
             }
-            else if (!IsWordInDictionary(tilesInMove))
+            else if (!FormsWordsFromDictionary(tilesInMove))
             {
                 validationMessages.Add("The word is not in the official Scrabble dictionary");
             }
@@ -263,11 +263,12 @@ namespace MyScrabble.Controller
             return result;
         }
 
-        private bool IsWordInDictionary(List<Tile> tilesInMove)
+        private bool FormsWordsFromDictionary(List<Tile> tilesInMove)
         {
             //here we assume the tiles in move are next to each other in one row or column
 
-            bool isWordInDictionary = false;
+            bool isWordInDictionaryInColumn = false;
+            bool isWordInDictionaryInRow = false;
 
 
             int? commonColumn = null;
@@ -279,12 +280,12 @@ namespace MyScrabble.Controller
             if (commonColumn != null)
             {
                 string wordInColumn = GetWordInColumn((int)commonColumn, tilesInMove);
-                isWordInDictionary = _scrabbleDictionary.IsWordInDictionary(wordInColumn);
+                isWordInDictionaryInColumn = _scrabbleDictionary.IsWordInDictionary(wordInColumn);
             }
             if (commonRow != null)
             {
                 string wordInRow = GetWordInRow((int)commonRow, tilesInMove);
-                isWordInDictionary = _scrabbleDictionary.IsWordInDictionary(wordInRow);
+                isWordInDictionaryInRow = _scrabbleDictionary.IsWordInDictionary(wordInRow);
             }
             if (commonColumn == null && commonRow == null)
             {
@@ -293,7 +294,14 @@ namespace MyScrabble.Controller
                                 "tiles are not in the same row or column");
             }
 
-            return isWordInDictionary;
+            //if a given tile form words both in column and row,
+            //then both of these words must be in dictionary
+            if (commonColumn != null && commonRow != null)
+            {
+                return isWordInDictionaryInColumn && isWordInDictionaryInRow;
+            }
+
+            return isWordInDictionaryInColumn ^ isWordInDictionaryInRow;
         }
 
         private void GetTilesCommonRowOrColumn(List<Tile> tilesInMove, ref int? commonColumn, ref int? commonRow)
@@ -311,8 +319,24 @@ namespace MyScrabble.Controller
             }
             else if (tilesInMove.Count == 1)
             {
-                commonColumn = (int)tilesInMove[0].PositionOnBoard.Value.X;
-                commonRow = (int)tilesInMove[0].PositionOnBoard.Value.Y;
+                int column = (int)tilesInMove[0].PositionOnBoard.Value.X;
+                int row = (int)tilesInMove[0].PositionOnBoard.Value.Y;
+
+                //if there is a tile placed above or below, then
+                //the single tile placed in the current move have a common column with them
+                if ((column >= 1 && _boardArray[column, row - 1] != null) ||
+                (column <= BOARD_SIZE - 2 && _boardArray[column, row + 1] != null))
+                {
+                    commonColumn = column;
+                }
+
+                //if there is a tile placed to the left or to the right, then
+                //the single tile placed in the current move have a common row with them
+                if ((row >= 1 && _boardArray[column - 1, row] != null) ||
+                (row <= BOARD_SIZE - 2 && _boardArray[column + 1, row] != null))
+                {
+                    commonRow = row;
+                }
             }
         }
 
