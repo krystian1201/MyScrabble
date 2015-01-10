@@ -7,7 +7,7 @@ namespace MyScrabble.Controller.Tiles
         private const string imageURI =
             @"\Assets\A.jpg";
 
-        public TileA() : base('A', 1, imageURI)
+        public TileA() : base('a', 1, imageURI)
         {
         }
     }

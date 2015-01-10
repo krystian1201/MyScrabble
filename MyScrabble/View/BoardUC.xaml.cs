@@ -16,6 +16,7 @@ namespace MyScrabble.View
 
     public partial class BoardUC : UserControl
     {
+        private ScrabbleDictionary _scrabbleDictionary;
         private Board _board;
 
         //otherwise the project doesn't compile
@@ -32,7 +33,8 @@ namespace MyScrabble.View
 
             BoardGrid.Drop += BoardGrid_Drop;
 
-            _board = new Board();
+            _scrabbleDictionary = new ScrabbleDictionary();
+            _board = new Board(_scrabbleDictionary);
         }
 
 

@@ -8,7 +8,7 @@ namespace MyScrabble.Controller.Tiles
             @"\Assets\B.jpg";
 
         public TileB()
-            : base('B', 3, imageURI)
+            : base('b', 3, imageURI)
         {
         }
     }

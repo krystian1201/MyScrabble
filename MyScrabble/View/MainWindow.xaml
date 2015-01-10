@@ -42,10 +42,10 @@
             <Button x:Name="PassButton" Content="Pass"
                     Margin="0,0,0,20" VerticalAlignment="Top" Height="25"/>
             
-            <!--Exchange tiles functionality suspended for now-->
-            <!--<Button x:Name="ExchangeTilesButton" Content="Exchange Tiles" 
+            <Button x:Name="ExchangeTilesButton" Content="Exchange Tiles" 
                     Margin="0,0,0,20" VerticalAlignment="Top" Width="127" Height="25" 
-                    Click="ExchangeTilesButton_Click"/>-->
+                    Click="ExchangeTilesButton_Click"/>
+            
             <Button x:Name="ResetTilesButton" Content="Reset Tiles" 
                     HorizontalAlignment="Left" Margin="0" 
                     VerticalAlignment="Top" Width="127" Height="25" Click="ResetTilesButton_Click"/>

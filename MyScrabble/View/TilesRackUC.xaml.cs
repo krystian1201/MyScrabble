@@ -40,7 +40,11 @@ namespace MyScrabble.View
         {
             TilesRackGrid.Children.Clear();
 
-            _tilesRack.PopulateWithTiles();
+            //we should use this function
+            //_tilesRack.PopulateWithTiles();
+
+            //but for testing purposes - we use this one
+            _tilesRack.PopulateWithSetTiles();
 
 
             for (int position = 0; position < _tilesRack.TilesArray.Length; position++)

@@ -27,7 +27,7 @@ namespace MyScrabble.Controller
             _tilesBag = tilesBag;
         }
 
-        public void PopulateWithTiles()
+        public void PopulateWithTilesFromTilesBag()
         {
 
             for (int i = 0; i < TILES_RACK_SIZE; i++)
@@ -71,6 +71,18 @@ namespace MyScrabble.Controller
                         throw new Exception("Tile doesn't belong to the valid set of tiles");
                 }
             }
+        }
+
+        //for testing purposes
+        public void PopulateWithSetTiles()
+        {
+            InsertTileIntoTilesArray(new TileA(), 0);
+            InsertTileIntoTilesArray(new TileA(), 1);
+            InsertTileIntoTilesArray(new TileB(), 2);
+            InsertTileIntoTilesArray(new TileB(), 3);
+            InsertTileIntoTilesArray(new TileB(), 4);
+            InsertTileIntoTilesArray(new TileC(), 5);
+            InsertTileIntoTilesArray(new TileC(), 6);
         }
 
         public void RefillTilesFromTilesBag()

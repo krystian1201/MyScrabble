@@ -15,14 +15,18 @@ namespace MyScrabble.View
     
     public partial class MainWindow : Window
     {
-        private TilesBag tilesBag;
-        private readonly Player player1;
+        private TilesBag _tilesBag;
+        //private readonly Player _player1;
+        //private readonly ScrabbleDictionary _scrabbleDictionary;
 
         public MainWindow()
         {
             InitializeComponent();
 
-            player1 = new Player();
+            //_player1 = new Player();
+
+            //_scrabbleDictionary = new ScrabbleDictionary();
+            //bool result = _scrabbleDictionary.IsWordInDictionary("baca");
 
             tilesRackUC.PopulateTilesRackUC();
 
@@ -37,13 +41,12 @@ namespace MyScrabble.View
             UpdateTilesBagListBox();
         }
 
-        //Echange tiles functionality was suspended for the moment
-        //private void ExchangeTilesButton_Click(object sender, RoutedEventArgs e)
-        //{
-        //    tilesRackUC.PopulateTilesRackUC();
-        //    tilesRackUC.GetTilesFromTilesRackToTilesBag();
-        //    UpdateTilesBagListBox();
-        //}
+        private void ExchangeTilesButton_Click(object sender, RoutedEventArgs e)
+        {
+            tilesRackUC.PopulateTilesRackUC();
+            tilesRackUC.GetTilesFromTilesRackToTilesBag();
+            UpdateTilesBagListBox();
+        }
 
         private void ResetTilesButton_Click(object sender, RoutedEventArgs e)
         {
