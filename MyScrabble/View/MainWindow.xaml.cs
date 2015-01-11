@@ -16,21 +16,16 @@ namespace MyScrabble.View
     public partial class MainWindow : Window
     {
         private TilesBag _tilesBag;
-        //private readonly Player _player1;
-        //private readonly ScrabbleDictionary _scrabbleDictionary;
+        
 
         public MainWindow()
         {
             InitializeComponent();
 
-            //_player1 = new Player();
-
-            //_scrabbleDictionary = new ScrabbleDictionary();
-            //bool result = _scrabbleDictionary.IsWordInDictionary("baca");
-
             tilesRackUC.PopulateTilesRackUC();
-
             UpdateTilesBagListBox();
+
+            Game.Start();
         }
 
         private void DoneButton_Click(object sender, RoutedEventArgs e)

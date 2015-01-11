@@ -66,6 +66,11 @@ namespace MyScrabble.Controller
 
 
             MarkTilesAfterMoveWasMade(tilesInMove);
+
+            if (Game.IsFirstMove)
+            {
+                Game.SetAfterFirstMove();
+            }
         }
 
         private void MarkTilesAfterMoveWasMade(List<Tile> tilesInMove)
@@ -105,6 +110,10 @@ namespace MyScrabble.Controller
             {
                 validationMessages.Add("The word is not in the official Scrabble dictionary");
             }
+            if (Game.IsFirstMove && !WordGoesThroughTheCenterOfBoard(tilesInMove))
+            {
+                validationMessages.Add("The first word in the game should go through the center of board");
+            }
 
             return validationMessages;
         }
@@ -128,6 +137,9 @@ namespace MyScrabble.Controller
 
         private bool AreTilesInSameRowOrColumn(List<Tile> tilesInMove)
         {
+            bool areInSameRow = false;
+            bool areInSameColumn = false;
+
             //here we assume that there was at least one tile in a move
             if (tilesInMove == null || tilesInMove.Count == 0)
             {
@@ -135,30 +147,36 @@ namespace MyScrabble.Controller
                     Exception("There should be at least one tile placed in a move to check" +
                                 "if tiles are in the same row or column");
             }
-
-            int xPosition = (int)tilesInMove[0].PositionOnBoard.Value.X;
-            int yPosition = (int)tilesInMove[0].PositionOnBoard.Value.Y;
-
-            bool areInSameRow = true;
-            bool areInSameColumn = true;
-
-            foreach (Tile tile in tilesInMove)
+            //if there is just one tile in move, you cannot say
+            //that it is in the same row or column with other tiles in move
+            else if (tilesInMove.Count >= 2)
             {
-                if (areInSameColumn && (int)tile.PositionOnBoard.Value.X != xPosition)
-                {
-                    areInSameColumn = false;
-                }
+                int xPosition = (int)tilesInMove[0].PositionOnBoard.Value.X;
+                int yPosition = (int)tilesInMove[0].PositionOnBoard.Value.Y;
 
-                if (areInSameRow && (int)tile.PositionOnBoard.Value.Y != yPosition)
-                {
-                    areInSameRow = false;
-                }
 
-                if (!areInSameColumn && !areInSameRow)
+                areInSameRow = true;
+                areInSameColumn = true;
+
+                foreach (Tile tile in tilesInMove)
                 {
-                    break;
+                    if (areInSameColumn && (int)tile.PositionOnBoard.Value.X != xPosition)
+                    {
+                        areInSameColumn = false;
+                    }
+
+                    if (areInSameRow && (int)tile.PositionOnBoard.Value.Y != yPosition)
+                    {
+                        areInSameRow = false;
+                    }
+
+                    if (!areInSameColumn && !areInSameRow)
+                    {
+                        break;
+                    }
                 }
             }
+
 
             return areInSameRow || areInSameColumn;
         }
@@ -179,7 +197,7 @@ namespace MyScrabble.Controller
             int? commonRow = null;
 
             
-            GetTilesCommonRowOrColumn(tilesInMove, ref commonColumn, ref commonRow);
+            GetTilesCommonRowOrColumnOrBoth(tilesInMove, ref commonColumn, ref commonRow);
 
             bool areTilesNextToEachOtherInColumn = false;
             bool areTilesNextToEachOtherInRow = false;
@@ -274,7 +292,7 @@ namespace MyScrabble.Controller
             int? commonColumn = null;
             int? commonRow = null;
 
-            GetTilesCommonRowOrColumn(tilesInMove, ref commonColumn, ref commonRow);
+            GetTilesCommonRowOrColumnOrBoth(tilesInMove, ref commonColumn, ref commonRow);
 
             
             if (commonColumn != null)
@@ -304,7 +322,7 @@ namespace MyScrabble.Controller
             return isWordInDictionaryInColumn ^ isWordInDictionaryInRow;
         }
 
-        private void GetTilesCommonRowOrColumn(List<Tile> tilesInMove, ref int? commonColumn, ref int? commonRow)
+        private void GetTilesCommonRowOrColumnOrBoth(List<Tile> tilesInMove, ref int? commonColumn, ref int? commonRow)
         {
             if (tilesInMove.Count > 1)
             {
@@ -449,6 +467,22 @@ namespace MyScrabble.Controller
             }
 
             return sbWord.ToString();
+        }
+
+        private bool WordGoesThroughTheCenterOfBoard(List<Tile> tilesInMove)
+        {
+            bool result = false;
+
+            foreach (Tile tileInMove in tilesInMove)
+            {
+                if (tileInMove.PositionOnBoard == new Point(7, 7))
+                {
+                    result = true;
+                    break;
+                }
+            }
+
+            return result;
         }
 
         public bool IsThePlaceOnBoardOccupied(int xPosition, int yPosition)
