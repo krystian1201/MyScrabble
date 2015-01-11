@@ -85,12 +85,8 @@ namespace MyScrabble.Controller
         {
             List<string> validationMessages = new List<string>();
 
-            List<Tile> tilesOnBoard = _boardArray.Cast<Tile>().
-                Where(tile => tile != null).
-                ToList();
-
-            List<Tile> tilesInMove =
-                tilesOnBoard.Where(tile => tile.WasMoveMade == false).
+            List<Tile> tilesInMove = _boardArray.Cast<Tile>().
+                Where(tile => tile != null && tile.WasMoveMade == false).
                 ToList();
 
 
@@ -98,33 +94,28 @@ namespace MyScrabble.Controller
             {
                 validationMessages.Add("You didn't place any tiles on board");
             }
-            else if (tilesInMove.Count >=2 )
+            else if (tilesInMove.Count >= 2 && !AreTilesInSameRowOrColumn(tilesInMove))
             {
-                if (!AreTilesInSameRowOrColumn(tilesInMove))
-                {
-                    validationMessages.Add("The tiles are not in one row or column");
-                }
-                else if(!AreTilesNextToEachOther(tilesOnBoard, tilesInMove))
-                {
-                    validationMessages.Add("The tiles are not next to each other");
-                } 
+                validationMessages.Add("The tiles are not in one row or column");
             }
-            if (Game.IsFirstMove)
+            else if (tilesInMove.Count >= 2 && !AreTilesNextToEachOther(tilesInMove))
             {
-                if (!WordGoesThroughTheCenterOfBoard(tilesInMove))
-                {
-                    validationMessages.Add("The first word in the game should go through the center of board");
-                }
+                validationMessages.Add("The tiles are not next to each other");
             }
-            else
+            else if (Game.IsFirstMove && !WordGoesThroughTheCenterOfBoard(tilesInMove))
             {
-                if (!FormWordsInCrosswordWay(tilesInMove))
-                {
-                    validationMessages.Add("All the words (except the first one) must be formed" +
-                        " in a crossword way");
-                }
+                validationMessages.Add("The first word in the game should go through the center of board");
             }
-            if (validationMessages.Count == 0 && !FormsWordsFromDictionary(tilesInMove))
+            else if (Game.IsFirstMove && tilesInMove.Count == 1)
+            {
+                validationMessages.Add("Single-letter words are not allowed in Scrabble");
+            }
+            else if (!Game.IsFirstMove && !FormWordsInCrosswordWay(tilesInMove))
+            {
+                validationMessages.Add("All the words (except the first one) must be formed" +
+                                        " in a crossword way");
+            }
+            else if (!FormsWordsFromDictionary(tilesInMove))
             {
                 validationMessages.Add("The word is not in the official Scrabble dictionary");
             }
@@ -198,7 +189,7 @@ namespace MyScrabble.Controller
 
         //this method takes into account both tiles in the move and
         //tiles on board next to them
-        private bool AreTilesNextToEachOther(List<Tile> tilesOnBoard, List<Tile> tilesInMove)
+        private bool AreTilesNextToEachOther(List<Tile> tilesInMove)
         {
             if (tilesInMove == null || tilesInMove.Count <= 1)
             {
@@ -479,37 +470,157 @@ namespace MyScrabble.Controller
 
         private bool WordGoesThroughTheCenterOfBoard(List<Tile> tilesInMove)
         {
-            bool result = false;
-
             foreach (Tile tileInMove in tilesInMove)
             {
                 if (tileInMove.PositionOnBoard == new Point(7, 7))
                 {
-                    result = true;
-                    break;
+                    return true;
                 }
             }
 
-            return result;
-        }
-
-
-        private bool FormWordsInCrosswordWay(List<Tile> tilesInMove)
-        {
-            bool result = false;
-
-            result = IsWordAdjacentToOthers() || DoesWordCrossOthers();
-
-            return result;
-        }
-
-        private bool IsWordAdjacentToOthers()
-        {
             return false;
         }
 
-        private bool DoesWordCrossOthers()
+        private bool FormWordsInCrosswordWay(List<Tile> tilesInMove)
         {
+
+            int? commonColumn = null;
+            int? commonRow = null;
+
+            GetTilesCommonRowOrColumnOrBoth(tilesInMove, ref commonColumn, ref commonRow);
+
+            bool result = false;
+
+            //that should include only single-letter words?
+            if (commonRow != null && commonColumn != null)
+            {
+                result = CheckAdjacentAndCrossingTilesForHorizontalWord(tilesInMove, (int)commonRow) &&
+                    CheckAdjacentAndCrossingTilesForVerticalWord(tilesInMove, (int)commonColumn);
+            }
+            else
+            {
+                if (commonRow != null)
+                {
+                    result = CheckAdjacentAndCrossingTilesForHorizontalWord(tilesInMove, (int)commonRow);
+                }
+                //I'm not sure whether row and column should be exclusive here
+                //Should the word be either vertical or horizontal?
+                //What about single-letter words?
+                else if (commonColumn != null)
+                {
+                    result = CheckAdjacentAndCrossingTilesForVerticalWord(tilesInMove, (int)commonColumn);
+                }
+            }
+            
+
+            return result;
+        }
+
+        private bool CheckAdjacentAndCrossingTilesForHorizontalWord(List<Tile> tilesInMove, int commonRow)
+        {
+
+            int wordLeftMostIndex = (int)tilesInMove.Min(tile => tile.PositionOnBoard.Value.X);
+            int wordRightMostIndex = (int)tilesInMove.Max(tile => tile.PositionOnBoard.Value.X);
+
+
+            //for the left-most tile in word
+            //-> check tiles adjacent to the left
+
+             //for the right-most tile in word
+            //-> check tiles adjacent to the right
+
+            if (IsThereTileAdjacentToTheLeft(wordLeftMostIndex, (int)commonRow) ||
+               IsThereTileAdjacentToTheRight(wordRightMostIndex, (int)commonRow) )
+            {
+                return true;
+            } 
+
+
+            //for all tiles
+            //-> check tiles adjacent above and below
+            for (int xIndex = wordLeftMostIndex; xIndex <= wordRightMostIndex; xIndex++)
+            {
+                if(IsThereTileAdjacentAbove(xIndex, (int)commonRow) ||
+                    IsThereTileAdjacentBelow(xIndex, (int)commonRow))
+                {
+                    return true;
+                }
+            }
+
+            return false; ;
+        }
+
+        private bool CheckAdjacentAndCrossingTilesForVerticalWord(List<Tile> tilesInMove, int commonColumn)
+        {
+
+            int wordTopMostIndex = (int)tilesInMove.Min(tile => tile.PositionOnBoard.Value.Y);
+            int wordBottomMostIndex = (int)tilesInMove.Max(tile => tile.PositionOnBoard.Value.Y);
+
+
+            //for the top-most tile in word
+            //-> check tiles adjacent above
+
+            //for the bottom-most tile in word
+            //-> check tiles adjacent below
+
+            if (IsThereTileAdjacentAbove((int)commonColumn, wordTopMostIndex) ||
+               IsThereTileAdjacentBelow((int)commonColumn, wordBottomMostIndex))
+            {
+                return true;
+            }
+
+
+            //for all tiles
+            //-> check tiles adjacent to the left and to the right
+            for (int yIndex = wordTopMostIndex; yIndex <= wordBottomMostIndex; yIndex++)
+            {
+                if (IsThereTileAdjacentToTheLeft((int)commonColumn, yIndex) ||
+                    IsThereTileAdjacentToTheRight((int)commonColumn, yIndex))
+                {
+                    return true;
+                }
+            }
+
+            return false; ;
+        }
+
+        private bool IsThereTileAdjacentToTheLeft(int xIndex, int yIndex)
+        {
+            if (xIndex >= 1 && _boardArray[xIndex - 1, yIndex] != null)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool IsThereTileAdjacentToTheRight(int xIndex, int yIndex)
+        {
+            if (xIndex <= BOARD_SIZE - 2 && _boardArray[xIndex + 1, yIndex] != null)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool IsThereTileAdjacentAbove(int xIndex, int yIndex)
+        {
+            if (yIndex >= 1 && _boardArray[xIndex, yIndex - 1] != null)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool IsThereTileAdjacentBelow(int xIndex, int yIndex)
+        {
+            if (yIndex <= BOARD_SIZE - 2 && _boardArray[xIndex, yIndex + 1] != null)
+            {
+                return true;
+            }
+
             return false;
         }
 
