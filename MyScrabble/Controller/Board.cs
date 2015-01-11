@@ -98,21 +98,35 @@ namespace MyScrabble.Controller
             {
                 validationMessages.Add("You didn't place any tiles on board");
             }
-            else if (!AreTilesInSameRowOrColumn(tilesInMove))
+            else if (tilesInMove.Count >=2 )
             {
-                validationMessages.Add("The tiles are not in one row or column");
+                if (!AreTilesInSameRowOrColumn(tilesInMove))
+                {
+                    validationMessages.Add("The tiles are not in one row or column");
+                }
+                else if(!AreTilesNextToEachOther(tilesOnBoard, tilesInMove))
+                {
+                    validationMessages.Add("The tiles are not next to each other");
+                } 
             }
-            else if (!AreTilesNextToEachOther(tilesOnBoard, tilesInMove))
+            if (Game.IsFirstMove)
             {
-                validationMessages.Add("The tiles are not next to each other");
+                if (!WordGoesThroughTheCenterOfBoard(tilesInMove))
+                {
+                    validationMessages.Add("The first word in the game should go through the center of board");
+                }
             }
-            else if (!FormsWordsFromDictionary(tilesInMove))
+            else
+            {
+                if (!FormWordsInCrosswordWay(tilesInMove))
+                {
+                    validationMessages.Add("All the words (except the first one) must be formed" +
+                        " in a crossword way");
+                }
+            }
+            if (validationMessages.Count == 0 && !FormsWordsFromDictionary(tilesInMove))
             {
                 validationMessages.Add("The word is not in the official Scrabble dictionary");
-            }
-            if (Game.IsFirstMove && !WordGoesThroughTheCenterOfBoard(tilesInMove))
-            {
-                validationMessages.Add("The first word in the game should go through the center of board");
             }
 
             return validationMessages;
@@ -140,15 +154,15 @@ namespace MyScrabble.Controller
             bool areInSameRow = false;
             bool areInSameColumn = false;
 
-            //here we assume that there was at least one tile in a move
-            if (tilesInMove == null || tilesInMove.Count == 0)
+            //here we assume that there were at least two tiles in a move
+            //if there is just one tile in move, checking if it is in the same
+            //row or column with others just doesn't make sense
+            if (tilesInMove == null || tilesInMove.Count <= 1)
             {
                 throw new 
-                    Exception("There should be at least one tile placed in a move to check" +
+                    Exception("There should be at least two tiles placed in a move to check" +
                                 "if tiles are in the same row or column");
             }
-            //if there is just one tile in move, you cannot say
-            //that it is in the same row or column with other tiles in move
             else if (tilesInMove.Count >= 2)
             {
                 int xPosition = (int)tilesInMove[0].PositionOnBoard.Value.X;
@@ -178,37 +192,37 @@ namespace MyScrabble.Controller
             }
 
 
-            return areInSameRow || areInSameColumn;
+            return areInSameRow ^ areInSameColumn;
         }
 
+
+        //this method takes into account both tiles in the move and
+        //tiles on board next to them
         private bool AreTilesNextToEachOther(List<Tile> tilesOnBoard, List<Tile> tilesInMove)
         {
-
-            //here we assume that there was at least one tile on the board and that
-            //tiles are in the same row or column
-            if (tilesOnBoard == null || tilesOnBoard.Count == 0)
+            if (tilesInMove == null || tilesInMove.Count <= 1)
             {
                 throw new
-                    Exception("There should be at least one tile on board to check" +
+                    Exception("There should be at least two tiles in move to check" +
                                 "if tiles are next to each other");
             }
 
             int? commonColumn = null;
             int? commonRow = null;
-
             
             GetTilesCommonRowOrColumnOrBoth(tilesInMove, ref commonColumn, ref commonRow);
+
 
             bool areTilesNextToEachOtherInColumn = false;
             bool areTilesNextToEachOtherInRow = false;
 
             if (commonColumn != null)
             {
-                areTilesNextToEachOtherInColumn = AreTilesNextToEachOtherInColumn(tilesOnBoard, (int)commonColumn);
+                areTilesNextToEachOtherInColumn = AreTilesNextToEachOtherInColumn(tilesInMove, (int)commonColumn);
             }
             if (commonRow != null)
             {
-                areTilesNextToEachOtherInRow = AreTilesNextToEachOtherInRow(tilesOnBoard, (int)commonRow);
+                areTilesNextToEachOtherInRow = AreTilesNextToEachOtherInRow(tilesInMove, (int)commonRow);
             }
             if (commonColumn == null && commonRow == null)
             {
@@ -221,63 +235,50 @@ namespace MyScrabble.Controller
         }
  
 
-        private bool AreTilesNextToEachOtherInColumn(List<Tile> tilesOnBoard, int column)
+        private bool AreTilesNextToEachOtherInColumn(List<Tile> tilesInMove, int column)
         {
-            bool result = true;
+            bool result = false;
 
-            List<Tile> sortedTilesOnBoardInColumn =
-                    tilesOnBoard.
-                    Where(tile => tile.PositionOnBoard.Value.X == column).
-                    OrderBy(tile => tile.PositionOnBoard.Value.Y).
-                    ToList();
+            int indexOfTopMostTile = (int)tilesInMove.Min(tile => tile.PositionOnBoard.Value.Y);
 
-            if (sortedTilesOnBoardInColumn.Count == 1)
+            //starting from the bottom-most tile, the top-most index till gap (if any)
+            int topMostIndexContinuous = GetWordTopMostIndex(column, tilesInMove);
+
+
+            int indexOfBottomMostTile = (int)tilesInMove.Max(tile => tile.PositionOnBoard.Value.Y);
+            int bottomMostIndexContinuous = GetWordBottomMostIndex(column, tilesInMove);
+
+            
+            if (topMostIndexContinuous <= indexOfTopMostTile &&
+                bottomMostIndexContinuous >= indexOfBottomMostTile)
             {
-                result = false;
+                result = true;
             }
-            else
-            {
-                for (int i = 0; i < sortedTilesOnBoardInColumn.Count - 1; i++)
-                {
-                    if (sortedTilesOnBoardInColumn[i + 1].PositionOnBoard.Value.Y !=
-                        sortedTilesOnBoardInColumn[i].PositionOnBoard.Value.Y + 1)
-                    {
-                        result = false;
-                        break;
-                    }
-                }
-            }
+            
 
             return result;
         }
 
-        private bool AreTilesNextToEachOtherInRow(List<Tile> tilesOnBoard, int row)
+        private bool AreTilesNextToEachOtherInRow(List<Tile> tilesInMove, int row)
         {
-            bool result = true;
+            bool result = false;
 
-            List<Tile> sortedTilesOnBoardInRow =
-                    tilesOnBoard.
-                    Where(tile => tile.PositionOnBoard.Value.Y == row).
-                    OrderBy(tile => tile.PositionOnBoard.Value.X).
-                    ToList();
+            int indexOfLeftMostTile = (int)tilesInMove.Min(tile => tile.PositionOnBoard.Value.X);
 
-            if (sortedTilesOnBoardInRow.Count == 1)
+            //starting from the right-most tile, the left-most index till gap (if any)
+            int leftMostIndexContinuous = GetWordLeftMostIndex(row, tilesInMove);
+
+
+            int indexOfRightMostTile = (int)tilesInMove.Max(tile => tile.PositionOnBoard.Value.X);
+            int rightMostIndexContinuous = GetWordRightMostIndex(row, tilesInMove);
+
+
+            if (leftMostIndexContinuous <= indexOfLeftMostTile &&
+                rightMostIndexContinuous >= indexOfRightMostTile)
             {
-                result = false;
+                result = true;
             }
-            else
-            {
-                for (int i = 0; i < sortedTilesOnBoardInRow.Count - 1; i++)
-                {
-                    if (sortedTilesOnBoardInRow[i + 1].PositionOnBoard.Value.X !=
-                        sortedTilesOnBoardInRow[i].PositionOnBoard.Value.X + 1)
-                    {
-                        result = false;
-                        break;
-                    }
-                }
-            }
-            
+
             return result;
         }
 
@@ -324,7 +325,7 @@ namespace MyScrabble.Controller
 
         private void GetTilesCommonRowOrColumnOrBoth(List<Tile> tilesInMove, ref int? commonColumn, ref int? commonRow)
         {
-            if (tilesInMove.Count > 1)
+            if (tilesInMove.Count >= 2)
             {
                 if (tilesInMove[0].PositionOnBoard.Value.X == tilesInMove[1].PositionOnBoard.Value.X)
                 {
@@ -369,10 +370,13 @@ namespace MyScrabble.Controller
             return word;
         }
 
+        //this method (and the similar ones for right, top and bottom) 
+        //consider both tiles in move and tiles on board next to them
         private int GetWordLeftMostIndex(int row, List<Tile> tilesInMove)
         {
-            //a starting index considering just the tiles from the current move
-            int wordLeftMostIndex = (int)tilesInMove.Min(tile => tile.PositionOnBoard.Value.X);
+            //a starting index - takes into account the possibility
+            //of a "gap" in word's tiles
+            int wordLeftMostIndex = (int)tilesInMove.Max(tile => tile.PositionOnBoard.Value.X);
 
             //extending range of the word including tiles placed in previous moves
             if (wordLeftMostIndex >= 1)
@@ -387,7 +391,9 @@ namespace MyScrabble.Controller
 
         private int GetWordRightMostIndex(int row, List<Tile> tilesInMove)
         {
-            int wordRightMostIndex = (int)tilesInMove.Max(tile => tile.PositionOnBoard.Value.X);
+            //a starting index - takes into account the possibility
+            //of a "gap" in word's tiles
+            int wordRightMostIndex = (int)tilesInMove.Min(tile => tile.PositionOnBoard.Value.X);
 
             if (wordRightMostIndex <= BOARD_SIZE - 2)
             {
@@ -424,8 +430,9 @@ namespace MyScrabble.Controller
 
         private int GetWordTopMostIndex(int column, List<Tile> tilesInMove)
         {
-            //a starting index considering just the tiles from the current move
-            int wordTopMostIndex = (int)tilesInMove.Min(tile => tile.PositionOnBoard.Value.Y);
+            //a starting index - takes into account the possibility
+            //of a "gap" in word's tiles
+            int wordTopMostIndex = (int)tilesInMove.Max(tile => tile.PositionOnBoard.Value.Y);
 
             //extending range of the word including tiles placed in previous moves
             if(wordTopMostIndex >= 1)
@@ -441,8 +448,9 @@ namespace MyScrabble.Controller
 
         private int GetWordBottomMostIndex(int column, List<Tile> tilesInMove)
         {
-            //a starting index considering just the tiles from the current move
-            int wordBottomMostIndex = (int)tilesInMove.Max(tile => tile.PositionOnBoard.Value.Y);
+            //a starting index - takes into account the possibility
+            //of a "gap" in word's tiles
+            int wordBottomMostIndex = (int)tilesInMove.Min(tile => tile.PositionOnBoard.Value.Y);
 
             //extending range of the word including tiles placed in previous moves
             if (wordBottomMostIndex <= BOARD_SIZE - 2)
@@ -483,6 +491,26 @@ namespace MyScrabble.Controller
             }
 
             return result;
+        }
+
+
+        private bool FormWordsInCrosswordWay(List<Tile> tilesInMove)
+        {
+            bool result = false;
+
+            result = IsWordAdjacentToOthers() || DoesWordCrossOthers();
+
+            return result;
+        }
+
+        private bool IsWordAdjacentToOthers()
+        {
+            return false;
+        }
+
+        private bool DoesWordCrossOthers()
+        {
+            return false;
         }
 
         public bool IsThePlaceOnBoardOccupied(int xPosition, int yPosition)

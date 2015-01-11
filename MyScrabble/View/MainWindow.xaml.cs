@@ -2,9 +2,9 @@
 using System;
 using System.Linq;
 using System.Windows;
-using System.Collections.Generic;
 using System.Windows.Input;
 using System.Windows.Controls;
+using System.Collections.Generic;
 
 using MyScrabble.Controller;
 using MyScrabble.Controller.Tiles;
@@ -15,9 +15,7 @@ namespace MyScrabble.View
     
     public partial class MainWindow : Window
     {
-        private TilesBag _tilesBag;
         
-
         public MainWindow()
         {
             InitializeComponent();
