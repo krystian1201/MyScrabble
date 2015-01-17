@@ -1,0 +1,28 @@
+﻿
+using System.Collections.Generic;
+
+using MyScrabble.Controller.Tiles;
+
+namespace MyScrabble.Controller
+{
+    class TilesRack
+    {
+        //TODO: setter/getter needed?
+        public List<Tile> TilesRackList;
+
+        public TilesRack()
+        {
+            TilesRackList = new List<Tile>();
+   
+        }
+
+        public void populateTilesRack()
+        {
+            TilesRackList.Add(new TileB());
+            TilesRackList.Add(new TileA());
+            TilesRackList.Add(new TileC());
+            TilesRackList.Add(new TileA());
+        }
+
+    }
+}

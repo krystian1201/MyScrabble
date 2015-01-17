@@ -2,7 +2,8 @@
 using System;
 using System.Collections.Generic;
 
-using MyScrabble.Controller.Tiles;
+using MyScrabble.Model;
+using MyScrabble.Model.Tiles;
 
 
 namespace MyScrabble.Controller

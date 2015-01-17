@@ -1,0 +1,15 @@
+﻿
+
+namespace MyScrabble.Controller.Tiles
+{
+    sealed class TileC : Tile
+    {
+        private const string imageURI =
+            @"C:\Users\Krystian\Documents\Visual Studio 2012\Projects\MyScrabble\MyScrabble\LetterTiles\C.jpg";
+
+        public TileC()
+            : base('C', 3, imageURI)
+        {
+        }
+    }
+}

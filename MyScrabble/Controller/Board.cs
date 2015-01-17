@@ -5,8 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using MyScrabble.Model;
+using MyScrabble.Model.Tiles;
 using MyScrabble.Controller;
-using MyScrabble.Controller.Tiles;
 using MyScrabble.View;
 
 

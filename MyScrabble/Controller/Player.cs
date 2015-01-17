@@ -1,7 +1,7 @@
 ﻿
 using System;
 
-using MyScrabble.Controller.Tiles;
+using MyScrabble.Model.Tiles;
 
 namespace MyScrabble.Controller
 {

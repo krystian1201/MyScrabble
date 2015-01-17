@@ -1,0 +1,195 @@
+﻿
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Shapes;
+
+namespace MyScrabble
+{
+    class BoardView
+    {
+        public readonly int boardSize = 15;
+        private readonly Grid boardGrid;
+
+        public BoardView(Grid  boardGrid)
+        {
+            this.boardGrid = boardGrid;
+        }
+
+        public void DefineGridRowsAndColumns()
+        {
+            for (int i = 0; i < boardSize; i++)
+            {
+                boardGrid.ColumnDefinitions.Add(new ColumnDefinition());
+                boardGrid.RowDefinitions.Add(new RowDefinition());
+            }
+        }
+
+        public void AddCells()
+        {
+            SolidColorBrush solidColorBrush = new SolidColorBrush(Colors.Gray);
+            Thickness marginThickness = new Thickness(1.0);
+
+
+            for (int row = 0; row < boardSize; row++)
+            {
+                for (int column = 0; column < boardSize; column++)
+                {
+                    Rectangle rectangleToAdd =
+                        CreateRectangleToAddToGrid(row, column, solidColorBrush, marginThickness);
+
+                    boardGrid.Children.Add(rectangleToAdd);
+                }
+            }
+        }
+
+
+        private Rectangle CreateRectangleToAddToGrid(int row, int column,
+            SolidColorBrush solidColorBrush, Thickness marginThickness)
+        {
+            Rectangle rectangleToAdd = new Rectangle();
+
+            rectangleToAdd.Stroke = solidColorBrush;
+            rectangleToAdd.StrokeThickness = 0.5;
+            rectangleToAdd.Margin = marginThickness;
+
+            Grid.SetRow(rectangleToAdd, row);
+            Grid.SetColumn(rectangleToAdd, column);
+
+            return rectangleToAdd;
+        }
+
+
+        public void ColorBonusCells()
+        {
+            ColorRedBonusCells();
+            ColorHazyRedBonusCells();
+            ColorBlueBonusCells();
+            ColorHazyBlueBonusCells();
+        }
+
+
+        private void ColorRedBonusCells()
+        {
+            List<Rectangle> redCells = new List<Rectangle>();
+
+            for (int row = 0; row < boardSize; row += boardSize / 2)
+            {
+                for (int column = 0; column < boardSize; column += boardSize / 2)
+                {
+                    redCells.Add(GetCellByRowAndColumn(row, column));
+                }
+            }
+
+            redCells.ForEach(rectangle => rectangle.Fill = new SolidColorBrush(Colors.Red));
+        }
+
+
+        private void ColorHazyRedBonusCells()
+        {
+            List<Rectangle> redHazyCells = new List<Rectangle>();
+
+            for (int rowColumn = 1; rowColumn < boardSize/2 - 2; rowColumn++)
+            {
+                redHazyCells.Add(GetCellByRowAndColumn(rowColumn, rowColumn));
+                redHazyCells.Add(GetCellByRowAndColumn(rowColumn, boardSize - rowColumn - 1));
+                redHazyCells.Add(GetCellByRowAndColumn(boardSize - rowColumn - 1, rowColumn));
+                redHazyCells.Add(GetCellByRowAndColumn(boardSize - rowColumn - 1, boardSize - rowColumn - 1));
+            }
+
+            redHazyCells.ForEach(rectangle => rectangle.Fill = new SolidColorBrush(Color.FromArgb(100, 255, 0, 0)));
+        }
+
+
+        private void ColorBlueBonusCells()
+        {
+            List<Rectangle> blueCells = new List<Rectangle>();
+
+            for (int row = 1; row < boardSize; row += boardSize/4 + 1)
+            {
+                blueCells.Add(GetCellByRowAndColumn(row, 5));
+                blueCells.Add(GetCellByRowAndColumn(row, boardSize - 1 - 5));
+            }
+
+            blueCells.Add(GetCellByRowAndColumn(5, 1));
+            blueCells.Add(GetCellByRowAndColumn(boardSize - 1 - 5, 1));
+
+            blueCells.Add(GetCellByRowAndColumn(5, boardSize - 1 -1));
+            blueCells.Add(GetCellByRowAndColumn(boardSize - 1 - 5, boardSize - 1 - 1));
+
+
+            blueCells.ForEach(rectangle => rectangle.Fill = new SolidColorBrush(Colors.Blue));
+        }
+
+
+        private void ColorHazyBlueBonusCells()
+        {
+            List<Rectangle> hazyBlueCells = new List<Rectangle>();
+
+            for (int column = 0; column < boardSize; column += boardSize/2)
+            {
+                hazyBlueCells.Add(GetCellByRowAndColumn(3, column));
+                hazyBlueCells.Add(GetCellByRowAndColumn(boardSize - 1 - 3, column));
+            }
+
+            for (int row = 0; row < boardSize; row += boardSize / 2)
+            {
+                hazyBlueCells.Add(GetCellByRowAndColumn(row, 3));
+                hazyBlueCells.Add(GetCellByRowAndColumn(row, boardSize - 1 - 3));
+            }
+
+            for (int column = 2; column < boardSize/2; column += 4)
+            {
+                hazyBlueCells.Add(GetCellByRowAndColumn(boardSize / 2 - 1, column));
+                hazyBlueCells.Add(GetCellByRowAndColumn(boardSize / 2 + 1, column));
+
+                hazyBlueCells.Add(GetCellByRowAndColumn(boardSize / 2 - 1, boardSize - 1 - column));
+                hazyBlueCells.Add(GetCellByRowAndColumn(boardSize / 2 + 1, boardSize - 1 - column));
+            }
+
+            for (int row = 2; row < boardSize / 2; row += 4)
+            {
+                hazyBlueCells.Add(GetCellByRowAndColumn(row, boardSize / 2 - 1));
+                hazyBlueCells.Add(GetCellByRowAndColumn(row, boardSize / 2 + 1));
+
+                hazyBlueCells.Add(GetCellByRowAndColumn(boardSize - 1 - row, boardSize / 2 - 1));
+                hazyBlueCells.Add(GetCellByRowAndColumn(boardSize - 1 - row, boardSize / 2 + 1));
+            }
+
+            hazyBlueCells.ForEach(rectangle => rectangle.Fill = new SolidColorBrush(Color.FromArgb(100, 0, 0, 255)));
+        }
+
+
+        private Rectangle GetCellByRowAndColumn(int row, int column)
+        {
+            const string rowOutOfRangeExceptionMsg =
+                "row cannot be less than 0 or greater than board size";
+
+            const string columnOutOfRangeExceptionMsg =
+                "column cannot be less than 0 or greater than board size";
+
+            if (row >= boardSize || row < 0)
+            {
+                throw new
+                    ArgumentOutOfRangeException("row", row, rowOutOfRangeExceptionMsg);
+            }
+
+            if (column >= boardSize || column < 0)
+            {
+                throw new
+                    ArgumentOutOfRangeException("column", column, columnOutOfRangeExceptionMsg);
+            }
+
+            return boardGrid.Children
+                .Cast<Rectangle>()
+                .Where(rectangle => Grid.GetRow(rectangle) == row).
+                Where(rectangle => Grid.GetColumn(rectangle) == column).
+                FirstOrDefault();
+
+        }
+    }
+}

@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-using MyScrabble.Controller.Tiles;
+using MyScrabble.Model;
 
 
 namespace MyScrabble.View

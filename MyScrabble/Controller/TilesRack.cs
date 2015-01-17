@@ -3,7 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-using MyScrabble.Controller.Tiles;
+using MyScrabble.Model;
+using MyScrabble.Model.Tiles;
 
 namespace MyScrabble.Controller
 {

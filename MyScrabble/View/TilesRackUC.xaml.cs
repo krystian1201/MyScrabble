@@ -4,7 +4,8 @@ using System.Windows.Controls;
 using System.Collections.Generic;
 
 using MyScrabble.Controller;
-using MyScrabble.Controller.Tiles;
+using MyScrabble.Model;
+using MyScrabble.Model.Tiles;
 
 
 namespace MyScrabble.View

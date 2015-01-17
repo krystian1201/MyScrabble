@@ -7,8 +7,8 @@ using System.Windows.Controls;
 using System.Collections.Generic;
 
 using MyScrabble.Controller;
-using MyScrabble.Controller.Tiles;
 using MyScrabble.Model;
+using MyScrabble.Model.Tiles;
 
 
 namespace MyScrabble.View
@@ -16,7 +16,9 @@ namespace MyScrabble.View
     
     public partial class MainWindow : Window
     {
-        
+
+        AIPlayerRandom _aiPlayerRandom;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -27,6 +29,9 @@ namespace MyScrabble.View
             Game.Start();
 
             AIDictionary aiDictionary = new AIDictionary();
+
+            _aiPlayerRandom = new AIPlayerRandom();
+           
         }
 
         private void DoneButton_Click(object sender, RoutedEventArgs e)
@@ -60,6 +65,11 @@ namespace MyScrabble.View
             {
                 TilesBagListBox.Items.Add(tile.Letter);
             }
+        }
+
+        private void AIPlayerMakeMoveButton_Click(object sender, RoutedEventArgs e)
+        {
+            List<Tile> tilesInMove = _aiPlayerRandom.GenerateMove();
         }
     }
 }

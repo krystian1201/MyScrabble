@@ -18,7 +18,15 @@ namespace MyScrabble.Model
 
         public AIDictionary()
         {
+            //BuildAlphabetizedWordsPermutations();
 
+            //SaveAlphabetizedWordsPermutationsToFile(_alphabetizedWordsPermutationsFileName);
+
+            _alphabetizedWordsPermutations = ReadAlphabetizedWordsPermutationsFromFile(_alphabetizedWordsPermutationsFileName);
+        }
+
+        private void BuildAlphabetizedWordsPermutations()
+        {
             _alphabetizedWordsPermutations = new Dictionary<string, List<string>>();
             ScrabbleDictionary tempScrabbleDictionary = new ScrabbleDictionary();
 
@@ -36,13 +44,10 @@ namespace MyScrabble.Model
                         (alphabetizedWord, new List<string>() { baseWord });
 
 
-                    CheckWordListForPermutations(tempScrabbleDictionary, i, baseWord, alphabetizedWord);  
-                    
+                    CheckWordListForPermutations(tempScrabbleDictionary, i, baseWord, alphabetizedWord);
+
                 }
             }
-
-            SaveAlphabetizedWordsPermutationsToFile(_alphabetizedWordsPermutationsFileName);
-            ReadAlphabetizedWordsPermutationsFromFile(_alphabetizedWordsPermutationsFileName);
         }
 
         private void CheckWordListForPermutations(ScrabbleDictionary tempScrabbleDictionary, int i, 

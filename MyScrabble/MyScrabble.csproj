@@ -53,10 +53,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controller\AIPlayerRandom.cs" />
     <Compile Include="Controller\Game.cs" />
-    <Compile Include="Controller\I_AIPlayer.cs" />
+    <Compile Include="Controller\BaseAIPlayer.cs" />
+    <Compile Include="Model\Move.cs" />
     <Compile Include="Controller\ScrabbleDictionary.cs" />
     <Compile Include="Controller\TilesRack.cs" />
+    <Compile Include="Controller\WordOrientation.cs" />
     <Compile Include="Model\AIDictionary.cs" />
     <Compile Include="View\BoardUC.xaml.cs">
       <DependentUpon>BoardUC.xaml</DependentUpon>
@@ -81,11 +84,11 @@
     </Compile>
     <Compile Include="Controller\Board.cs" />
     <Compile Include="Controller\Player.cs" />
-    <Compile Include="Controller\Tiles\TileB.cs" />
-    <Compile Include="Controller\Tiles\TileC.cs" />
+    <Compile Include="Model\Tiles\TileB.cs" />
+    <Compile Include="Model\Tiles\TileC.cs" />
     <Compile Include="Controller\TilesBag.cs" />
-    <Compile Include="Controller\Tiles\Tile.cs" />
-    <Compile Include="Controller\Tiles\TileA.cs" />
+    <Compile Include="Model\Tile.cs" />
+    <Compile Include="Model\Tiles\TileA.cs" />
     <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
