@@ -60,14 +60,14 @@ C:\Users\lol\Source\Repos\MyScrabble\MyScrabble\obj\Debug\MyScrabble.g.resources
 C:\Users\lol\Source\Repos\MyScrabble\MyScrabble\obj\Debug\MyScrabble.Properties.Resources.resources
 C:\Users\lol\Source\Repos\MyScrabble\MyScrabble\obj\Debug\MyScrabble.csproj.GenerateResource.Cache
 C:\Users\lol\Source\Repos\MyScrabble\MyScrabble\obj\Debug\MyScrabble.csprojResolveAssemblyReference.cache
-C:\Users\Krystian\Documents\Visual Studio 2013\Projects\MyScrabble\MyScrabble\obj\Debug\View\MainWindow.g.cs
-C:\Users\Krystian\Documents\Visual Studio 2013\Projects\MyScrabble\MyScrabble\bin\Debug\MyScrabble.exe.config
 C:\Users\Krystian\Documents\Visual Studio 2013\Projects\MyScrabble\MyScrabble\bin\Debug\MyScrabble.exe
+C:\Users\Krystian\Documents\Visual Studio 2013\Projects\MyScrabble\MyScrabble\bin\Debug\MyScrabble.exe.config
 C:\Users\Krystian\Documents\Visual Studio 2013\Projects\MyScrabble\MyScrabble\bin\Debug\MyScrabble.pdb
 C:\Users\Krystian\Documents\Visual Studio 2013\Projects\MyScrabble\MyScrabble\obj\Debug\View\BoardUC.baml
 C:\Users\Krystian\Documents\Visual Studio 2013\Projects\MyScrabble\MyScrabble\obj\Debug\View\TilesRackUC.baml
 C:\Users\Krystian\Documents\Visual Studio 2013\Projects\MyScrabble\MyScrabble\obj\Debug\View\TileUC.baml
 C:\Users\Krystian\Documents\Visual Studio 2013\Projects\MyScrabble\MyScrabble\obj\Debug\View\BoardUC.g.cs
+C:\Users\Krystian\Documents\Visual Studio 2013\Projects\MyScrabble\MyScrabble\obj\Debug\View\MainWindow.g.cs
 C:\Users\Krystian\Documents\Visual Studio 2013\Projects\MyScrabble\MyScrabble\obj\Debug\View\TilesRackUC.g.cs
 C:\Users\Krystian\Documents\Visual Studio 2013\Projects\MyScrabble\MyScrabble\obj\Debug\View\TileUC.g.cs
 C:\Users\Krystian\Documents\Visual Studio 2013\Projects\MyScrabble\MyScrabble\obj\Debug\App.g.cs
@@ -80,4 +80,3 @@ C:\Users\Krystian\Documents\Visual Studio 2013\Projects\MyScrabble\MyScrabble\ob
 C:\Users\Krystian\Documents\Visual Studio 2013\Projects\MyScrabble\MyScrabble\obj\Debug\MyScrabble.csproj.GenerateResource.Cache
 C:\Users\Krystian\Documents\Visual Studio 2013\Projects\MyScrabble\MyScrabble\obj\Debug\MyScrabble.exe
 C:\Users\Krystian\Documents\Visual Studio 2013\Projects\MyScrabble\MyScrabble\obj\Debug\MyScrabble.pdb
-C:\Users\Krystian\Documents\Visual Studio 2013\Projects\MyScrabble\MyScrabble\obj\Debug\MyScrabble.csprojResolveAssemblyReference.cache

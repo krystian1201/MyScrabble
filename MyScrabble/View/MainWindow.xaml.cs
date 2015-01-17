@@ -8,6 +8,7 @@ using System.Collections.Generic;
 
 using MyScrabble.Controller;
 using MyScrabble.Controller.Tiles;
+using MyScrabble.Model;
 
 
 namespace MyScrabble.View
@@ -24,6 +25,8 @@ namespace MyScrabble.View
             UpdateTilesBagListBox();
 
             Game.Start();
+
+            AIDictionary aiDictionary = new AIDictionary();
         }
 
         private void DoneButton_Click(object sender, RoutedEventArgs e)

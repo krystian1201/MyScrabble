@@ -10,11 +10,16 @@ namespace MyScrabble.Controller
 {
     public class ScrabbleDictionary
     {
-        private List<string> wordList;
+        private List<string> _wordList;
+
+        public List<string> WordList 
+        {
+            get { return _wordList;  }  
+        }
 
         public ScrabbleDictionary()
         {
-            wordList = new List<string>();
+            _wordList = new List<string>();
 
             //for tests
             //PopulateWordListWithSetWords();
@@ -30,17 +35,17 @@ namespace MyScrabble.Controller
 
             try
             {
-                lines = System.IO.File.ReadAllLines(@"sowpods.txt");
+                lines = File.ReadAllLines(@"sowpods.txt");
 
             }
-            catch (Exception e)
+            catch (IOException e)
             {
                 MessageBox.Show("The dictionary file could not be read:\n" + e.Message);
             }
 
             if (lines != null && lines.Length > 0)
             {
-                wordList.AddRange(lines);
+                _wordList.AddRange(lines);
             }
             else
             {
@@ -53,21 +58,19 @@ namespace MyScrabble.Controller
         //just for tests
         private void PopulateWordListWithSetWords()
         {
-            wordList.Add("baba");
-            wordList.Add("baca");
+            _wordList.Add("baba");
+            _wordList.Add("baca");
         }
 
 
+        public void RemoveWordFromDictionary(string wordToRemove)
+        {
+            _wordList.Remove(wordToRemove);
+        }
+
         public bool IsWordInDictionary(string wordToCheck)
         {
-
-            if (wordList.Contains(wordToCheck))
-            {
-                return true;
-            }
-
-
-            return false;
+            return _wordList.Contains(wordToCheck);
         }
     }
 }
