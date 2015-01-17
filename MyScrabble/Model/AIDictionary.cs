@@ -45,7 +45,8 @@ namespace MyScrabble.Model
                         (alphabetizedWord, new List<string>() { baseWord });
 
 
-                    CheckWordListForPermutations(tempScrabbleDictionary, i, baseWord, alphabetizedWord);    
+                    CheckWordListForPermutations(tempScrabbleDictionary, i, baseWord, alphabetizedWord);  
+                    
                 }
             }
 
@@ -150,6 +151,208 @@ namespace MyScrabble.Model
             return true;
         }
 
+
+        //private void AddPermutationsIfValidWords(ScrabbleDictionary tempScrabbleDictionary, 
+        //    string alphabetizedWord, List<string> permutations)
+        //{
+        //    foreach (string permutation in permutations)
+        //    {
+        //        if (tempScrabbleDictionary.IsWordInDictionary(permutation) &&
+        //           !_alphabetizedStringsPermutations[alphabetizedWord].Contains(permutation))
+        //        {
+        //            _alphabetizedStringsPermutations[alphabetizedWord].Add(permutation);
+        //            tempScrabbleDictionary.RemoveWordFromDictionary(permutation);
+        //        }
+
+        //    }
+        //}
+
+
+        //TODO - the creation of keys should be done automatically
+        //TODO - it should be done for all letters and all string
+        //lengths from 2 up to 7
+        //private List<string> CreateAlphabetizedStringsManually()
+        //{
+        //    List<string> list = new List<string>();
+
+        //    list.Add("aa");
+        //    list.Add("ab");
+        //    list.Add("ac");
+        //    list.Add("bb");
+        //    list.Add("bc");
+        //    list.Add("cc");
+
+        //    list.Add("aaa");
+        //    list.Add("aab");
+        //    list.Add("aac");
+
+        //    list.Add("abb");
+        //    list.Add("abc");
+        //    list.Add("acc");
+
+        //    list.Add("bbb");
+        //    list.Add("bbc");
+        //    list.Add("bcc");
+
+        //    list.Add("ccc");
+
+        //    return list;
+        //}
+
+        //give up this method for now
+        //private List<string> GenerateAlphabetizedStrings()
+        //{
+        //    int startLength = 2;
+        //    int endLength = 3;
+
+        //    char startLetter = 'a';
+        //    char endLetter = 'c';
+
+        //    List<string> alphabetizedStrings = new List<string>();
+
+            
+        //    //GenerateAlphabetizedStringsOfGivenLenght(4, startLetter, endLetter);
+
+        //    return alphabetizedStrings;
+        //}
+
+        //private List<string> GenerateAlphabetizedStringsOfGivenLenght(int stringLength, char startLetter, char endLetter)
+        //{
+
+        //    if (stringLength <= 1)
+        //    {
+        //        throw new Exception("Scrabble words must be at least 2-letters long");
+        //    }
+
+        //    char[] charArray = new char[stringLength];
+        //    List<string> alphabetizedStrings = new List<string>();
+
+        //    //for (char outerLetter = startLetter; outerLetter <= endLetter; outerLetter++)
+        //    //{
+        //    //    //int i = 0;
+
+        //    //    for (int i = 0; i < stringLength; i++)
+        //    //    {
+        //    //        charArray[i] = outerLetter;
+        //    //    }
+
+        //    //    alphabetizedStrings.Add(new string(charArray));
+
+
+        //    //        for (char innerLetter = outerLetter; innerLetter <= endLetter; innerLetter++)
+        //    //        {
+        //    //            //charArray[0] = outerLetter;
+
+        //    //            for (int i = 0; i < stringLength; i++)
+        //    //            {
+        //    //                charArray[i] = (char)(innerLetter + i);// Convert.ToChar(i);
+                            
+        //    //            }
+
+        //    //            alphabetizedStrings.Add(new string(charArray));
+        //    //        } 
+        //    //}
+
+
+        //    //next attempt
+        //    for (char startLetterChanged = (char)(startLetter + 1); startLetterChanged <= endLetter; startLetterChanged++)
+        //    {
+
+        //        for (int letterChangeStartPosition = stringLength - 1; letterChangeStartPosition > 0; letterChangeStartPosition--)
+        //        {
+        //            //char startLetterChanged = (char)(startLetter + (stringLength - (letterChangePosition + 1)));
+
+
+        //            for (char letterChanged = startLetterChanged; letterChanged <= endLetter; letterChanged++)
+        //            {
+        //                for (int letterChangePosition = letterChangeStartPosition; letterChangePosition < stringLength; letterChangePosition++)
+        //                {
+
+        //                }
+        //            }
+
+        //        }
+        //    }
+
+             
+
+        //    return alphabetizedStrings;
+        //}
+
+        //private void AssignWordListsToAlphabetizedStrings(List<string> listOfKeys)
+        //{
+        //    _alphabetizedStringsPermutations = new Dictionary<string, List<string>>();
+
+        //    _scrabbleDictionary = new ScrabbleDictionary();
+
+
+        //    foreach (string alphabetizedString in listOfKeys)
+        //    {
+                
+        //        char[] alphabetizedStringArray = alphabetizedString.ToCharArray();
+
+        //        List<string> permutationsList = new List<string>();
+
+        //        GeneratePermutations(permutationsList, alphabetizedStringArray, 0);
+
+        //        List<string> validWordsInPermutationsList =
+        //            CheckIfPermutationsAreValidWords(permutationsList);
+
+        //        if (validWordsInPermutationsList.Count >= 1)
+        //        {
+        //            _alphabetizedStringsPermutations[alphabetizedString] = validWordsInPermutationsList;
+        //        }
+                
+        //    }
+        //}
+
+
+        //algorithm from this site:
+        //http://stackoverflow.com/questions/11208446/generating-permutations-of-a-set-most-efficiently
+        //private void GeneratePermutations(List<string> permutationsList, char[] charArray, int i)
+        //{
+
+        //    if (i >= charArray.Length - 1)
+        //    {
+        //        if (!permutationsList.Contains(new string(charArray)))
+        //        {
+        //            permutationsList.Add(new string(charArray));
+        //        }    
+        //    }
+        //    else 
+        //    {
+        //        GeneratePermutations(permutationsList, charArray, i + 1);
+
+        //        for (int j = i + 1; j < charArray.Length; j++)
+        //        {
+        //            SwapElementsInCharArray(charArray, i, j);
+        //            GeneratePermutations(permutationsList, charArray, i + 1);
+        //            SwapElementsInCharArray(charArray, i, j);
+        //        }
+        //    }
+        //}
+
+        //private void SwapElementsInCharArray(char[] charArray, int i, int j)
+        //{
+        //    char temp = charArray[i];
+        //    charArray[i] = charArray[j];
+        //    charArray[j] = temp;
+        //}
+
+        //private List<string> CheckIfPermutationsAreValidWords(List<string> permutationsList)
+        //{
+        //    List<string> validWords = new List<string>();
+
+        //    foreach (string permutation in permutationsList)
+        //    {
+        //        if (_scrabbleDictionary.IsWordInDictionary(permutation))
+        //        {
+        //            validWords.Add(permutation);
+        //        }
+        //    }
+
+        //    return validWords;
+        //}
 
         private string AlphabetizeString(string s)
         {
