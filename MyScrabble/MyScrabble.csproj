@@ -56,11 +56,35 @@
     <Compile Include="Controller\AIPlayerRandom.cs" />
     <Compile Include="Controller\Game.cs" />
     <Compile Include="Controller\BaseAIPlayer.cs" />
+    <Compile Include="Controller\TilesFactory.cs" />
     <Compile Include="Model\Move.cs" />
     <Compile Include="Controller\ScrabbleDictionary.cs" />
     <Compile Include="Controller\TilesRack.cs" />
     <Compile Include="Controller\WordOrientation.cs" />
     <Compile Include="Model\AIDictionary.cs" />
+    <Compile Include="Model\Tiles\TileZ.cs" />
+    <Compile Include="Model\Tiles\TileY.cs" />
+    <Compile Include="Model\Tiles\TileX.cs" />
+    <Compile Include="Model\Tiles\TileW.cs" />
+    <Compile Include="Model\Tiles\TileV.cs" />
+    <Compile Include="Model\Tiles\TileU.cs" />
+    <Compile Include="Model\Tiles\TileT.cs" />
+    <Compile Include="Model\Tiles\TileS.cs" />
+    <Compile Include="Model\Tiles\TileR.cs" />
+    <Compile Include="Model\Tiles\TileQ.cs" />
+    <Compile Include="Model\Tiles\TileP.cs" />
+    <Compile Include="Model\Tiles\TileO.cs" />
+    <Compile Include="Model\Tiles\TileN.cs" />
+    <Compile Include="Model\Tiles\TileM.cs" />
+    <Compile Include="Model\Tiles\TileL.cs" />
+    <Compile Include="Model\Tiles\TileK.cs" />
+    <Compile Include="Model\Tiles\TileJ.cs" />
+    <Compile Include="Model\Tiles\TileI.cs" />
+    <Compile Include="Model\Tiles\TileH.cs" />
+    <Compile Include="Model\Tiles\TileG.cs" />
+    <Compile Include="Model\Tiles\TileF.cs" />
+    <Compile Include="Model\Tiles\TileE.cs" />
+    <Compile Include="Model\Tiles\TileD.cs" />
     <Compile Include="View\BoardUC.xaml.cs">
       <DependentUpon>BoardUC.xaml</DependentUpon>
     </Compile>

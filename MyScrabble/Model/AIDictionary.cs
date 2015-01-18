@@ -14,6 +14,11 @@ namespace MyScrabble.Model
     {
         private Dictionary<string, List<string>> _alphabetizedWordsPermutations;
 
+        public Dictionary<string, List<string>> AlphabetizedWordsPermutations
+        {
+            get { return _alphabetizedWordsPermutations; }
+        }
+
         const string _alphabetizedWordsPermutationsFileName = "alphabetizedWordsPermutations.txt";
 
         public AIDictionary()

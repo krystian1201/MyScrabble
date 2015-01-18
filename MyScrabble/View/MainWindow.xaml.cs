@@ -28,7 +28,6 @@ namespace MyScrabble.View
 
             Game.Start();
 
-            AIDictionary aiDictionary = new AIDictionary();
 
             _aiPlayerRandom = new AIPlayerRandom();
            
