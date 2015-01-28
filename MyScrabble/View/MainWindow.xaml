@@ -31,7 +31,7 @@
         <local:BoardUC x:Name="boardUC" Grid.Row="1" Grid.Column="1"/>
 
 
-        <local:TilesRackUC x:Name="tilesRackUC" Grid.Row="2" Grid.Column="1" />
+        <local:TilesRackUC x:Name="Player1TilesRackUC" Grid.Row="2" Grid.Column="1" />
 
 
         <StackPanel Grid.Column="2" Margin="0,50,20,0" Grid.Row="1" 
@@ -39,6 +39,7 @@
 
             <Button x:Name="DoneButton" Content="Done" Margin="0,0,0,20"
                     VerticalAlignment="Top" Height="25" Click="DoneButton_Click"/>
+            
             <Button x:Name="PassButton" Content="Pass"
                     Margin="0,0,0,20" VerticalAlignment="Top" Height="25"/>
             
@@ -53,8 +54,11 @@
                  Margin="0,0,0,20" VerticalAlignment="Top" Height="25" Click="AIPlayerMakeMoveButton_Click"/>
 
         </StackPanel>
-        <ListBox x:Name="TilesBagListBox" Height="300" Margin="20,0" Grid.Row="1" VerticalAlignment="Top"/>
-       
+        
+        <ListBox x:Name="TilesBagListBox" Height="300" Margin="20,0" Grid.Row="1" VerticalAlignment="Center"/>
+
+        <local:TilesRackUC x:Name="Player2TilesRackUC" Grid.Row="0" Grid.Column="1" />
+
     </Grid>
 
 </Window>

@@ -7,17 +7,17 @@ using System.Windows.Shapes;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Windows.Media.Imaging;
+
 
 using MyScrabble.Controller;
+using MyScrabble.Model;
 
 namespace MyScrabble.View
 {
 
     public partial class BoardUC : UserControl
     {
-        private ScrabbleDictionary _scrabbleDictionary;
-        private Board _board;
+        public Board Board { get; private set; }
 
         //otherwise the project doesn't compile
         //"no default constructor for BoardUC"
@@ -33,11 +33,13 @@ namespace MyScrabble.View
 
             BoardGrid.Drop += BoardGrid_Drop;
 
-            _scrabbleDictionary = new ScrabbleDictionary();
-            _board = new Board(_scrabbleDictionary);
+            
+            Board = new Board(this);
         }
 
 
+        //create board UI
+        //----------------------------------------------------------------------------------------------------------------------------------------------------------------------//
         private void DefineGridRowsAndColumns()
         {
             for (int i = 0; i < Board.BOARD_SIZE; i++)
@@ -212,153 +214,6 @@ namespace MyScrabble.View
 
         }
 
-
-        private void BoardGrid_Drop(object sender, DragEventArgs dragEventArgs)
-        {
-            base.OnDrop(dragEventArgs);
-
-            // If the DataObject contains TileUC object, extract it. 
-            if (dragEventArgs.Data.GetDataPresent("TileUC"))
-            {
-               
-                //cannot cast to Rectangle or any other specific control
-                //because we don't know where a tile will be dropped
-                UIElement uiElement = (UIElement)dragEventArgs.Source;
-                int column = Grid.GetColumn(uiElement);
-                int row = Grid.GetRow(uiElement);
-
-
-                if (_board.IsThePlaceOnBoardOccupied(column, row))
-                {
-                    TileUC tileUC = (TileUC)dragEventArgs.Data.GetData("TileUC");
-
-                    char letter = tileUC.Tile.Letter;
-
-                    TestLabel.Content = letter + " " + column + "," + row;
-
-                    RemoveTileFromItsSource(tileUC);
-
-                    PlaceATileOnBoard(tileUC, column, row);
-                }
-            }
-
-            dragEventArgs.Handled = true;
-        }
-
-        private void RemoveTileFromItsSource(TileUC tileUC)
-        {
-            //if a tile was dragged from tiles rack
-            if (tileUC.Tile.PositionOnBoard == null)
-            {
-                RemoveTileFromTilesRack(tileUC);
-            }
-            //if a tile was dragged from one place on the board to another
-            else
-            {
-                RemoveTileFromBoard(tileUC);
-            }
-        }
-
-
-        private void PlaceATileOnBoard(TileUC tileUC, int xPosition, int yPosition)
-        {
-            //UI side
-            Grid.SetRow(tileUC, yPosition);
-            Grid.SetColumn(tileUC, xPosition);
-
-            BoardGrid.Children.Add(tileUC);
-
-            //Controller-logic side
-            _board.PlaceATile(tileUC.Tile, xPosition, yPosition);
-        }
-
-        private void RemoveTileFromBoard(TileUC tileUC)
-        {
-            //UI side
-            BoardGrid.Children.Remove(tileUC); 
-
-            //Controller-logic side
-            _board.RemoveATile(tileUC.Tile);
-        }
-
-        private void RemoveTileFromTilesRack(TileUC tileUC)
-        {
-            //UI side
-            Grid tilesRackGrid = (Grid)tileUC.Parent;
-            tilesRackGrid.Children.Remove(tileUC);
-
-            //Controller-logic side
-            TilesRackUC tilesRackUC = (TilesRackUC) tilesRackGrid.Parent;
-            tilesRackUC.TilesRack.RemoveTileFromTilesArray(tileUC.Tile);
-        }
-
-
-        public void GetLastTilesFromBoardToTilesRack()
-        {
-            List<TileUC> tileUCsInMove =
-                BoardGrid.Children.OfType<TileUC>().
-                Where(TileUC => TileUC.Tile.WasMoveMade == false).
-                ToList<TileUC>();
-
-            Grid MainGrid = (Grid)this.Parent;
-
-            TilesRackUC tilesRackUC = MainGrid.Children.OfType<TilesRackUC>().FirstOrDefault();
-
-            foreach (TileUC tileUC in tileUCsInMove)
-            {
-                RemoveTileFromBoard(tileUC);
-                tilesRackUC.PlaceATileFromBoardInTilesRack(tileUC, tileUC.Tile.PositionInTilesRack);  
-            }
-
-        }
-
-
-        public void MakeAMove()
-        {
-            List<string> validationMessages = _board.ValidateMove();
-
-            if (validationMessages.Count > 0)
-            {
-                ShowMoveValidationMessages(validationMessages);
-
-                //if move was invalid, tiles go back to the tiles rack
-                GetLastTilesFromBoardToTilesRack();
-            }
-            else
-            {
-                //you cannot change position of a tile after move was made
-                MakeTileUCsInMoveNonDraggable();
-
-                _board.MakeAMove();
-            }
-            
-        }
-
-        private void ShowMoveValidationMessages(List<string> validationMessages)
-        {
-            StringBuilder stringBuilder = new StringBuilder();
-
-            foreach (string validationMessage in validationMessages)
-            {
-                stringBuilder.Append(validationMessage + "\n");
-            }
-
-            MessageBox.Show(stringBuilder.ToString(), "Invalid move");
-        }
-
-        private void MakeTileUCsInMoveNonDraggable()
-        {
-            List<TileUC> tileUCsInMove =
-                BoardGrid.Children.OfType<TileUC>().
-                Where(TileUC => TileUC.Tile.WasMoveMade == false).
-                ToList<TileUC>();
-
-            foreach (TileUC tileUC in tileUCsInMove)
-            {
-                tileUC.MakeTileUCNonDraggable();
-            }
-        }
-
         public void InitializeBoardSideMarkers()
         {
 
@@ -432,6 +287,176 @@ namespace MyScrabble.View
             labelToAdd.Content = (row + 1).ToString();
             Grid.SetRow(labelToAdd, row);
         }    
+
+        //end of creating boardUI
+        //----------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+
+        private void BoardGrid_Drop(object sender, DragEventArgs dragEventArgs)
+        {
+            base.OnDrop(dragEventArgs);
+
+            // If the DataObject contains TileUC object, extract it. 
+            if (dragEventArgs.Data.GetDataPresent("TileUC"))
+            {
+               
+                //cannot cast to Rectangle or any other specific control
+                //because we don't know where a tile will be dropped
+                UIElement uiElement = (UIElement)dragEventArgs.Source;
+                int column = Grid.GetColumn(uiElement);
+                int row = Grid.GetRow(uiElement);
+
+
+                if (Board.IsThePlaceOnBoardFree(column, row))
+                {
+                    TileUC tileUC = (TileUC)dragEventArgs.Data.GetData("TileUC");
+
+                    char letter = tileUC.Tile.Letter;
+
+                    TestLabel.Content = letter + " " + column + "," + row;
+
+                    RemoveTileFromItsSource(tileUC);
+
+                    PlaceATileOnBoard(tileUC, column, row);
+                }
+            }
+
+            dragEventArgs.Handled = true;
+        }
+
+        private void RemoveTileFromItsSource(TileUC tileUC)
+        {
+            //if a tile was dragged from tiles rack
+            if (tileUC.Tile.PositionOnBoard == null)
+            {
+                RemoveTileFromTilesRack(tileUC);
+            }
+            //if a tile was dragged from one place on the board to another
+            else
+            {
+                RemoveTileFromBoard(tileUC);
+            }
+        }
+
+
+        private void PlaceATileOnBoard(TileUC tileUC, int xPosition, int yPosition)
+        {
+            //UI side
+            Grid.SetRow(tileUC, yPosition);
+            Grid.SetColumn(tileUC, xPosition);
+
+            BoardGrid.Children.Add(tileUC);
+
+
+            //Controller-logic side
+            Board.PlaceATileOnBoard(tileUC.Tile, xPosition, yPosition);
+        }
+
+        private void RemoveTileFromBoard(TileUC tileUC)
+        {
+            //UI side
+            BoardGrid.Children.Remove(tileUC); 
+
+            //Controller-logic side
+            Board.RemoveATile(tileUC.Tile);
+        }
+
+        private void RemoveTileFromTilesRack(TileUC tileUC)
+        {
+            //UI side
+            Grid tilesRackGrid = (Grid)tileUC.Parent;
+            tilesRackGrid.Children.Remove(tileUC);
+
+            //Controller-logic side
+            TilesRackUC tilesRackUC = (TilesRackUC) tilesRackGrid.Parent;
+            tilesRackUC.TilesRack.RemoveTileFromTilesArray(tileUC.Tile);
+        }
+
+
+        public void GetLastTilesFromBoardToTilesRack()
+        {
+            List<TileUC> tileUCsInMove =
+                BoardGrid.Children.OfType<TileUC>().
+                Where(TileUC => TileUC.Tile.WasMoveMade == false).
+                ToList<TileUC>();
+
+            Grid MainGrid = (Grid)this.Parent;
+
+            TilesRackUC tilesRackUC = MainGrid.Children.OfType<TilesRackUC>().FirstOrDefault();
+
+            foreach (TileUC tileUC in tileUCsInMove)
+            {
+                RemoveTileFromBoard(tileUC);
+                tilesRackUC.PlaceATileFromBoardInTilesRack(tileUC, tileUC.Tile.PositionInTilesRack);  
+            }
+
+        }
+
+
+        public void MakeAMoveHuman()
+        {
+            List<string> validationMessages = Board.ValidateMove();
+
+            if (validationMessages.Count > 0)
+            {
+                ShowMoveValidationMessages(validationMessages);
+
+                //if move was invalid, tiles go back to the tiles rack
+                GetLastTilesFromBoardToTilesRack();
+            }
+            else
+            {
+                //you cannot change position of a tile after move was made
+                MakeTileUCsInMoveNonDraggable();
+
+                Board.MakeAMoveHuman();
+            }
+            
+        }
+
+        private void ShowMoveValidationMessages(List<string> validationMessages)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+
+            foreach (string validationMessage in validationMessages)
+            {
+                stringBuilder.Append(validationMessage + "\n");
+            }
+
+            MessageBox.Show(stringBuilder.ToString(), "Invalid move");
+        }
+
+        public void MakeAMoveAI(List<Tile> tilesInMove)
+        {
+            PutTilesOnBoardUC(tilesInMove);
+
+            MakeTileUCsInMoveNonDraggable();
+  
+        }
+
+
+        private void MakeTileUCsInMoveNonDraggable()
+        {
+            List<TileUC> tileUCsInMove =
+                BoardGrid.Children.OfType<TileUC>().
+                Where(TileUC => TileUC.Tile.WasMoveMade == false).
+                ToList<TileUC>();
+
+            foreach (TileUC tileUC in tileUCsInMove)
+            {
+                tileUC.MakeTileUCNonDraggable();
+            }
+        }
+
+        private void PutTilesOnBoardUC(List<Tile> tilesInMove)
+        {
+            foreach (Tile tile in tilesInMove)
+            {
+                TileUC tileUC = new TileUC(tile);
+
+                PlaceATileOnBoard(tileUC, (int)tileUC.Tile.PositionOnBoard.Value.X, 
+                    (int)tileUC.Tile.PositionOnBoard.Value.Y);
+            }
+        }
     }
 
 

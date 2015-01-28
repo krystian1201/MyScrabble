@@ -19,21 +19,19 @@ namespace MyScrabble.Controller
         private readonly List<char> UniqueTilesList =
             new List<char>() {'A', 'B', 'C'};
 
-        private TilesBag _tilesBag;
+        //private TilesBag tilesBag;
 
-        public TilesRack(TilesBag tilesBag)
+        public TilesRack()
         {
             TilesArray = new Tile[TILES_RACK_SIZE];
-
-            _tilesBag = tilesBag;
         }
 
-        public void PopulateWithTilesFromTilesBag()
+        public void PopulateWithTilesFromTilesBag(TilesBag tilesBag)
         {
 
             for (int i = 0; i < TILES_RACK_SIZE; i++)
             {
-                Tile randomTileFromTilesBag = _tilesBag.GetRandomTile();
+                Tile randomTileFromTilesBag = tilesBag.GetRandomTile();
 
                 if (randomTileFromTilesBag != null)
                 {
@@ -86,7 +84,7 @@ namespace MyScrabble.Controller
             InsertTileIntoTilesArray(new TileC(), 6);
         }
 
-        public void RefillTilesFromTilesBag()
+        public void RefillTilesFromTilesBag(TilesBag tilesBag)
         {
             //Tile[] emptyPositionsInTilesRack = 
             //    TilesArray.Where(tile => tile == null).ToArray();
@@ -95,7 +93,7 @@ namespace MyScrabble.Controller
             {
                 if (TilesArray[i] == null)
                 {
-                    Tile randomTileFromTilesBag = _tilesBag.GetRandomTile();
+                    Tile randomTileFromTilesBag = tilesBag.GetRandomTile();
 
                     if (randomTileFromTilesBag != null)
                     {

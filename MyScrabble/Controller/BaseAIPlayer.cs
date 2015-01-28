@@ -1,8 +1,6 @@
-﻿using System;
+﻿
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 using MyScrabble.Model;
 
@@ -11,6 +9,7 @@ namespace MyScrabble.Controller
     public abstract class BaseAIPlayer
     {
         protected AIDictionary _aiDictionary;
+        //protected TilesRack _tilesRack;
 
         protected BaseAIPlayer()
         {
@@ -18,7 +17,7 @@ namespace MyScrabble.Controller
 
         }
 
-        public abstract List<Tile> GenerateMove();
-
+        public abstract List<Tile> GenerateFirstMove(TilesRack tilesRack);
+        public abstract List<Tile> GenerateSecondAndAboveMove(TilesRack tilesRack);
     }
 }

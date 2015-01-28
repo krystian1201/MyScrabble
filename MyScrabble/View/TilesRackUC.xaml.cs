@@ -5,33 +5,24 @@ using System.Collections.Generic;
 
 using MyScrabble.Controller;
 using MyScrabble.Model;
-using MyScrabble.Model.Tiles;
 
 
 namespace MyScrabble.View
 {
     public partial class TilesRackUC : UserControl
     {
+        //private readonly TilesBag TilesBag.TilesBagInstance;
 
-        private TilesRack _tilesRack;
-        private TilesBag _tilesBag;
-
-        public TilesRack TilesRack
-        {
-            get { return _tilesRack; }
-        }
+        public TilesRack TilesRack { get; private set; }
 
         public TilesRackUC()
         {
             InitializeComponent();
 
-            _tilesBag = new TilesBag();
-            _tilesBag.PopulateWithTiles();
-
-            _tilesRack = new TilesRack(_tilesBag);
+            TilesRack = new TilesRack();
 
 
-            for (int i = 0; i < _tilesRack.TilesArray.Length; i++)
+            for (int i = 0; i < TilesRack.TilesArray.Length; i++)
             {
                 TilesRackGrid.ColumnDefinitions.Add(new ColumnDefinition());
             }  
@@ -39,33 +30,50 @@ namespace MyScrabble.View
 
         public void PopulateTilesRackUC()
         {
-            TilesRackGrid.Children.Clear();
 
             //we should use this function
-            //_tilesRack.PopulateWithTiles();
+            //_tilesRack.PopulateWithTilesFromTilesBag();
 
             //but for testing purposes - we use this one
-            _tilesRack.PopulateWithSetTiles();
+            TilesRack.PopulateWithSetTiles();
+           
+            RefreshTilesRackUCFromTilesRack();
+        }
 
-
-            for (int position = 0; position < _tilesRack.TilesArray.Length; position++)
+        public void RefillTilesFromTilesBag()
+        {
+            //if there are tiles in tiles bag
+            if (TilesBag.TilesBagInstance.TilesList.Count > 0)
             {
-                //it can happen that the tiles rack will
-                //contain less than 7 tiles
-                if (_tilesRack.TilesArray[position] != null)
+                TilesRack.RefillTilesFromTilesBag(TilesBag.TilesBagInstance);
+
+                RefreshTilesRackUCFromTilesRack();
+            }
+        }
+
+        private void RefreshTilesRackUCFromTilesRack()
+        {
+            TilesRackGrid.Children.Clear();
+
+            //it can happen that the tiles rack will
+            //contain less than 7 tiles
+            for (int position = 0; position < TilesRack.TilesArray.Length; position++)
+            {
+                if (TilesRack.TilesArray[position] != null)
                 {
                     ShowATileFromTilesRackInTilesRackUC(position);
-                }    
+                }
             }
         }
 
         private void ShowATileFromTilesRackInTilesRackUC(int position)
         {
-            TileUC tileUC = new TileUC(_tilesRack.TilesArray[position]);
+            TileUC tileUC = new TileUC(TilesRack.TilesArray[position]);
 
             Grid.SetColumn(tileUC, position);
             TilesRackGrid.Children.Add(tileUC);
         }
+
 
         public void PlaceATileFromBoardInTilesRack(TileUC tileUC, int? position)
         {
@@ -74,7 +82,7 @@ namespace MyScrabble.View
                 Grid.SetColumn(tileUC, (int)position);
                 TilesRackGrid.Children.Add(tileUC);
 
-                _tilesRack.InsertTileIntoTilesArray(tileUC.Tile, (int)position);
+                TilesRack.InsertTileIntoTilesArray(tileUC.Tile, (int)position);
             }
             else
             {
@@ -85,32 +93,16 @@ namespace MyScrabble.View
         //just for testing
         public List<Tile> GetAllTilesFromTilesBag()
         {
-            return _tilesBag.TilesList;
+            return TilesBag.TilesBagInstance.TilesList;
         }
 
         //just a wrapper
         //becasue MainWindow doesn't contain TilesRack but TilesRackUC
         public void GetTilesFromTilesRackToTilesBag()
         {
-            _tilesRack.GetTilesFromTilesRackToTilesBag();
+            TilesRack.GetTilesFromTilesRackToTilesBag();
         }
 
-        public void RefillTilesFromTilesBag()
-        {
-            if (_tilesBag.TilesList.Count > 0)
-            {
-                _tilesRack.RefillTilesFromTilesBag();
-
-                TilesRackGrid.Children.Clear();
-
-                for (int position = 0; position < _tilesRack.TilesArray.Length; position++)
-                {
-                    if (_tilesRack.TilesArray[position] != null)
-                    {
-                        ShowATileFromTilesRackInTilesRackUC(position);
-                    }
-                }
-            } 
-        }
+    
     }
 }

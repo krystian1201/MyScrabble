@@ -10,21 +10,14 @@ namespace MyScrabble.View
 {
     public partial class TileUC : UserControl
     {
-        private Tile tile;
-
-        public Tile Tile
-        {
-            get
-            {
-                return tile;
-            }
-        }
+     
+        public Tile Tile { get; private set; }
 
         public TileUC(Tile tile)
         {
             InitializeComponent();
 
-            this.tile = tile;
+            this.Tile = tile;
 
             this.Content = tile.TileImage;
 

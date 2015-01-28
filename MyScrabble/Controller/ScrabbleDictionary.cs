@@ -22,7 +22,7 @@ namespace MyScrabble.Controller
             _wordList = new List<string>();
 
             //for tests
-            //PopulateWordListWithSetWords();
+            //PopulateWordListWithTestWords();
 
             //proper method
             PopulateWordListWithWordsFromDictionary();
@@ -56,7 +56,7 @@ namespace MyScrabble.Controller
 
 
         //just for tests
-        private void PopulateWordListWithSetWords()
+        private void PopulateWordListWithTestWords()
         {
             _wordList.Add("baba");
             _wordList.Add("baca");

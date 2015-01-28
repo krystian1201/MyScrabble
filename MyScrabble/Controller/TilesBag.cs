@@ -8,20 +8,28 @@ using MyScrabble.Model.Tiles;
 
 namespace MyScrabble.Controller
 {
-    public class TilesBag
+
+    public sealed class TilesBag
     {
-        private List<Tile> tilesList;
+        private static readonly TilesBag _tilesBagInstance = new TilesBag();
+
+        private readonly List<Tile> _tilesList;
 
         //just for testing
         public List<Tile> TilesList
         {
-            get { return tilesList; }
+            get { return _tilesList; }
         }
 
-        public TilesBag()
+        private TilesBag()
         {
-            tilesList = new List<Tile>();
-  
+            _tilesList = new List<Tile>();
+            PopulateWithTiles();
+        }
+
+        public static TilesBag TilesBagInstance
+        {
+            get { return _tilesBagInstance; }
         }
 
         public void PopulateWithTiles()
@@ -30,21 +38,21 @@ namespace MyScrabble.Controller
             {
                 Tile tileToAdd = new TileA();
 
-                tilesList.Add(tileToAdd);
+                _tilesList.Add(tileToAdd);
             }
 
             for (int i = 0; i < 2; i++)
             {
                 Tile tileToAdd = new TileB();
 
-                tilesList.Add(tileToAdd);
+                _tilesList.Add(tileToAdd);
             }
 
             for (int i = 0; i < 2; i++)
             {
                 Tile tileToAdd = new TileC();
 
-                tilesList.Add(tileToAdd);
+                _tilesList.Add(tileToAdd);
             }
 
             //TODO: not all tiles have been added yet
@@ -54,15 +62,15 @@ namespace MyScrabble.Controller
         {
             Tile tileToReturn = null;
 
-            if (tilesList.Count > 0)
+            if (_tilesList.Count > 0)
             {
                 Random random = new Random();
 
-                int tileIndex = random.Next(0, tilesList.Count);
+                int tileIndex = random.Next(0, _tilesList.Count);
 
-                tileToReturn = tilesList[tileIndex];
+                tileToReturn = _tilesList[tileIndex];
 
-                tilesList.RemoveAt(tileIndex);
+                _tilesList.RemoveAt(tileIndex);
 
             }
 

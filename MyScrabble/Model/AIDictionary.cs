@@ -23,8 +23,8 @@ namespace MyScrabble.Model
 
         public AIDictionary()
         {
+            //an offline process - done just once
             //BuildAlphabetizedWordsPermutations();
-
             //SaveAlphabetizedWordsPermutationsToFile(_alphabetizedWordsPermutationsFileName);
 
             _alphabetizedWordsPermutations = ReadAlphabetizedWordsPermutationsFromFile(_alphabetizedWordsPermutationsFileName);
@@ -36,7 +36,7 @@ namespace MyScrabble.Model
             ScrabbleDictionary tempScrabbleDictionary = new ScrabbleDictionary();
 
             //tempScrabbleDictionary.WordList.Count
-            for (int i = 0; i < 270; i++)
+            for (int i = 0; i < tempScrabbleDictionary.WordList.Count; i++)
             {
                 string baseWord = tempScrabbleDictionary.WordList[i];
 
@@ -109,7 +109,7 @@ namespace MyScrabble.Model
             return true;
         }
 
-        private string AlphabetizeString(string s)
+        public string AlphabetizeString(string s)
         {
             // 1.
             // Convert to char array.

@@ -23,7 +23,9 @@ namespace MyScrabble.View
         {
             InitializeComponent();
 
-            tilesRackUC.PopulateTilesRackUC();
+            Player1TilesRackUC.PopulateTilesRackUC();
+            Player2TilesRackUC.PopulateTilesRackUC();
+
             UpdateTilesBagListBox();
 
             Game.Start();
@@ -35,16 +37,16 @@ namespace MyScrabble.View
 
         private void DoneButton_Click(object sender, RoutedEventArgs e)
         {
-            boardUC.MakeAMove();
-            tilesRackUC.RefillTilesFromTilesBag();
+            boardUC.MakeAMoveHuman();
+            Player1TilesRackUC.RefillTilesFromTilesBag();
 
             UpdateTilesBagListBox();
         }
 
         private void ExchangeTilesButton_Click(object sender, RoutedEventArgs e)
         {
-            tilesRackUC.PopulateTilesRackUC();
-            tilesRackUC.GetTilesFromTilesRackToTilesBag();
+            Player1TilesRackUC.PopulateTilesRackUC();
+            Player1TilesRackUC.GetTilesFromTilesRackToTilesBag();
             UpdateTilesBagListBox();
         }
 
@@ -58,7 +60,7 @@ namespace MyScrabble.View
         {
             TilesBagListBox.Items.Clear();
 
-            List<Tile> tilesInBag = tilesRackUC.GetAllTilesFromTilesBag();
+            List<Tile> tilesInBag = Player1TilesRackUC.GetAllTilesFromTilesBag();
 
             foreach (Tile tile in tilesInBag)
             {
@@ -68,7 +70,16 @@ namespace MyScrabble.View
 
         private void AIPlayerMakeMoveButton_Click(object sender, RoutedEventArgs e)
         {
-            List<Tile> tilesInMove = _aiPlayerRandom.GenerateMove();
+            List<Tile> tilesInMove = null;
+
+            if (Game.IsFirstMove)
+            {
+                tilesInMove = _aiPlayerRandom.GenerateFirstMove(Player2TilesRackUC.TilesRack);
+
+            }
+
+            boardUC.Board.MakeAMoveAI(tilesInMove);
+
         }
     }
 }

@@ -6,8 +6,6 @@ using System.Linq;
 using System.Text;
 
 using MyScrabble.Model;
-using MyScrabble.Model.Tiles;
-using MyScrabble.Controller;
 using MyScrabble.View;
 
 
@@ -16,30 +14,24 @@ namespace MyScrabble.Controller
 
     public class Board
     {
+        private readonly BoardUC _boardUC;
         public const int BOARD_SIZE = 15;
 
-        private Tile[,] _boardArray = new Tile[BOARD_SIZE, BOARD_SIZE];
+        private readonly Tile[,] _boardArray = new Tile[BOARD_SIZE, BOARD_SIZE];
 
-        private ScrabbleDictionary _scrabbleDictionary;
 
-        public Board(ScrabbleDictionary scrabbleDictionary)
+        public Board(BoardUC _boardUC)
         {
-            this._scrabbleDictionary = scrabbleDictionary;
+            this._boardUC = _boardUC;
         }
 
 
-        public void PlaceATile(Tile tileToPlaceOnBoard, int xPosition, int yPosition)
+        public void PlaceATileOnBoard(Tile tileToPlaceOnBoard, int xPosition, int yPosition)
         {
 
-            //we assume that it is check in BoardUC whether or not a tile
-            //can be placed in a given cell
-            //I don't know where it makes bigger sense
-            //if (canTileBePlacedHere(xPosition, yPosition))
-            //{
                 tileToPlaceOnBoard.PositionOnBoard = new Point(xPosition, yPosition);
                 
                 _boardArray[xPosition, yPosition] = tileToPlaceOnBoard;
-            //}
 
         }
 
@@ -59,12 +51,34 @@ namespace MyScrabble.Controller
         }
         
 
-        public void MakeAMove()
+        public void MakeAMoveHuman()
         {
             List<Tile> tilesInMove = _boardArray.Cast<Tile>().
                  Where(tile => tile != null && tile.WasMoveMade == false).
                  ToList();
 
+
+            MarkTilesAfterMoveWasMade(tilesInMove);
+
+            if (Game.IsFirstMove)
+            {
+                Game.SetAfterFirstMove();
+            }
+        }
+
+        public void MakeAMoveAI(List<Tile> tilesInMove)
+        {
+            foreach (Tile tile in tilesInMove)
+            {
+                if (tile.PositionOnBoard != null)
+                    PlaceATileOnBoard(tile, (int)tile.PositionOnBoard.Value.X, (int)tile.PositionOnBoard.Value.Y);
+                else
+                {
+                    throw new Exception("Tile must have assigned a position on board");
+                }
+            }
+
+            _boardUC.MakeAMoveAI(tilesInMove);
 
             MarkTilesAfterMoveWasMade(tilesInMove);
 
@@ -81,6 +95,7 @@ namespace MyScrabble.Controller
                 tile.WasMoveMade = true;
             }
         }
+
 
         public List<string> ValidateMove()
         {
@@ -116,7 +131,7 @@ namespace MyScrabble.Controller
                 validationMessages.Add("All the words (except the first one) must be formed" +
                                         " in a crossword way");
             }
-            else if (!FormsWordsFromDictionary(tilesInMove))
+            else if (!FormsWordsFromDictionary(tilesInMove, new ScrabbleDictionary()))
             {
                 validationMessages.Add("The word is not in the official Scrabble dictionary");
             }
@@ -274,7 +289,7 @@ namespace MyScrabble.Controller
             return result;
         }
 
-        private bool FormsWordsFromDictionary(List<Tile> tilesInMove)
+        private bool FormsWordsFromDictionary(List<Tile> tilesInMove, ScrabbleDictionary scrabbleDictionary)
         {
             //here we assume the tiles in move are next to each other in one row or column
 
@@ -291,12 +306,12 @@ namespace MyScrabble.Controller
             if (commonColumn != null)
             {
                 string wordInColumn = GetWordInColumn((int)commonColumn, tilesInMove);
-                isWordInDictionaryInColumn = _scrabbleDictionary.IsWordInDictionary(wordInColumn);
+                isWordInDictionaryInColumn = scrabbleDictionary.IsWordInDictionary(wordInColumn);
             }
             if (commonRow != null)
             {
                 string wordInRow = GetWordInRow((int)commonRow, tilesInMove);
-                isWordInDictionaryInRow = _scrabbleDictionary.IsWordInDictionary(wordInRow);
+                isWordInDictionaryInRow = scrabbleDictionary.IsWordInDictionary(wordInRow);
             }
             if (commonColumn == null && commonRow == null)
             {
@@ -625,7 +640,7 @@ namespace MyScrabble.Controller
             return false;
         }
 
-        public bool IsThePlaceOnBoardOccupied(int xPosition, int yPosition)
+        public bool IsThePlaceOnBoardFree(int xPosition, int yPosition)
         {
             if (_boardArray[xPosition, yPosition] == null)
             {
