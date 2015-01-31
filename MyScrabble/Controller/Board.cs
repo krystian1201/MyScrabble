@@ -377,6 +377,23 @@ namespace MyScrabble.Controller
             return word;
         }
 
+        public List<Tile> GetTilesOfWordInRow(int row, List<Tile> tilesInMove)
+        {
+            int wordLeftMostIndex = GetWordLeftMostIndex(row, tilesInMove);
+            int wordRightMostIndex = GetWordRightMostIndex(row, tilesInMove);
+
+
+            List<Tile> tilesOfWordInRow =
+                _boardArray.Cast<Tile>().
+                 Where(tile => tile != null && 
+                     tile.PositionOnBoard.Value.Y == row &&
+                     tile.PositionOnBoard.Value.X >= wordLeftMostIndex &&
+                     tile.PositionOnBoard.Value.X <= wordRightMostIndex).
+                 ToList();
+
+            return tilesOfWordInRow;
+        }
+
         //this method (and the similar ones for right, top and bottom) 
         //consider both tiles in move and tiles on board next to them
         private int GetWordLeftMostIndex(int row, List<Tile> tilesInMove)
@@ -433,6 +450,23 @@ namespace MyScrabble.Controller
             string word = BuildWordFromVerticalRange(column, wordTopMostIndex, wordBottomMostIndex);
 
             return word;
+        }
+
+        public List<Tile> GetTilesOfWordInColumn(int column, List<Tile> tilesInMove)
+        {
+            int wordTopMostIndex = GetWordTopMostIndex(column, tilesInMove);
+            int wordBottomMostIndex = GetWordBottomMostIndex(column, tilesInMove);
+
+
+            List<Tile> tilesOfWordInColumn =
+                _boardArray.Cast<Tile>().
+                 Where(tile => tile != null &&
+                     tile.PositionOnBoard.Value.X == column &&
+                     tile.PositionOnBoard.Value.Y >= wordTopMostIndex &&
+                     tile.PositionOnBoard.Value.Y <= wordBottomMostIndex).
+                 ToList();
+
+            return tilesOfWordInColumn;
         }
 
         private int GetWordTopMostIndex(int column, List<Tile> tilesInMove)

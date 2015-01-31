@@ -16,8 +16,7 @@ namespace MyScrabble.View
     
     public partial class MainWindow : Window
     {
-
-        AIPlayerRandom _aiPlayerRandom;
+        readonly AIPlayerRandom _aiPlayerRandom;
 
         public MainWindow()
         {
@@ -71,17 +70,14 @@ namespace MyScrabble.View
 
         private void AIPlayerMakeMoveButton_Click(object sender, RoutedEventArgs e)
         {
-            List<Tile> tilesInMove = null;
 
-            if (Game.IsFirstMove)
+            List<Tile> tilesInMove = 
+                _aiPlayerRandom.GenerateMove(Player2TilesRackUC.TilesRack, boardUC.Board);
+
+            if (tilesInMove == null || tilesInMove.Count == 0)
             {
-                tilesInMove = _aiPlayerRandom.GenerateFirstMove(Player2TilesRackUC.TilesRack);
+                throw new Exception("No tiles in move");
             }
-            else if (!Game.IsFirstMove)
-            {
-                tilesInMove = _aiPlayerRandom.GenerateSecondAndAboveMove(Player2TilesRackUC.TilesRack, boardUC.Board);
-            }
-            
 
             boardUC.Board.MakeAMoveAI(tilesInMove);
 

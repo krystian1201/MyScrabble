@@ -16,7 +16,31 @@ namespace MyScrabble.Controller
         {
         }
 
-        public override List<Tile> GenerateFirstMove(TilesRack tilesRack)
+
+        public override List<Tile> GenerateMove(TilesRack tilesRack, Board board)
+        {
+            List<Tile> tilesInMove = null;
+
+            if (Game.IsFirstMove)
+            {
+                tilesInMove = GenerateFirstMove(tilesRack);
+            }
+            else if (!Game.IsFirstMove)
+            {
+                tilesInMove = GenerateSecondAndAboveMove(tilesRack, board);
+            }
+
+            if (tilesInMove == null || tilesInMove.Count == 0)
+            {
+                throw new Exception("No tiles in move");
+            }
+
+            return tilesInMove;
+        }
+
+        
+
+        private List<Tile> GenerateFirstMove(TilesRack tilesRack)
         {
 
             List <Tile> tilesInMove = GetRandomTilesFromTilesRackThatFormValidWord(tilesRack);
@@ -24,8 +48,10 @@ namespace MyScrabble.Controller
             //for tests
             //string word = GetRandomWordFromDictionary();
 
+            string stringFromTiles = BuildStringFromTiles(tilesInMove);
+
             //random word has to be formed from tiles in tiles rack
-            string word = GetRandomWordFromTilesRack(tilesInMove);
+            string word = GetRandomWordFromRandomString(randomString: stringFromTiles, substring: "");
             
             //for tests
             //List<Tile> tilesInMove = GenerateTilesFromWord(word);
@@ -35,7 +61,7 @@ namespace MyScrabble.Controller
 
             WordOrientation wordOrientation = GetRandomWordOrientation();
 
-            AssignPositionsOnBoardToTilesInMove(word, tilesInMove, wordStartPosition, wordOrientation);
+            AssignPositionsOnBoardToTilesInMove(word, tilesInMove, new List<Tile>(), wordStartPosition, new Point(7, 7), wordOrientation, "", -1);
 
 
             return tilesInMove;
@@ -87,19 +113,22 @@ namespace MyScrabble.Controller
             {
 
                 int randomPositionInTilesRack;
+                Tile randomTile;
 
                 //we need to make sure that the randomly chosen positions
                 //don't repeat
                 do
                 {
                     randomPositionInTilesRack = random.Next(0, 7);
+
+                    //it can happen that the tiles rack will be empty at the
+                    //chosen position (near the end of game)
+                    randomTile = tilesRack.TilesArray[randomPositionInTilesRack];
                 } 
-                while (randomPositionsInTilesRack.Contains(randomPositionInTilesRack));
+                while (randomTile == null || randomPositionsInTilesRack.Contains(randomPositionInTilesRack));
                 
                 
                 randomPositionsInTilesRack.Add(randomPositionInTilesRack);
-
-                Tile randomTile = tilesRack.TilesArray[randomPositionInTilesRack];
 
                 randomTilesFromTilesRack.Add(randomTile);
 
@@ -108,26 +137,40 @@ namespace MyScrabble.Controller
             return randomTilesFromTilesRack;
         }
 
-        private string GetRandomWordFromTilesRack(List<Tile> randomTiles)
+        private string GetRandomWordFromRandomString(string randomString, string substring)
         {
+            string alphabetizedString = _aiDictionary.AlphabetizeString(randomString);
+            string randomWord = null;
 
-            string stringFromTiles = BuildStringFromTiles(randomTiles);
+            if (_aiDictionary.AlphabetizedWordsPermutations.ContainsKey(alphabetizedString))
+            {
+                List<string> wordsList = _aiDictionary.AlphabetizedWordsPermutations[alphabetizedString];
+                List<string> tempWordsList = new List<string>(wordsList);
 
-            string alphabetizedString = _aiDictionary.AlphabetizeString(stringFromTiles);
+                Random random = new Random();
+                
+                do
+                {
+                    randomWord = tempWordsList[random.Next(0, tempWordsList.Count)];
+                    tempWordsList.Remove(randomWord);
+                }
+                while (!randomWord.Contains(substring) && tempWordsList.Count >= 1);
+ 
+            }
 
-            List<string> wordsList = _aiDictionary.AlphabetizedWordsPermutations[alphabetizedString];
+            if (randomWord != null && randomWord.Contains(substring))
+            {
+                return randomWord;
+            }
+            return null;
 
-            Random random = new Random();
-            string randomWord = wordsList[random.Next(0, wordsList.Count)];
-
-            return randomWord;
         }
 
-        private string BuildStringFromTiles(List<Tile> randomTilesFromTilesRack)
+        private string BuildStringFromTiles(List<Tile> tiles)
         {
             StringBuilder stringBuilder = new StringBuilder();
 
-            foreach (Tile tile in randomTilesFromTilesRack)
+            foreach (Tile tile in tiles)
             {
                 stringBuilder.Append(tile.Letter);
             }
@@ -223,57 +266,83 @@ namespace MyScrabble.Controller
             return tilesInMove;
         }
 
-        private void AssignPositionsOnBoardToTilesInMove(string word, List<Tile> tilesInMove,  int startTilePosition, 
-            WordOrientation wordOrientation)
+        private void AssignPositionsOnBoardToTilesInMove(string word, List<Tile> tilesInMove,
+            List<Tile> tilesOnBoardFromAnchor, int startTilePosition, Point anchorPosition, WordOrientation wordOrientation, 
+            string substring, int substringIndex)
         {
+            
+            //List<Tile> tilesInWordNewPlusOnBoard = new List<Tile>();
+            //tilesInWordNewPlusOnBoard.AddRange(tilesOnBoardFromAnchor);
+            //tilesInWordNewPlusOnBoard.AddRange(tilesInMove);
+
+            //List<Tile> tempTilesList = new List<Tile>(tilesInWordNewPlusOnBoard);
             List<Tile> tempTilesList = new List<Tile>(tilesInMove);
-
-
-            int? row = null;
-            int? column = null;
 
             int letterIndex = 0;
 
-            while (tempTilesList.Count > 0)
+            while (tempTilesList.Count >= 1 && letterIndex <= word.Length - 1)
             {
+                if (letterIndex == substringIndex)
+                {
+                    letterIndex += substring.Length;
+                }
+
                 //first tile with a given letter
                 //actually, if we have two or more tiles with the same letter in tiles rack, 
                 //they can be used in any place on board that requires a given letter
-                Tile tileInMove = tempTilesList.FirstOrDefault(tile => tile.Letter == word[letterIndex]);
+                Tile tileInMove = 
+                    tempTilesList.FirstOrDefault(tile => tile.Letter == word[letterIndex] );
 
-
-                if (wordOrientation == WordOrientation.Horizontal)
+                //we assign position on board only to tiles that were actually added in the current move
+                //if (!tilesOnBoardFromAnchor.Contains(tileInMove))
                 {
-                    row = 7;
-                    tileInMove.PositionOnBoard = new Point(startTilePosition + letterIndex, (int)row);
+                    if (wordOrientation == WordOrientation.Horizontal)
+                    {
+                        tileInMove.PositionOnBoard = new Point(startTilePosition + letterIndex, (int)anchorPosition.Y);
 
+                    }
+                    else if (wordOrientation == WordOrientation.Vertical)
+                    {
+                        tileInMove.PositionOnBoard = new Point((int)anchorPosition.X, startTilePosition + letterIndex);
+                    }
                 }
-                else if (wordOrientation == WordOrientation.Vertical)
-                {
-                    column = 7;
-                    tileInMove.PositionOnBoard = new Point((int)column, startTilePosition + letterIndex);
-                }
-
 
                 tempTilesList.Remove(tileInMove);
 
                 letterIndex++;
+
+                
             }
         }
 
-        public override List<Tile> GenerateSecondAndAboveMove(TilesRack tilesRack, Board board)
+        private List<Tile> GenerateSecondAndAboveMove(TilesRack tilesRack, Board board)
         {
-            WordOrientation wordOrientation = GetRandomWordOrientation();
+            string word = null;
+            List<Tile> tilesOnBoardFromAnchor = null;
+            List<Tile> randomTilesFromTilesRack = null;
+            WordOrientation wordOrientation;
+            Tile anchorTile;
 
-            Tile anchorTile = GetRandomAnchorTile(board);
+            do
+            {
+                wordOrientation = GetRandomWordOrientation();
 
-            List<Tile> randomTilesFromTilesRack = GetRandomTilesFromTilesRack(tilesRack);
+                anchorTile = GetRandomAnchorTile(board);
 
-            //string word = GetRandomWordFromTilesRackAndBoard(randomTilesFromTilesRack, anchorTile, board, wordOrientation);
+                tilesOnBoardFromAnchor = GetTilesOnBoardFromAnchor(anchorTile, board, wordOrientation);
 
-            string wordOnBoardFromAnchor = GetWordOnBoardFromAnchor(anchorTile, board, wordOrientation); 
+                randomTilesFromTilesRack = GetRandomTilesFromTilesRack(tilesRack);
 
-            return new List<Tile>();
+
+                word = GetRandomWordFromTilesRackAndBoard(randomTiles: randomTilesFromTilesRack, tilesOnBoardFromAnchor: tilesOnBoardFromAnchor, 
+                    anchorTile: anchorTile, board: board, wordOrientation: wordOrientation);
+            } 
+            while (word == null);
+
+            AssignPositionsToTilesInMoveSecondAndAbove(randomTilesFromTilesRack, tilesOnBoardFromAnchor, 
+                anchorTile, wordOrientation, word);
+
+            return randomTilesFromTilesRack;
         }
 
         private Tile GetRandomAnchorTile(Board board)
@@ -296,33 +365,114 @@ namespace MyScrabble.Controller
             return randomTileOnBoard;
         }
 
-        private string GetRandomWordFromTilesRackAndBoard(List<Tile> randomTiles, Tile anchorTile, Board board, WordOrientation wordOrientation)
+        private List<Tile> GetTilesOnBoardFromAnchor(Tile anchorTile, Board board, WordOrientation wordOrientation)
         {
-            //List<tile> randomTiles
-
-            //string stringFromTiles = BuildStringFromTiles(new List<Tile>(randomTiles.Add(anchorTile)));
-
-            
-
-            return "";
-        }
-
-        private string GetWordOnBoardFromAnchor(Tile anchorTile, Board board, WordOrientation wordOrientation)
-        {
-            string wordFromAnchor = null;
+  
+            List<Tile> tilesOnBoardFromAnchor = null;
 
             if (wordOrientation == WordOrientation.Horizontal)
             {
-                //get horizontal word consisting of the anchor tile
-                wordFromAnchor = board.GetWordInRow((int)anchorTile.PositionOnBoard.Value.Y, new List<Tile>() {anchorTile});
+                tilesOnBoardFromAnchor = board.GetTilesOfWordInRow((int)anchorTile.PositionOnBoard.Value.Y, new List<Tile>() { anchorTile });
             }
-            else if(wordOrientation == WordOrientation.Vertical)
+            else if (wordOrientation == WordOrientation.Vertical)
             {
-                //get vertical word consisting of the anchor tile
-                wordFromAnchor = board.GetWordInColumn((int)anchorTile.PositionOnBoard.Value.X, new List<Tile>() { anchorTile });
+                tilesOnBoardFromAnchor = board.GetTilesOfWordInColumn((int)anchorTile.PositionOnBoard.Value.X, new List<Tile>() { anchorTile });
             }
 
-            return wordFromAnchor;
+            return tilesOnBoardFromAnchor;
+        }
+
+        private string GetRandomWordFromTilesRackAndBoard(List<Tile> randomTiles, List<Tile> tilesOnBoardFromAnchor, 
+            Tile anchorTile, Board board, WordOrientation wordOrientation)
+        {
+            string wordFromTilesOnBoard = BuildStringFromTiles(tilesOnBoardFromAnchor);
+
+            string stringFromRandomTiles = BuildStringFromTiles(randomTiles);
+
+            string randomWord = 
+                GetRandomWordFromRandomString(randomString: wordFromTilesOnBoard + stringFromRandomTiles, substring: wordFromTilesOnBoard);
+
+            return randomWord;
+        }
+
+        private void AssignPositionsToTilesInMoveSecondAndAbove(List<Tile> randomTilesFromTilesRack, List<Tile> tilesOnBoardFromAnchor,
+            Tile anchorTile, WordOrientation wordOrientation, string word)
+        {
+            
+
+            string wordFromTilesOnBoard = BuildStringFromTiles(tilesOnBoardFromAnchor);
+
+            //int wordStartPosition = 
+            //    GetStartTilePositionForMoveSecondAndAbove(word: word, substring: wordFromTilesOnBoard, 
+            //    wordOrientation: wordOrientation, tilesOnBoardFromAnchor: tilesOnBoardFromAnchor);
+
+
+            List<int> indexesOfSubstring = word.AllIndexesOf(wordFromTilesOnBoard).ToList();
+
+            Random random = new Random();
+            int randomIndexOfSubstring = indexesOfSubstring[random.Next(0, indexesOfSubstring.Count)];
+
+            int wordStartPosition = -1;
+
+            if (wordOrientation == WordOrientation.Horizontal)
+            {
+                wordStartPosition = (int) tilesOnBoardFromAnchor.Min(tile => tile.PositionOnBoard.Value.X) -
+                                    randomIndexOfSubstring;
+            }
+            else if (wordOrientation == WordOrientation.Vertical)
+            {
+                wordStartPosition = (int)tilesOnBoardFromAnchor.Min(tile => tile.PositionOnBoard.Value.Y) -
+                                    randomIndexOfSubstring;
+            }
+
+
+            AssignPositionsOnBoardToTilesInMove(word: word, tilesInMove: randomTilesFromTilesRack,
+                tilesOnBoardFromAnchor: tilesOnBoardFromAnchor, startTilePosition: wordStartPosition, 
+                anchorPosition: (Point)anchorTile.PositionOnBoard, wordOrientation: wordOrientation,
+                substring: wordFromTilesOnBoard, substringIndex: randomIndexOfSubstring);
+        }
+
+        //private int GetStartTilePositionForMoveSecondAndAbove(string word, string substring, 
+        //    WordOrientation wordOrientation, List<Tile> tilesOnBoardFromAnchor)
+        //{
+
+        //    List<int> indexesOfSubstring = word.AllIndexesOf(substring).ToList();
+
+        //    Random random = new Random();
+        //    int randomIndexOfSubstring = indexesOfSubstring[random.Next(0, indexesOfSubstring.Count)];
+
+        //    int wordStartPosition = -1;
+
+        //    if (wordOrientation == WordOrientation.Horizontal)
+        //    {
+        //        wordStartPosition = (int) tilesOnBoardFromAnchor.Min(tile => tile.PositionOnBoard.Value.X) -
+        //                            randomIndexOfSubstring;
+        //    }
+        //    else if (wordOrientation == WordOrientation.Vertical)
+        //    {
+        //        wordStartPosition = (int)tilesOnBoardFromAnchor.Min(tile => tile.PositionOnBoard.Value.Y) -
+        //                            randomIndexOfSubstring;
+        //    }
+
+        //    return wordStartPosition;
+        //}
+
+       
+    }
+
+    public static class AllIndexesOfSubstringInsideString
+    {
+        public static IEnumerable<int> AllIndexesOf(this string str, string value)
+        {
+            if (String.IsNullOrEmpty(value))
+                throw new ArgumentException("the string to find may not be empty", "value");
+            for (int index = 0; ; index += value.Length)
+            {
+                index = str.IndexOf(value, index);
+                if (index == -1)
+                    break;
+                yield return index;
+            }
         }
     }
 }
