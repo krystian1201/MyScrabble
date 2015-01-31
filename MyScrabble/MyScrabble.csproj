@@ -57,7 +57,6 @@
     <Compile Include="Controller\Game.cs" />
     <Compile Include="Controller\BaseAIPlayer.cs" />
     <Compile Include="Controller\TilesFactory.cs" />
-    <Compile Include="Model\Move.cs" />
     <Compile Include="Controller\ScrabbleDictionary.cs" />
     <Compile Include="Controller\TilesRack.cs" />
     <Compile Include="Controller\WordOrientation.cs" />

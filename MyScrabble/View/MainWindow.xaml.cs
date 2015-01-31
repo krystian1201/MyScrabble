@@ -38,8 +38,9 @@ namespace MyScrabble.View
         private void DoneButton_Click(object sender, RoutedEventArgs e)
         {
             boardUC.MakeAMoveHuman();
-            Player1TilesRackUC.RefillTilesFromTilesBag();
 
+            Player1TilesRackUC.RefillTilesFromTilesBag();
+            
             UpdateTilesBagListBox();
         }
 
@@ -75,11 +76,19 @@ namespace MyScrabble.View
             if (Game.IsFirstMove)
             {
                 tilesInMove = _aiPlayerRandom.GenerateFirstMove(Player2TilesRackUC.TilesRack);
-
             }
+            else if (!Game.IsFirstMove)
+            {
+                tilesInMove = _aiPlayerRandom.GenerateSecondAndAboveMove(Player2TilesRackUC.TilesRack, boardUC.Board);
+            }
+            
 
             boardUC.Board.MakeAMoveAI(tilesInMove);
 
+            Player2TilesRackUC.TilesRack.RemoveTiles(tilesInMove);
+            Player2TilesRackUC.RefillTilesFromTilesBag();
+
+            UpdateTilesBagListBox();
         }
     }
 }

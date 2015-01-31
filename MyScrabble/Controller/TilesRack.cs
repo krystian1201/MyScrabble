@@ -26,6 +26,7 @@ namespace MyScrabble.Controller
             TilesArray = new Tile[TILES_RACK_SIZE];
         }
 
+        //the proper method
         public void PopulateWithTilesFromTilesBag(TilesBag tilesBag)
         {
 
@@ -35,7 +36,7 @@ namespace MyScrabble.Controller
 
                 if (randomTileFromTilesBag != null)
                 {
-                    InsertTileIntoTilesArray(randomTileFromTilesBag, i);
+                    InsertTile(randomTileFromTilesBag, i);
                 } 
                 //there are no more tiles in tiles rack
                 else
@@ -46,6 +47,7 @@ namespace MyScrabble.Controller
 
         }
 
+        //for tests
         public void PopulateWithRandomTiles()
         {
 
@@ -58,13 +60,13 @@ namespace MyScrabble.Controller
                 switch (UniqueTilesList[tileIndex])
                 {
                     case 'A':
-                        InsertTileIntoTilesArray(new TileA(), i);
+                        InsertTile(new TileA(), i);
                         break;
                     case 'B':
-                        InsertTileIntoTilesArray(new TileB(), i);
+                        InsertTile(new TileB(), i);
                         break;
                     case 'C':
-                        InsertTileIntoTilesArray(new TileC(), i);
+                        InsertTile(new TileC(), i);
                         break;
                     default:
                         throw new Exception("Tile doesn't belong to the valid set of tiles");
@@ -75,19 +77,17 @@ namespace MyScrabble.Controller
         //for testing purposes
         public void PopulateWithSetTiles()
         {
-            InsertTileIntoTilesArray(new TileA(), 0);
-            InsertTileIntoTilesArray(new TileA(), 1);
-            InsertTileIntoTilesArray(new TileB(), 2);
-            InsertTileIntoTilesArray(new TileB(), 3);
-            InsertTileIntoTilesArray(new TileB(), 4);
-            InsertTileIntoTilesArray(new TileC(), 5);
-            InsertTileIntoTilesArray(new TileC(), 6);
+            InsertTile(new TileA(), 0);
+            InsertTile(new TileA(), 1);
+            InsertTile(new TileB(), 2);
+            InsertTile(new TileB(), 3);
+            InsertTile(new TileB(), 4);
+            InsertTile(new TileC(), 5);
+            InsertTile(new TileC(), 6);
         }
 
         public void RefillTilesFromTilesBag(TilesBag tilesBag)
         {
-            //Tile[] emptyPositionsInTilesRack = 
-            //    TilesArray.Where(tile => tile == null).ToArray();
 
             for (int i = 0; i < TILES_RACK_SIZE; i++)
             {
@@ -97,7 +97,7 @@ namespace MyScrabble.Controller
 
                     if (randomTileFromTilesBag != null)
                     {
-                        InsertTileIntoTilesArray(randomTileFromTilesBag, i);
+                        InsertTile(randomTileFromTilesBag, i);
                     } 
                 }
             }
@@ -108,12 +108,22 @@ namespace MyScrabble.Controller
             throw new NotImplementedException();
         }
 
-        public void RemoveTileFromTilesArray(Tile tileToRemove)
+        public void RemoveTiles(List<Tile> tilesToRemove)
         {
-            TilesArray[(int)tileToRemove.PositionInTilesRack] = null; 
+            foreach (Tile tile in tilesToRemove)
+            {
+                RemoveTile(tile);
+            }
         }
 
-        public void InsertTileIntoTilesArray(Tile tileToInsert, int position)
+        public void RemoveTile(Tile tileToRemove)
+        {
+            TilesArray[(int)tileToRemove.PositionInTilesRack] = null;
+
+            tileToRemove.PositionInTilesRack = null;
+        }
+
+        public void InsertTile(Tile tileToInsert, int position)
         {
             tileToInsert.PositionInTilesRack = position;
             TilesArray[position] = tileToInsert;

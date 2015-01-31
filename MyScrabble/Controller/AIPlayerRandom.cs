@@ -25,13 +25,13 @@ namespace MyScrabble.Controller
             //string word = GetRandomWordFromDictionary();
 
             //random word has to be formed from tiles in tiles rack
-            string word = GetRandomWordFromTilesRackAndDictionary(tilesInMove);
+            string word = GetRandomWordFromTilesRack(tilesInMove);
             
             //for tests
             //List<Tile> tilesInMove = GenerateTilesFromWord(word);
 
 
-            int wordStartPosition = GetRandomStartTilePosition(word);
+            int wordStartPosition = GetRandomStartTilePositionForFirstMove(word);
 
             WordOrientation wordOrientation = GetRandomWordOrientation();
 
@@ -66,9 +66,20 @@ namespace MyScrabble.Controller
         {
             Random random = new Random();
 
-            //2..7
-            int randomNumberOfTiles = random.Next(2, 8);
+            
+            int randomNumberOfTiles;
 
+            //first move -> 2..7 letters
+            //second move and above -> 1..7 letters
+            if (Game.IsFirstMove)
+            {
+                randomNumberOfTiles = random.Next(2, 8);
+            }
+            else
+            {
+                randomNumberOfTiles = random.Next(1, 8);
+            }
+           
             List<Tile> randomTilesFromTilesRack = new List<Tile>();
             List<int> randomPositionsInTilesRack = new List<int>();
 
@@ -97,7 +108,7 @@ namespace MyScrabble.Controller
             return randomTilesFromTilesRack;
         }
 
-        private string GetRandomWordFromTilesRackAndDictionary(List<Tile> randomTiles)
+        private string GetRandomWordFromTilesRack(List<Tile> randomTiles)
         {
 
             string stringFromTiles = BuildStringFromTiles(randomTiles);
@@ -128,14 +139,14 @@ namespace MyScrabble.Controller
         {
             Random random = new Random();
 
-            //random integer - 0 or 1
-            int randomValue = random.Next(0, 2);
+            //I don't know why but when I call random.Next(0, 2), I always get 0
+            int randomValue = random.Next(0, 10);
 
-            if (randomValue == 0)
+            if (randomValue >= 0 && randomValue <= 4)
             {
                 return WordOrientation.Horizontal;
             }
-            if (randomValue == 1)
+            if (randomValue >= 5 && randomValue <= 9)
             {
                 return WordOrientation.Vertical;
             }
@@ -188,7 +199,7 @@ namespace MyScrabble.Controller
 
         //the position here means either starting column - for horizontal word, or
         //starting row - for vertical word
-        private int GetRandomStartTilePosition(string word)
+        private int GetRandomStartTilePositionForFirstMove(string word)
         {
             Random random = new Random();
 
@@ -250,9 +261,68 @@ namespace MyScrabble.Controller
             }
         }
 
-        public override List<Tile> GenerateSecondAndAboveMove(TilesRack tilesRack)
+        public override List<Tile> GenerateSecondAndAboveMove(TilesRack tilesRack, Board board)
         {
-            throw new NotImplementedException();
+            WordOrientation wordOrientation = GetRandomWordOrientation();
+
+            Tile anchorTile = GetRandomAnchorTile(board);
+
+            List<Tile> randomTilesFromTilesRack = GetRandomTilesFromTilesRack(tilesRack);
+
+            //string word = GetRandomWordFromTilesRackAndBoard(randomTilesFromTilesRack, anchorTile, board, wordOrientation);
+
+            string wordOnBoardFromAnchor = GetWordOnBoardFromAnchor(anchorTile, board, wordOrientation); 
+
+            return new List<Tile>();
+        }
+
+        private Tile GetRandomAnchorTile(Board board)
+        {
+            List<Tile> tilesOnBoard = board.GetTilesOnBoard();
+
+            Random random = new Random();
+            Tile randomTileOnBoard;
+
+            //if a tile is totally surrounded by other tiles from left, right, top and bottom
+            //we cannot use such tile to form new words
+            do
+            {
+                int randomTileOnBoardIndex = random.Next(0, tilesOnBoard.Count);
+
+                randomTileOnBoard = tilesOnBoard[randomTileOnBoardIndex];
+            }
+            while (board.IsTileTotallySurrounded(randomTileOnBoard));
+
+            return randomTileOnBoard;
+        }
+
+        private string GetRandomWordFromTilesRackAndBoard(List<Tile> randomTiles, Tile anchorTile, Board board, WordOrientation wordOrientation)
+        {
+            //List<tile> randomTiles
+
+            //string stringFromTiles = BuildStringFromTiles(new List<Tile>(randomTiles.Add(anchorTile)));
+
+            
+
+            return "";
+        }
+
+        private string GetWordOnBoardFromAnchor(Tile anchorTile, Board board, WordOrientation wordOrientation)
+        {
+            string wordFromAnchor = null;
+
+            if (wordOrientation == WordOrientation.Horizontal)
+            {
+                //get horizontal word consisting of the anchor tile
+                wordFromAnchor = board.GetWordInRow((int)anchorTile.PositionOnBoard.Value.Y, new List<Tile>() {anchorTile});
+            }
+            else if(wordOrientation == WordOrientation.Vertical)
+            {
+                //get vertical word consisting of the anchor tile
+                wordFromAnchor = board.GetWordInColumn((int)anchorTile.PositionOnBoard.Value.X, new List<Tile>() { anchorTile });
+            }
+
+            return wordFromAnchor;
         }
     }
 }

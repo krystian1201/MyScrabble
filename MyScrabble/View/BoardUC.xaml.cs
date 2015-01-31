@@ -368,7 +368,7 @@ namespace MyScrabble.View
 
             //Controller-logic side
             TilesRackUC tilesRackUC = (TilesRackUC) tilesRackGrid.Parent;
-            tilesRackUC.TilesRack.RemoveTileFromTilesArray(tileUC.Tile);
+            tilesRackUC.TilesRack.RemoveTile(tileUC.Tile);
         }
 
 

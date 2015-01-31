@@ -366,7 +366,7 @@ namespace MyScrabble.Controller
             }
         }
 
-        private string GetWordInRow(int row, List<Tile> tilesInMove)
+        public string GetWordInRow(int row, List<Tile> tilesInMove)
         {
             int wordLeftMostIndex = GetWordLeftMostIndex(row, tilesInMove);
             int wordRightMostIndex = GetWordRightMostIndex(row, tilesInMove);
@@ -425,7 +425,7 @@ namespace MyScrabble.Controller
             return sbWord.ToString();
         }
 
-        private string GetWordInColumn(int column, List<Tile> tilesInMove)
+        public string GetWordInColumn(int column, List<Tile> tilesInMove)
         {
             int wordTopMostIndex = GetWordTopMostIndex(column, tilesInMove);
             int wordBottomMostIndex = GetWordBottomMostIndex(column, tilesInMove);
@@ -648,7 +648,30 @@ namespace MyScrabble.Controller
             }
 
             return false;
-        } 
+        }
+
+        public List<Tile> GetTilesOnBoard()
+        {
+            List<Tile> tilesOnBoard = _boardArray.Cast<Tile>().
+                 Where(tile => tile != null && tile.WasMoveMade == true).
+                 ToList();
+
+            return tilesOnBoard;
+        }
+
+        public bool IsTileTotallySurrounded(Tile tile)
+        {
+            int x = (int) tile.PositionOnBoard.Value.X;
+            int y = (int) tile.PositionOnBoard.Value.Y;
+
+            if (_boardArray[x - 1, y] != null && _boardArray[x + 1, y] != null
+                && _boardArray[x, y - 1] != null && _boardArray[x, y + 1] != null)
+            {
+                return true;
+            }
+
+            return false;
+        }
 
     }
 }

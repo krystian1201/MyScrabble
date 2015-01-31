@@ -18,6 +18,6 @@ namespace MyScrabble.Controller
         }
 
         public abstract List<Tile> GenerateFirstMove(TilesRack tilesRack);
-        public abstract List<Tile> GenerateSecondAndAboveMove(TilesRack tilesRack);
+        public abstract List<Tile> GenerateSecondAndAboveMove(TilesRack tilesRack, Board board);
     }
 }

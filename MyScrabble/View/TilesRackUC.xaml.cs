@@ -82,7 +82,7 @@ namespace MyScrabble.View
                 Grid.SetColumn(tileUC, (int)position);
                 TilesRackGrid.Children.Add(tileUC);
 
-                TilesRack.InsertTileIntoTilesArray(tileUC.Tile, (int)position);
+                TilesRack.InsertTile(tileUC.Tile, (int)position);
             }
             else
             {
