@@ -45,9 +45,7 @@ namespace MyScrabble.Controller
 
             List <Tile> tilesInMove = GetRandomTilesFromTilesRackThatFormValidWord(tilesRack);
 
-            //for tests
-            //string word = GetRandomWordFromDictionary();
-
+            
             string stringFromTiles = BuildStringFromTiles(tilesInMove);
 
             //random word has to be formed from tiles in tiles rack
@@ -197,44 +195,6 @@ namespace MyScrabble.Controller
             throw new Exception("Word orientation should be either horizontal or vertical");
         }
 
-        //for tests
-        private string GetRandomWordFromDictionary()
-        {
-            Random random = new Random();
-
-
-            int randomWordKeyIndex;
-            string alphabetizedString = null;
-
-
-            //in the first move we can play at most 7-letter word
-            if (Game.IsFirstMove)
-            {
-                do 
-                {
-                    randomWordKeyIndex = random.Next(0, _aiDictionary.AlphabetizedWordsPermutations.Count);
-
-                    alphabetizedString = 
-                        _aiDictionary.AlphabetizedWordsPermutations.Keys.ElementAt(randomWordKeyIndex);
-                }
-                while (alphabetizedString.Length > 7);
-            }
-            else
-            {
-                randomWordKeyIndex = random.Next(0, _aiDictionary.AlphabetizedWordsPermutations.Count);
-
-                alphabetizedString =
-                    _aiDictionary.AlphabetizedWordsPermutations.Keys.ElementAt(randomWordKeyIndex);
-            }
-            
-
-            int randomWordPermutationIndex =
-                random.Next(0, _aiDictionary.AlphabetizedWordsPermutations[alphabetizedString].Count);
-
-            string word = _aiDictionary.AlphabetizedWordsPermutations[alphabetizedString][randomWordPermutationIndex];
-
-            return word;
-        }
 
         //the position of the "start"/"first" tile in word can be described by just one
         //number because either row or column must be equal to 7 so that the word
