@@ -18,7 +18,7 @@ namespace MyScrabble.Controller
         }
 
 
-        protected override List<Tile> GenerateFirstMove(TilesRack tilesRack)
+        protected override List<Tile> GenerateFirstMove(TilesRack tilesRack, Board board)
         {
 
             //At this point we already know that the tiles chosen randomly
@@ -34,7 +34,7 @@ namespace MyScrabble.Controller
 
             Point startTilePosition = GetRandomStartTilePositionForFirstMove(word, wordOrientation);
 
-            AssignPositionsOnBoardToTilesInMove(word, tilesInMove, startTilePosition, wordOrientation, "", null);
+            AssignPositionsOnBoardToTilesInMove(word, tilesInMove, startTilePosition, wordOrientation, "", null, board);
 
 
             return tilesInMove;
@@ -94,21 +94,37 @@ namespace MyScrabble.Controller
             List<Tile> tilesOnBoardFromAnchor;
             List<Tile> tilesInMove;
             WordOrientation wordOrientation;
+            ScrabbleDictionary scrabbleDictionary = new ScrabbleDictionary();
+            bool areInvalidWordsInSomeDirection;
 
-            string word =
-                GetRandomValidWordForMoveSecondAndAbove(tilesRack, board, out wordOrientation, out tilesInMove, out tilesOnBoardFromAnchor);
+            do
+            {
+                areInvalidWordsInSomeDirection = false;
+
+                string word =
+                    GetRandomValidWordForMoveSecondAndAbove(tilesRack, board, out wordOrientation, out tilesInMove, out tilesOnBoardFromAnchor);
+
+                string substringFromTilesOnBoard = BuildStringFromTiles(tilesOnBoardFromAnchor);
+                int substringIndex;
+
+                Point startTilePosition =
+                    GetRandomStartTilePositionForMoveSecondAndAbove(word, substringFromTilesOnBoard,
+                    wordOrientation, tilesOnBoardFromAnchor, out substringIndex);
 
 
-            string substringFromTilesOnBoard = BuildStringFromTiles(tilesOnBoardFromAnchor);
-            int substringIndex;
-
-            Point startTilePosition =
-                GetRandomStartTilePositionForMoveSecondAndAbove(word, substringFromTilesOnBoard,
-                wordOrientation, tilesOnBoardFromAnchor, out substringIndex);
+                AssignPositionsOnBoardToTilesInMove(word, tilesInMove, startTilePosition,
+                    wordOrientation, substringFromTilesOnBoard, substringIndex, board);
 
 
-            AssignPositionsOnBoardToTilesInMove(word, tilesInMove, startTilePosition,
-                wordOrientation, substringFromTilesOnBoard, substringIndex);
+                if (!board.FormsNoInvalidWordsInAnyDirection(tilesInMove, scrabbleDictionary))
+                {
+                    board.RemoveTiles(tilesInMove);
+                    areInvalidWordsInSomeDirection = true;
+                }
+
+            } 
+            while (areInvalidWordsInSomeDirection);
+
 
             return tilesInMove;
         }
@@ -133,6 +149,7 @@ namespace MyScrabble.Controller
 
 
                 word = GetRandomWordForMoveSecondAndAbove(tilesInMove, tilesOnBoardFromAnchor);
+
             } 
             while (word == null);
 
@@ -383,7 +400,7 @@ namespace MyScrabble.Controller
 
         private void AssignPositionsOnBoardToTilesInMove(string word, List<Tile> tilesInMove,
            Point startTilePosition, WordOrientation wordOrientation,
-           string substring, int? substringIndex)
+           string substring, int? substringIndex, Board board)
         {
 
             if (!word.Contains(substring))
@@ -416,12 +433,13 @@ namespace MyScrabble.Controller
 
                 if (wordOrientation == WordOrientation.Horizontal)
                 {
-                    tileInMove.PositionOnBoard = new Point(startTilePosition.X + letterIndex, startTilePosition.Y);
-
+                    //tileInMove.PositionOnBoard = new Point(startTilePosition.X + letterIndex, startTilePosition.Y);
+                    board.PlaceATileOnBoard(tileInMove, (int) (startTilePosition.X + letterIndex), (int) startTilePosition.Y);
                 }
                 else if (wordOrientation == WordOrientation.Vertical)
                 {
-                    tileInMove.PositionOnBoard = new Point(startTilePosition.X, startTilePosition.Y + letterIndex);
+                    //tileInMove.PositionOnBoard = new Point(startTilePosition.X, startTilePosition.Y + letterIndex);
+                    board.PlaceATileOnBoard(tileInMove, (int) startTilePosition.X, (int) (startTilePosition.Y + letterIndex));
                 }
                 
 

@@ -24,7 +24,7 @@ namespace MyScrabble.Controller
 
             if (Game.IsFirstMove)
             {
-                tilesInMove = GenerateFirstMove(tilesRack);
+                tilesInMove = GenerateFirstMove(tilesRack, board);
             }
             else if (!Game.IsFirstMove)
             {
@@ -39,7 +39,7 @@ namespace MyScrabble.Controller
             return tilesInMove;
         }
 
-        protected abstract List<Tile> GenerateFirstMove(TilesRack tilesRack);
+        protected abstract List<Tile> GenerateFirstMove(TilesRack tilesRack, Board board);
 
         protected abstract List<Tile> GenerateSecondAndAboveMove(TilesRack tilesRack, Board board);
 

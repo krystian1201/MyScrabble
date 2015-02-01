@@ -28,11 +28,18 @@ namespace MyScrabble.Controller
 
         public void PlaceATileOnBoard(Tile tileToPlaceOnBoard, int xPosition, int yPosition)
         {
-
                 tileToPlaceOnBoard.PositionOnBoard = new Point(xPosition, yPosition);
                 
                 _boardArray[xPosition, yPosition] = tileToPlaceOnBoard;
+        }
 
+
+        public void RemoveTiles(List<Tile> tilesToRemoveFromBoard)
+        {
+            foreach (Tile tile in tilesToRemoveFromBoard)
+            {
+                RemoveATile(tile);
+            }
         }
 
         public void RemoveATile(Tile tileToRemoveFromBoard)
@@ -105,6 +112,7 @@ namespace MyScrabble.Controller
                 Where(tile => tile != null && tile.WasMoveMade == false).
                 ToList();
 
+            ScrabbleDictionary scrabbleDictionary = new ScrabbleDictionary();
 
             if (IsMoveEmpty(tilesInMove))
             {
@@ -131,9 +139,13 @@ namespace MyScrabble.Controller
                 validationMessages.Add("All the words (except the first one) must be formed" +
                                         " in a crossword way");
             }
-            else if (!FormsWordsFromDictionary(tilesInMove, new ScrabbleDictionary()))
+            else if (!FormsWordsFromDictionary(tilesInMove, scrabbleDictionary))
             {
                 validationMessages.Add("The word is not in the official Scrabble dictionary");
+            }
+            else if (!FormsNoInvalidWordsInAnyDirection(tilesInMove, scrabbleDictionary))
+            {
+                validationMessages.Add("The word forms at least one invalid word in some direction");
             }
 
             return validationMessages;
@@ -302,7 +314,6 @@ namespace MyScrabble.Controller
 
             GetTilesCommonRowOrColumnOrBoth(tilesInMove, ref commonColumn, ref commonRow);
 
-            
             if (commonColumn != null)
             {
                 string wordInColumn = GetWordInColumn((int)commonColumn, tilesInMove);
@@ -682,6 +693,118 @@ namespace MyScrabble.Controller
             }
 
             return false;
+        }
+
+        public bool FormsNoInvalidWordsInAnyDirection(List<Tile> tilesInMove, ScrabbleDictionary scrabbleDictionary)
+        {
+            int? commonColumn = null;
+            int? commonRow = null;
+
+            GetTilesCommonRowOrColumnOrBoth(tilesInMove, ref commonColumn, ref commonRow);
+
+
+            //that case includes only single-letter words, right?
+            if (commonRow != null && commonColumn != null)
+            {
+                return CheckInvalidWordsForHorizontalTiles(tilesInMove, commonRow, scrabbleDictionary) &&
+                       CheckInvalidWordsForVerticalTiles(tilesInMove, commonColumn, scrabbleDictionary);
+            }
+            if (commonRow != null)
+            {
+                return CheckInvalidWordsForHorizontalTiles(tilesInMove, commonRow, scrabbleDictionary);
+            }
+            if (commonColumn != null)
+            {
+                return CheckInvalidWordsForVerticalTiles(tilesInMove, commonColumn, scrabbleDictionary);
+            }
+            
+            return true;
+        }
+
+        private bool CheckInvalidWordsForHorizontalTiles(List<Tile> tilesInMove, int? commonRow, ScrabbleDictionary scrabbleDictionary)
+        {
+
+            int wordLeftMostIndex = GetWordLeftMostIndex((int) commonRow, tilesInMove);
+            int wordRightMostIndex = GetWordRightMostIndex((int) commonRow, tilesInMove);
+
+            if (IsThereTileAdjacentToTheLeft(wordLeftMostIndex, (int) commonRow) ||
+                IsThereTileAdjacentToTheRight(wordRightMostIndex, (int) commonRow))
+            {
+                string horizontalWord = 
+                    BuildWordFromHorizontalRange((int)commonRow, wordLeftMostIndex, wordRightMostIndex);
+
+                if (!scrabbleDictionary.WordList.Contains(horizontalWord))
+                {
+                    return false;
+                }
+            }
+
+
+            foreach (Tile tileInMove in tilesInMove)
+            {
+                int xIndex = (int)tileInMove.PositionOnBoard.Value.X;
+
+                if (IsThereTileAdjacentAbove(xIndex, (int)commonRow) ||
+                    IsThereTileAdjacentBelow(xIndex, (int)commonRow))
+                {
+
+                    int wordBottomMostIndex = GetWordBottomMostIndex(xIndex, new List<Tile>() { tileInMove });
+                    int wordTopMostIndex = GetWordTopMostIndex(xIndex, new List<Tile>() { tileInMove });
+
+                    string verticalWord = BuildWordFromVerticalRange(xIndex, wordTopMostIndex, wordBottomMostIndex);
+
+                    if (!scrabbleDictionary.WordList.Contains(verticalWord))
+                    {
+                        return false;
+                    }
+                }
+            }
+            
+
+            return true;
+        }
+
+        private bool CheckInvalidWordsForVerticalTiles(List<Tile> tilesInMove, int? commonColumn, ScrabbleDictionary scrabbleDictionary)
+        {
+
+            int wordTopMostIndex = GetWordTopMostIndex((int)commonColumn, tilesInMove);
+            int wordBottomMostIndex = GetWordBottomMostIndex((int)commonColumn, tilesInMove);
+
+
+            if (IsThereTileAdjacentAbove(wordTopMostIndex, (int)commonColumn) ||
+                IsThereTileAdjacentBelow(wordBottomMostIndex, (int)commonColumn))
+            {
+                string verticalWord =
+                    BuildWordFromHorizontalRange((int)commonColumn, wordTopMostIndex, wordBottomMostIndex);
+
+                if (!scrabbleDictionary.WordList.Contains(verticalWord))
+                {
+                    return false;
+                }
+            }
+
+
+            foreach(Tile tileInMove in tilesInMove)
+            {
+                int yIndex = (int)tileInMove.PositionOnBoard.Value.Y;
+
+                if (IsThereTileAdjacentToTheLeft((int) commonColumn, yIndex) ||
+                    IsThereTileAdjacentToTheRight((int) commonColumn, yIndex))
+                {
+
+                    int wordLeftMostIndex = GetWordLeftMostIndex(yIndex, new List<Tile>() { tileInMove});
+                    int wordRightMostIndex = GetWordRightMostIndex(yIndex, new List<Tile>() { tileInMove });
+
+                    string horizontalWord = BuildWordFromHorizontalRange(yIndex, wordLeftMostIndex, wordRightMostIndex);
+
+                    if (!scrabbleDictionary.WordList.Contains(horizontalWord))
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
         }
 
         public List<Tile> GetTilesOnBoard()
