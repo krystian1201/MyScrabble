@@ -111,6 +111,11 @@ namespace MyScrabble.Model
 
         public string AlphabetizeString(string s)
         {
+            if (String.IsNullOrEmpty(s))
+            {
+                throw new ArgumentException("Cannot alphabetize an empty string");
+            }
+
             // 1.
             // Convert to char array.
             char[] charArray = s.ToCharArray();

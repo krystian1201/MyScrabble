@@ -38,7 +38,7 @@ namespace MyScrabble.View
         }
 
 
-        //create board UI
+        #region create board UI
         //----------------------------------------------------------------------------------------------------------------------------------------------------------------------//
         private void DefineGridRowsAndColumns()
         {
@@ -288,7 +288,7 @@ namespace MyScrabble.View
             Grid.SetRow(labelToAdd, row);
         }    
 
-        //end of creating boardUI
+        #endregion of creating boardUI
         //----------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 
         private void BoardGrid_Drop(object sender, DragEventArgs dragEventArgs)

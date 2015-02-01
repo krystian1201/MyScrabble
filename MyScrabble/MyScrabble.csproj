@@ -84,6 +84,7 @@
     <Compile Include="Model\Tiles\TileF.cs" />
     <Compile Include="Model\Tiles\TileE.cs" />
     <Compile Include="Model\Tiles\TileD.cs" />
+    <Compile Include="Utilities\AllIndexesOfSubstringInsideString.cs" />
     <Compile Include="View\BoardUC.xaml.cs">
       <DependentUpon>BoardUC.xaml</DependentUpon>
     </Compile>

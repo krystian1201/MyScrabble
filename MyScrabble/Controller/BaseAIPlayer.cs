@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Collections.Generic;
 
 
@@ -17,7 +18,30 @@ namespace MyScrabble.Controller
 
         }
 
+        public List<Tile> GenerateMove(TilesRack tilesRack, Board board)
+        {
+            List<Tile> tilesInMove = null;
 
-        public abstract List<Tile> GenerateMove(TilesRack tilesRack, Board board);
+            if (Game.IsFirstMove)
+            {
+                tilesInMove = GenerateFirstMove(tilesRack);
+            }
+            else if (!Game.IsFirstMove)
+            {
+                tilesInMove = GenerateSecondAndAboveMove(tilesRack, board);
+            }
+
+            if (tilesInMove == null || tilesInMove.Count == 0)
+            {
+                throw new Exception("No tiles in move");
+            }
+
+            return tilesInMove;
+        }
+
+        protected abstract List<Tile> GenerateFirstMove(TilesRack tilesRack);
+
+        protected abstract List<Tile> GenerateSecondAndAboveMove(TilesRack tilesRack, Board board);
+
     }
 }

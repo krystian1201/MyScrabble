@@ -38,7 +38,7 @@ namespace MyScrabble.Controller
                 {
                     InsertTile(randomTileFromTilesBag, i);
                 } 
-                //there are no more tiles in tiles rack
+                //there are no more tiles in tiles bag
                 else
                 {
                     SetTilesArrayPositionAsEmpty(i);
@@ -120,7 +120,10 @@ namespace MyScrabble.Controller
         {
             TilesArray[(int)tileToRemove.PositionInTilesRack] = null;
 
-            tileToRemove.PositionInTilesRack = null;
+            //it is useful to keep the tile's position in tiles rack
+            //in case the tile will come back from board to tiles rack
+            //because, for example, the word is invalid
+            //tileToRemove.PositionInTilesRack = null;
         }
 
         public void InsertTile(Tile tileToInsert, int position)
@@ -132,6 +135,13 @@ namespace MyScrabble.Controller
         private void SetTilesArrayPositionAsEmpty(int position)
         {
             TilesArray[position] = null;
+        }
+
+        public int GetNumberOfTilesInTilesRack()
+        {
+            List<Tile> tilesInTilesRack = TilesArray.Where(tile => tile != null).ToList();
+
+            return tilesInTilesRack.Count;
         }
     }
 }
