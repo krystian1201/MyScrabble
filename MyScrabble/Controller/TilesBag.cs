@@ -36,26 +36,31 @@ namespace MyScrabble.Controller
         {
             for (int i = 0; i < 9; i++)
             {
-                Tile tileToAdd = new TileA();
-
-                _tilesList.Add(tileToAdd);
+                _tilesList.Add(new TileA());
             }
 
             for (int i = 0; i < 2; i++)
             {
-                Tile tileToAdd = new TileB();
-
-                _tilesList.Add(tileToAdd);
+                _tilesList.Add(new TileB());
             }
 
             for (int i = 0; i < 2; i++)
             {
-                Tile tileToAdd = new TileC();
+                _tilesList.Add(new TileC());
+            }
 
-                _tilesList.Add(tileToAdd);
+            for (int i = 0; i < 4; i++)
+            {
+                _tilesList.Add(new TileD());
+            }
+
+            for (int i = 0; i < 12; i++)
+            {
+                _tilesList.Add(new TileE());
             }
 
             //TODO: not all tiles have been added yet
+            //TODO: the amounts of tiles may be not correct - just for tests
         }
 
         public Tile GetRandomTile()

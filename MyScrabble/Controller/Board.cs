@@ -727,8 +727,8 @@ namespace MyScrabble.Controller
             int wordLeftMostIndex = GetWordLeftMostIndex((int) commonRow, tilesInMove);
             int wordRightMostIndex = GetWordRightMostIndex((int) commonRow, tilesInMove);
 
-            if (IsThereTileAdjacentToTheLeft(wordLeftMostIndex, (int) commonRow) ||
-                IsThereTileAdjacentToTheRight(wordRightMostIndex, (int) commonRow))
+            //if (IsThereTileAdjacentToTheLeft(wordLeftMostIndex, (int) commonRow) ||
+            //    IsThereTileAdjacentToTheRight(wordRightMostIndex, (int) commonRow))
             {
                 string horizontalWord = 
                     BuildWordFromHorizontalRange((int)commonRow, wordLeftMostIndex, wordRightMostIndex);
@@ -771,11 +771,11 @@ namespace MyScrabble.Controller
             int wordBottomMostIndex = GetWordBottomMostIndex((int)commonColumn, tilesInMove);
 
 
-            if (IsThereTileAdjacentAbove(wordTopMostIndex, (int)commonColumn) ||
-                IsThereTileAdjacentBelow(wordBottomMostIndex, (int)commonColumn))
+            //if (IsThereTileAdjacentAbove(wordTopMostIndex, (int)commonColumn) ||
+            //    IsThereTileAdjacentBelow(wordBottomMostIndex, (int)commonColumn))
             {
                 string verticalWord =
-                    BuildWordFromHorizontalRange((int)commonColumn, wordTopMostIndex, wordBottomMostIndex);
+                    BuildWordFromVerticalRange((int)commonColumn, wordTopMostIndex, wordBottomMostIndex);
 
                 if (!scrabbleDictionary.WordList.Contains(verticalWord))
                 {

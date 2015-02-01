@@ -55,7 +55,7 @@
 
         </StackPanel>
         
-        <ListBox x:Name="TilesBagListBox" Height="300" Margin="20,0" Grid.Row="1" VerticalAlignment="Center"/>
+        <ListBox x:Name="TilesBagListBox" Margin="20,0" Grid.Row="1"/>
 
         <local:TilesRackUC x:Name="Player2TilesRackUC" Grid.Row="0" Grid.Column="1" />
 

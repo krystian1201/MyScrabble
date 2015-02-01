@@ -16,8 +16,6 @@ namespace MyScrabble.Controller
         //TODO: setter/getter needed?
         public Tile[] TilesArray;
 
-        private readonly List<char> UniqueTilesList =
-            new List<char>() {'A', 'B', 'C'};
 
         //private TilesBag tilesBag;
 
@@ -50,6 +48,7 @@ namespace MyScrabble.Controller
         //for tests
         public void PopulateWithRandomTiles()
         {
+             List<char> UniqueTilesList = new List<char>() {'A', 'B', 'C'};
 
             Random random = new Random();
 

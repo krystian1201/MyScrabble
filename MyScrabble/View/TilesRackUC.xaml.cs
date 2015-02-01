@@ -30,12 +30,11 @@ namespace MyScrabble.View
 
         public void PopulateTilesRackUC()
         {
-
             //we should use this function
-            //_tilesRack.PopulateWithTilesFromTilesBag();
+            TilesRack.PopulateWithTilesFromTilesBag(TilesBag.TilesBagInstance);
 
-            //but for testing purposes - we use this one
-            TilesRack.PopulateWithSetTiles();
+            //but for testing purposes - we can use this one
+            //TilesRack.PopulateWithSetTiles();
            
             RefreshTilesRackUCFromTilesRack();
         }
