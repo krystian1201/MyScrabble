@@ -210,11 +210,11 @@ namespace MyScrabble.Controller
 
             if (wordOrientation == WordOrientation.Horizontal)
             {
-                tilesOnBoardFromAnchor = board.GetTilesOfWordInRow((int)anchorTile.PositionOnBoard.Value.Y, new List<Tile>() { anchorTile });
+                tilesOnBoardFromAnchor = board.GetTilesOfWordInRow(new List<Tile>() { anchorTile }, (int)anchorTile.PositionOnBoard.Value.Y);
             }
             else if (wordOrientation == WordOrientation.Vertical)
             {
-                tilesOnBoardFromAnchor = board.GetTilesOfWordInColumn((int)anchorTile.PositionOnBoard.Value.X, new List<Tile>() { anchorTile });
+                tilesOnBoardFromAnchor = board.GetTilesOfWordInColumn(new List<Tile>() { anchorTile }, (int)anchorTile.PositionOnBoard.Value.X);
             }
 
             if (tilesOnBoardFromAnchor == null || tilesOnBoardFromAnchor.Count == 0)

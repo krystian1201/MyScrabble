@@ -59,7 +59,7 @@
 
         <local:TilesRackUC x:Name="Player2TilesRackUC" Grid.Row="0" Grid.Column="1" />
 
-        <StackPanel x:Name="Player2ScoreStackPanel" Margin="15,0">
+        <StackPanel x:Name="Player2ScoreStackPanel" Margin="10,0">
             
             <Label x:Name="Player2Label" Content="Player 2" Margin="0" VerticalAlignment="Top" Foreground="White"/>
             <Label x:Name="Player2TotalScoreLabel" Content="Total Score: " Margin="0" VerticalAlignment="Top" Foreground="White"/>
@@ -67,7 +67,7 @@
             
         </StackPanel>
         
-        <StackPanel x:Name="Player1ScoreStackPanel" Margin="10,0,20,0" Grid.Row="2">
+        <StackPanel x:Name="Player1ScoreStackPanel" Margin="10,0" Grid.Row="2">
 
             <Label x:Name="Player1Label" Content="Player 1" Margin="0" VerticalAlignment="Top" Foreground="White"/>
             <Label x:Name="Player1TotalScoreLabel" Content="Total Score: " Margin="0" VerticalAlignment="Top" Foreground="White"/>
