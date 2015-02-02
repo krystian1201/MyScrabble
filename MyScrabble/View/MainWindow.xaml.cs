@@ -17,6 +17,7 @@ namespace MyScrabble.View
     public partial class MainWindow : Window
     {
         private readonly AIPlayerRandom _aiRandomPlayer;
+        private readonly AIPlayerBrute _aiBrutePlayer;
         private readonly Player _humanPlayer;
 
         public MainWindow()
@@ -32,6 +33,7 @@ namespace MyScrabble.View
 
 
             _aiRandomPlayer = new AIPlayerRandom();
+            _aiBrutePlayer = new AIPlayerBrute();
             _humanPlayer = new Player();
         }
 
@@ -60,10 +62,8 @@ namespace MyScrabble.View
             boardUC.GetLastTilesFromBoardToTilesRack();
         }
 
-        //just for testing/debugging
-        
 
-        private void AIPlayerMakeMoveButton_Click(object sender, RoutedEventArgs e)
+        private void AIRAndomPlayerMakeMoveButton_Click(object sender, RoutedEventArgs e)
         {
 
             List<Tile> tilesInMove = 
@@ -77,6 +77,29 @@ namespace MyScrabble.View
             int moveScore = boardUC.Board.GetScoreOfMove(tilesInMove);
             _aiRandomPlayer.UpdateTotalScoreWithLastMoveScore(moveScore);
             UpdatePlayer2ScoreLabels(moveScore, _aiRandomPlayer.TotalScore);
+
+            boardUC.Board.MakeAMoveAI(tilesInMove);
+
+            Player2TilesRackUC.TilesRack.RemoveTiles(tilesInMove);
+            Player2TilesRackUC.RefillTilesFromTilesBag();
+
+            UpdateTilesBagListBox();
+        }
+
+        private void AIBruteForcePlayerMakeMoveButton_Click(object sender, RoutedEventArgs e)
+        {
+
+            List<Tile> tilesInMove =
+                _aiBrutePlayer.GenerateMove(Player2TilesRackUC.TilesRack, boardUC.Board);
+
+            if (tilesInMove == null || tilesInMove.Count == 0)
+            {
+                throw new Exception("No tiles in move");
+            }
+
+            int moveScore = boardUC.Board.GetScoreOfMove(tilesInMove);
+            _aiBrutePlayer.UpdateTotalScoreWithLastMoveScore(moveScore);
+            UpdatePlayer2ScoreLabels(moveScore, _aiBrutePlayer.TotalScore);
 
             boardUC.Board.MakeAMoveAI(tilesInMove);
 

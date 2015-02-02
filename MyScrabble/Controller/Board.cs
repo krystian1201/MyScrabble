@@ -1058,6 +1058,47 @@ namespace MyScrabble.Controller
 
             return false;
         }
+
+        public WordOrientation GetWordOrientationFromTiles(List<Tile> tilesInMove)
+        {
+            int? commonRow = null;
+            int? commonColumn = null;
+
+            GetTilesCommonRowOrColumnOrBoth(tilesInMove, ref commonColumn, ref commonRow);
+
+            if (commonRow != null)
+            {
+                return WordOrientation.Horizontal;
+            }
+
+            if (commonColumn != null)
+            {
+                return WordOrientation.Vertical;
+            }
+
+            throw new Exception("Cannot assign orientation to word");
+        }
+
+        public Point GetWordStartPositionFromTiles(List<Tile> tilesInMove, WordOrientation wordOrientation)
+        {
+            if (wordOrientation == WordOrientation.Horizontal)
+            {
+                int minX = (int)tilesInMove.Min(tile => tile.PositionOnBoard.Value.X);
+                int commonRow = (int)tilesInMove.First().PositionOnBoard.Value.Y;
+
+                return new Point(minX, commonRow);
+            }
+
+            if (wordOrientation == WordOrientation.Vertical)
+            {
+                int minY = (int)tilesInMove.Min(tile => tile.PositionOnBoard.Value.Y);
+                int commonColumn = (int)tilesInMove.First().PositionOnBoard.Value.X;
+
+                return new Point(commonColumn, minY);
+            }
+            
+            return new Point(-1, -1);
+        }
     }
 
     public enum ScoringBonus

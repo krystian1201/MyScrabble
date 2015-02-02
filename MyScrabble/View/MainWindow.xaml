@@ -34,8 +34,7 @@
         <local:TilesRackUC x:Name="Player1TilesRackUC" Grid.Row="2" Grid.Column="1" />
 
 
-        <StackPanel Grid.Column="2" Margin="0,50,20,0" Grid.Row="1" 
-                    VerticalAlignment="Top">
+        <StackPanel Grid.Column="2" Margin="0,50,20,100" Grid.Row="1">
 
             <Button x:Name="DoneButton" Content="Done" Margin="0,0,0,20"
                     VerticalAlignment="Top" Height="25" Click="DoneButton_Click"/>
@@ -50,8 +49,19 @@
             <Button x:Name="ResetTilesButton" Content="Reset Tiles" Margin="0,0,0,20" 
                     VerticalAlignment="Top" Width="127" Height="25" Click="ResetTilesButton_Click"/>
 
-            <Button x:Name="AIPlayerMakeMoveButton" Content="AI player - make move" 
-                 Margin="0,0,0,20" VerticalAlignment="Top" Height="25" Click="AIPlayerMakeMoveButton_Click"/>
+            <Button x:Name="AIRandomPlayerMakeMoveButton" Margin="0,0,0,20" VerticalAlignment="Top" 
+                    Click="AIRAndomPlayerMakeMoveButton_Click">
+                <TextBlock TextWrapping="Wrap">
+                    AI random player make move
+                </TextBlock>
+            </Button>
+            
+            <Button x:Name="AIBruteForcePlayerMakeMoveButton" Margin="0,0,0,20" VerticalAlignment="Top" 
+            	Click="AIBruteForcePlayerMakeMoveButton_Click">
+                <TextBlock TextWrapping="Wrap">
+                    AI brute force player make move
+                </TextBlock>
+            </Button>
 
         </StackPanel>
 

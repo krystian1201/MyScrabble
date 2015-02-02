@@ -1,6 +1,7 @@
 ﻿
 
 using System;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
@@ -8,34 +9,18 @@ using System.Windows.Media.Imaging;
 
 namespace MyScrabble.Model
 {
-    public abstract class Tile
+    public class Tile
     {
-        private readonly char letter;
-        public char Letter
-        {
-            get { return letter; }
-        }
 
-        private readonly int points;
-        public int Points
-        {
-            get { return points; }
-        }
+        public char Letter { get; private set; }
 
-        private readonly string imageURI;
+        public int Points { get; private set; }
 
-        public string ImageURI
-        {
-            get { return imageURI; }
-        }
 
-        private readonly Image tileImage = new Image();
+        public string ImageURI { get; private set; }
 
-        public Image TileImage 
-        {
-            get { return tileImage; }
-            
-        }
+        public Image TileImage { get; private set; }
+        
 
         public bool WasMoveMade { get; set; }
 
@@ -44,17 +29,26 @@ namespace MyScrabble.Model
 
         public Point? PositionOnBoard { get; set; }
 
+        public Tile(Tile tile)
+        {
+            this.Letter = tile.Letter;
+            this.Points = tile.Points;
+            this.TileImage = tile.TileImage;
+            this.WasMoveMade = tile.WasMoveMade;
+            this.PositionOnBoard = tile.PositionOnBoard;
+            this.PositionInTilesRack = tile.PositionInTilesRack;
+            this.ImageURI = tile.ImageURI;
+
+        }
 
         protected Tile(char letter, int points, string imageURI)
         {
-            this.letter = letter;
-            this.points = points;
-            this.imageURI = imageURI;
-
-            this.tileImage.Source = new BitmapImage(new Uri(imageURI, UriKind.RelativeOrAbsolute));
-
+            this.Letter = letter;
+            this.Points = points;
+            this.ImageURI = imageURI;
+            this.TileImage = new Image();
+            this.TileImage.Source = new BitmapImage(new Uri(imageURI, UriKind.RelativeOrAbsolute));
             this.WasMoveMade = false;
-
             this.PositionInTilesRack = null;
             this.PositionOnBoard = null;
         }
