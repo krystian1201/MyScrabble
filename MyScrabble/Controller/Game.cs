@@ -10,6 +10,7 @@ namespace MyScrabble.Controller
     {
         private static bool isFirstMove = true;
 
+
         public static bool IsFirstMove
         {
             get { return isFirstMove;  }

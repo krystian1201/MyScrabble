@@ -18,11 +18,101 @@ namespace MyScrabble.Controller
         public const int BOARD_SIZE = 15;
 
         private readonly Tile[,] _boardArray = new Tile[BOARD_SIZE, BOARD_SIZE];
-
+        private Dictionary<Point, ScoringBonus> bonusScoringMatrix;
 
         public Board(BoardUC _boardUC)
         {
             this._boardUC = _boardUC;
+            CreateBonusScoringMatrix();
+        }
+
+        private void CreateBonusScoringMatrix()
+        {
+            bonusScoringMatrix = new Dictionary<Point, ScoringBonus>();
+
+            AddTrippleWordBonusSpotsToBonusMatrix();
+
+            AddDoubleWordBonusSpotsToBonusMatrix();
+
+            AddTrippleLetterBonusSpotsToBonusMatrix();
+
+            AddDoubleLetterBonusSpotsToBonusMatrix();
+        }
+
+        private void AddTrippleWordBonusSpotsToBonusMatrix()
+        {
+            for (int row = 0; row < BOARD_SIZE; row += BOARD_SIZE / 2)
+            {
+                for (int column = 0; column < BOARD_SIZE; column += BOARD_SIZE / 2)
+                {
+                    bonusScoringMatrix.Add(new Point(column, row), ScoringBonus.TrippleWord);
+                }
+            }
+
+            //the center cell has actually a double-word bonus
+            bonusScoringMatrix.Remove(new Point(7, 7));
+        }
+
+        private void AddDoubleWordBonusSpotsToBonusMatrix()
+        {
+            for (int rowColumn = 1; rowColumn < BOARD_SIZE/2 - 2; rowColumn++)
+            {
+                bonusScoringMatrix.Add(new Point(rowColumn, rowColumn), ScoringBonus.DoubleWord);
+                bonusScoringMatrix.Add(new Point(rowColumn, BOARD_SIZE - rowColumn - 1), ScoringBonus.DoubleWord);
+                bonusScoringMatrix.Add(new Point(BOARD_SIZE - rowColumn - 1, rowColumn), ScoringBonus.DoubleWord);
+                bonusScoringMatrix.Add(new Point(BOARD_SIZE - rowColumn - 1, BOARD_SIZE - rowColumn - 1),
+                    ScoringBonus.DoubleWord);
+            }
+
+            bonusScoringMatrix.Add(new Point(7, 7), ScoringBonus.DoubleWord);
+        }
+
+        
+        private void AddTrippleLetterBonusSpotsToBonusMatrix()
+        {
+            for (int row = 1; row < BOARD_SIZE; row += BOARD_SIZE / 4 + 1)
+            {
+                bonusScoringMatrix.Add(new Point(row, 5), ScoringBonus.TrippleLetter);
+                bonusScoringMatrix.Add(new Point(row, BOARD_SIZE - 1 - 5), ScoringBonus.TrippleLetter);
+            }
+
+            bonusScoringMatrix.Add(new Point(5, 1), ScoringBonus.TrippleLetter);
+            bonusScoringMatrix.Add(new Point(BOARD_SIZE - 1 - 5, 1), ScoringBonus.TrippleLetter);
+            bonusScoringMatrix.Add(new Point(5, BOARD_SIZE - 1 - 1), ScoringBonus.TrippleLetter);
+            bonusScoringMatrix.Add(new Point(BOARD_SIZE - 1 - 5, BOARD_SIZE - 1 - 1), ScoringBonus.TrippleLetter);
+        }
+
+
+        private void AddDoubleLetterBonusSpotsToBonusMatrix()
+        {
+            for (int column = 0; column < BOARD_SIZE; column += BOARD_SIZE / 2)
+            {
+                bonusScoringMatrix.Add(new Point(column, 3), ScoringBonus.DoubleLetter);
+                bonusScoringMatrix.Add(new Point(column, BOARD_SIZE - 1 - 3), ScoringBonus.DoubleLetter);
+            }
+
+            for (int row = 0; row < BOARD_SIZE; row += BOARD_SIZE / 2)
+            {
+                bonusScoringMatrix.Add(new Point(3, row), ScoringBonus.DoubleLetter);
+                bonusScoringMatrix.Add(new Point(BOARD_SIZE - 1 - 3, row), ScoringBonus.DoubleLetter);
+            }
+
+            for (int column = 2; column < BOARD_SIZE / 2; column += 4)
+            {
+                bonusScoringMatrix.Add(new Point(column, BOARD_SIZE / 2 - 1), ScoringBonus.DoubleLetter);
+                bonusScoringMatrix.Add(new Point(column, BOARD_SIZE / 2 + 1), ScoringBonus.DoubleLetter);
+
+                bonusScoringMatrix.Add(new Point(BOARD_SIZE - 1 - column, BOARD_SIZE / 2 - 1), ScoringBonus.DoubleLetter);
+                bonusScoringMatrix.Add(new Point(BOARD_SIZE - 1 - column, BOARD_SIZE / 2 + 1), ScoringBonus.DoubleLetter);
+            }
+
+            
+            bonusScoringMatrix.Add(new Point(BOARD_SIZE / 2 - 1, 2), ScoringBonus.DoubleLetter);
+            bonusScoringMatrix.Add(new Point(BOARD_SIZE / 2 + 1, 2), ScoringBonus.DoubleLetter);
+
+            bonusScoringMatrix.Add(new Point(BOARD_SIZE / 2 - 1, BOARD_SIZE - 1 - 2), ScoringBonus.DoubleLetter);
+            bonusScoringMatrix.Add(new Point(BOARD_SIZE / 2 + 1, BOARD_SIZE - 1 - 2), ScoringBonus.DoubleLetter);
+            
         }
 
 
@@ -58,7 +148,7 @@ namespace MyScrabble.Controller
         }
         
 
-        public void MakeAMoveHuman()
+        public List<Tile> MakeAMoveHuman()
         {
             List<Tile> tilesInMove = _boardArray.Cast<Tile>().
                  Where(tile => tile != null && tile.WasMoveMade == false).
@@ -71,6 +161,8 @@ namespace MyScrabble.Controller
             {
                 Game.SetAfterFirstMove();
             }
+
+            return tilesInMove;
         }
 
         public void MakeAMoveAI(List<Tile> tilesInMove)
@@ -830,5 +922,54 @@ namespace MyScrabble.Controller
             return false;
         }
 
+        public int GetScoreOfMove(List<Tile> tilesInMove)
+        {
+            if (tilesInMove == null)
+            {
+                return 0;
+            }
+
+            int score = 0;
+            int wordBonusFactor = 1;
+
+            foreach (Tile tile in tilesInMove)
+            {
+                int letterBonusFactor = 1;
+
+                Point tilesPosition = (Point)tile.PositionOnBoard;
+
+                if (bonusScoringMatrix.ContainsKey(tilesPosition))
+                {
+                    if (bonusScoringMatrix[tilesPosition] == ScoringBonus.TrippleWord)
+                    {
+                        wordBonusFactor *= 3;
+                    }
+                    else if(bonusScoringMatrix[tilesPosition] == ScoringBonus.DoubleWord)
+                    {
+                        wordBonusFactor *= 2;
+                    }
+                    else if (bonusScoringMatrix[tilesPosition] == ScoringBonus.TrippleLetter)
+                    {
+                        letterBonusFactor = 3;
+                    }
+                    else if(bonusScoringMatrix[tilesPosition] == ScoringBonus.DoubleLetter)
+                    {
+                        letterBonusFactor = 2;
+                    }
+
+                }
+
+                score += tile.Points * letterBonusFactor;
+            }
+
+            score *= wordBonusFactor;
+
+            return score;
+        }
+    }
+
+    public enum ScoringBonus
+    {
+        DoubleLetter, TrippleLetter, DoubleWord, TrippleWord
     }
 }

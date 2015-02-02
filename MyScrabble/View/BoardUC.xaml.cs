@@ -107,6 +107,9 @@ namespace MyScrabble.View
                 }
             }
 
+            //the center cell is actuall hazy/pale red
+            redCells.Remove(GetCellByRowAndColumn(7, 7));
+
             redCells.ForEach(rectangle => rectangle.Fill = new SolidColorBrush(Colors.Red));
         }
 
@@ -122,6 +125,8 @@ namespace MyScrabble.View
                 redHazyCells.Add(GetCellByRowAndColumn(Board.BOARD_SIZE - rowColumn - 1, rowColumn));
                 redHazyCells.Add(GetCellByRowAndColumn(Board.BOARD_SIZE - rowColumn - 1, Board.BOARD_SIZE - rowColumn - 1));
             }
+
+            redHazyCells.Add(GetCellByRowAndColumn(7, 7));
 
             redHazyCells.ForEach(rectangle => rectangle.Fill = new SolidColorBrush(Color.FromArgb(100, 255, 0, 0)));
         }
@@ -173,6 +178,9 @@ namespace MyScrabble.View
                 hazyBlueCells.Add(GetCellByRowAndColumn(Board.BOARD_SIZE / 2 + 1, Board.BOARD_SIZE - 1 - column));
             }
 
+
+            //TODO: here, for row = 6 and the first statement we get an exception
+            //the key already was added
             for (int row = 2; row < Board.BOARD_SIZE / 2; row += 4)
             {
                 hazyBlueCells.Add(GetCellByRowAndColumn(row, Board.BOARD_SIZE / 2 - 1));
@@ -392,7 +400,7 @@ namespace MyScrabble.View
         }
 
 
-        public void MakeAMoveHuman()
+        public List<Tile> MakeAMoveHuman()
         {
             List<string> validationMessages = Board.ValidateMove();
 
@@ -402,15 +410,14 @@ namespace MyScrabble.View
 
                 //if move was invalid, tiles go back to the tiles rack
                 GetLastTilesFromBoardToTilesRack();
-            }
-            else
-            {
-                //you cannot change position of a tile after move was made
-                MakeTileUCsInMoveNonDraggable();
 
-                Board.MakeAMoveHuman();
+                return null;
             }
-            
+
+            //you cannot change position of a tile after move was made
+            MakeTileUCsInMoveNonDraggable();
+
+            return Board.MakeAMoveHuman();
         }
 
         private void ShowMoveValidationMessages(List<string> validationMessages)

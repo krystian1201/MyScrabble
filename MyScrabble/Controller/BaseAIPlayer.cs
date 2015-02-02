@@ -7,7 +7,7 @@ using MyScrabble.Model;
 
 namespace MyScrabble.Controller
 {
-    public abstract class BaseAIPlayer
+    public abstract class BaseAIPlayer : Player
     {
         protected AIDictionary _aiDictionary;
         

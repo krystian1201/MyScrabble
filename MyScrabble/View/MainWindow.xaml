@@ -39,14 +39,14 @@
 
             <Button x:Name="DoneButton" Content="Done" Margin="0,0,0,20"
                     VerticalAlignment="Top" Height="25" Click="DoneButton_Click"/>
-            
+
             <Button x:Name="PassButton" Content="Pass"
                     Margin="0,0,0,20" VerticalAlignment="Top" Height="25"/>
-            
+
             <Button x:Name="ExchangeTilesButton" Content="Exchange Tiles" 
                     Margin="0,0,0,20" VerticalAlignment="Top" Width="127" Height="25" 
                     Click="ExchangeTilesButton_Click"/>
-            
+
             <Button x:Name="ResetTilesButton" Content="Reset Tiles" Margin="0,0,0,20" 
                     VerticalAlignment="Top" Width="127" Height="25" Click="ResetTilesButton_Click"/>
 
@@ -54,10 +54,26 @@
                  Margin="0,0,0,20" VerticalAlignment="Top" Height="25" Click="AIPlayerMakeMoveButton_Click"/>
 
         </StackPanel>
-        
-        <ListBox x:Name="TilesBagListBox" Margin="20,0" Grid.Row="1"/>
+
+        <ListBox x:Name="TilesBagListBox" Margin="20,15" Grid.Row="1"/>
 
         <local:TilesRackUC x:Name="Player2TilesRackUC" Grid.Row="0" Grid.Column="1" />
+
+        <StackPanel x:Name="Player2ScoreStackPanel" Margin="15,0">
+            
+            <Label x:Name="Player2Label" Content="Player 2" Margin="0" VerticalAlignment="Top" Foreground="White"/>
+            <Label x:Name="Player2TotalScoreLabel" Content="Total Score: " Margin="0" VerticalAlignment="Top" Foreground="White"/>
+            <Label x:Name="Player2LastMoveScoreLabel" Content="Last Move Score: " Margin="0" VerticalAlignment="Top" Foreground="White"/>
+            
+        </StackPanel>
+        
+        <StackPanel x:Name="Player1ScoreStackPanel" Margin="10,0,20,0" Grid.Row="2">
+
+            <Label x:Name="Player1Label" Content="Player 1" Margin="0" VerticalAlignment="Top" Foreground="White"/>
+            <Label x:Name="Player1TotalScoreLabel" Content="Total Score: " Margin="0" VerticalAlignment="Top" Foreground="White"/>
+            <Label x:Name="Player1LastMoveScoreLabel" Content="Last Move Score: " Margin="0" VerticalAlignment="Top" Foreground="White"/>
+
+        </StackPanel>
 
     </Grid>
 
