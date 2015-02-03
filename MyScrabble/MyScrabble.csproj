@@ -161,6 +161,29 @@
     <Resource Include="Assets\D.jpg" />
     <Resource Include="Assets\E.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\F.jpg" />
+    <Resource Include="Assets\G.jpg" />
+    <Resource Include="Assets\H.jpg" />
+    <Resource Include="Assets\I.jpg" />
+    <Resource Include="Assets\J.jpg" />
+    <Resource Include="Assets\K.jpg" />
+    <Resource Include="Assets\L.jpg" />
+    <Resource Include="Assets\M.jpg" />
+    <Resource Include="Assets\N.jpg" />
+    <Resource Include="Assets\O.jpg" />
+    <Resource Include="Assets\P.jpg" />
+    <Resource Include="Assets\Q.jpg" />
+    <Resource Include="Assets\R.jpg" />
+    <Resource Include="Assets\S.jpg" />
+    <Resource Include="Assets\T.jpg" />
+    <Resource Include="Assets\U.jpg" />
+    <Resource Include="Assets\V.jpg" />
+    <Resource Include="Assets\W.jpg" />
+    <Resource Include="Assets\X.jpg" />
+    <Resource Include="Assets\Y.jpg" />
+    <Resource Include="Assets\Z.jpg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -27,10 +27,11 @@ namespace MyScrabble.Controller
         //the proper method
         public void PopulateWithTilesFromTilesBag(TilesBag tilesBag)
         {
+            Random random = new Random();
 
             for (int i = 0; i < TILES_RACK_SIZE; i++)
             {
-                Tile randomTileFromTilesBag = tilesBag.GetRandomTile();
+                Tile randomTileFromTilesBag = tilesBag.GetRandomTile(random);
 
                 if (randomTileFromTilesBag != null)
                 {
@@ -87,12 +88,13 @@ namespace MyScrabble.Controller
 
         public void RefillTilesFromTilesBag(TilesBag tilesBag)
         {
+            Random random = new Random();
 
             for (int i = 0; i < TILES_RACK_SIZE; i++)
             {
                 if (TilesArray[i] == null)
                 {
-                    Tile randomTileFromTilesBag = tilesBag.GetRandomTile();
+                    Tile randomTileFromTilesBag = tilesBag.GetRandomTile(random);
 
                     if (randomTileFromTilesBag != null)
                     {

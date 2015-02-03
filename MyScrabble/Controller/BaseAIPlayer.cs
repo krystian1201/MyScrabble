@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -12,7 +13,6 @@ namespace MyScrabble.Controller
     {
         protected AIDictionary _aiDictionary;
         
-
         protected BaseAIPlayer()
         {
             _aiDictionary = new AIDictionary();
@@ -37,7 +37,7 @@ namespace MyScrabble.Controller
                 throw new Exception("No tiles in move");
             }
 
-            return tilesInMove;
+            return new List<Tile>();
         }
 
         protected abstract List<Tile> GenerateFirstMove(TilesRack tilesRack, Board board);
@@ -99,13 +99,31 @@ namespace MyScrabble.Controller
 
                 if (wordOrientation == WordOrientation.Horizontal)
                 {
-                    //tileInMove.PositionOnBoard = new Point(startTilePosition.X + letterIndex, startTilePosition.Y);
-                    board.PlaceATileOnBoard(tileInMove, (int)(startTilePosition.X + letterIndex), (int)startTilePosition.Y);
+                    int xCoordinate = (int) (startTilePosition.X + letterIndex);
+
+                    if (xCoordinate > Board.BOARD_SIZE - 1 || xCoordinate < 0)
+                    {
+                        List<Tile> tilesPlacedOnBoard = board.GetTilesOnBoardFromCurrentMove();
+                        board.RemoveTiles(tilesPlacedOnBoard);
+
+                        throw new Exception("Tile goes outside the boarders of board");
+                    }
+
+                    board.PlaceATileOnBoard(tileInMove, xCoordinate, (int)startTilePosition.Y);
                 }
                 else if (wordOrientation == WordOrientation.Vertical)
                 {
-                    //tileInMove.PositionOnBoard = new Point(startTilePosition.X, startTilePosition.Y + letterIndex);
-                    board.PlaceATileOnBoard(tileInMove, (int)startTilePosition.X, (int)(startTilePosition.Y + letterIndex));
+                    int yCoordinate = (int)(startTilePosition.Y + letterIndex);
+
+                    if (yCoordinate > Board.BOARD_SIZE - 1 || yCoordinate < 0)
+                    {
+                        List<Tile> tilesPlacedOnBoard = board.GetTilesOnBoardFromCurrentMove();
+                        board.RemoveTiles(tilesPlacedOnBoard);
+
+                        throw new Exception("Tile goes outside the boarders of board");
+                    }
+
+                    board.PlaceATileOnBoard(tileInMove, (int)startTilePosition.X, yCoordinate);
                 }
 
 
@@ -132,6 +150,7 @@ namespace MyScrabble.Controller
             return stringBuilder.ToString();
         }
 
+        
         
     }
 }

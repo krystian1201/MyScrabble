@@ -13,6 +13,7 @@ namespace MyScrabble.Controller
 {
     public class AIPlayerRandom : BaseAIPlayer
     {
+        readonly Random random = new Random();
 
         protected override List<Tile> GenerateFirstMove(TilesRack tilesRack, Board board)
         {
@@ -69,7 +70,7 @@ namespace MyScrabble.Controller
                 throw new ArgumentException("Word formed from tiles cannot be empty");
             }
 
-            Random random = new Random();
+            
             int randomCordinate = random.Next(7 - word.Length + 1, 8);
 
             if (wordOrientation == WordOrientation.Horizontal)
@@ -108,8 +109,15 @@ namespace MyScrabble.Controller
                     wordOrientation, tilesOnBoardFromAnchor, out substringIndex);
 
 
-                AssignPositionsOnBoardToTilesInMove(word, tilesInMove, startTilePosition,
-                    wordOrientation, substringFromTilesOnBoard, substringIndex, board);
+                try
+                {
+                    AssignPositionsOnBoardToTilesInMove(word, tilesInMove, startTilePosition,
+                        wordOrientation, substringFromTilesOnBoard, substringIndex, board);
+                }
+                catch (Exception)
+                {
+                    continue;
+                }
 
 
                 if (!board.FormsNoInvalidWordsInAnyDirection(tilesInMove, scrabbleDictionary))
@@ -163,7 +171,6 @@ namespace MyScrabble.Controller
                                     "be at least two tiles on board already");
             }
 
-            Random random = new Random();
             Tile randomTileOnBoard;
 
             //if a tile is totally surrounded by other tiles from left, right, top and bottom
@@ -184,7 +191,6 @@ namespace MyScrabble.Controller
 
         private int GetRandomNumberOfTilesToChoseFromTilesRack(TilesRack tilesRack)
         {
-            Random random = new Random();
             int randomNumberOfTiles = -1;
 
             //it can happen that the tiles rack will contain less than 7 tiles
@@ -220,7 +226,6 @@ namespace MyScrabble.Controller
                     ArgumentOutOfRangeException("randomNumberOfTiles", "The number of tiles to get randomly cannot be less than 1");
             }
 
-            Random random = new Random();
             List<Tile> randomTilesFromTilesRack = new List<Tile>();
 
             for (int i = 0; i < randomNumberOfTiles; i++)
@@ -308,7 +313,6 @@ namespace MyScrabble.Controller
                                                 " that contains substring: " + substring);
             }
 
-            Random random = new Random();
 
             string randomWordFromKey = wordsFromKeyContainingSubstring[random.Next(0, wordsFromKeyContainingSubstring.Count)];
             
@@ -332,7 +336,7 @@ namespace MyScrabble.Controller
             }
 
             List<int> indexesOfSubstring = word.AllIndexesOf(substring).ToList();
-            Random random = new Random();
+
             substringIndex = indexesOfSubstring[random.Next(0, indexesOfSubstring.Count)];
 
             Point startTilePosition = new Point(-1, -1);

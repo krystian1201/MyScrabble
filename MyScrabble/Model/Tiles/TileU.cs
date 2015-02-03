@@ -6,10 +6,10 @@ namespace MyScrabble.Model.Tiles
     sealed class TileU : Tile
     {
         private const string imageURI =
-            @"\Assets\C.jpg";
+            @"\Assets\U.jpg";
 
         public TileU()
-            : base('u', 3, imageURI)
+            : base('u', 1, imageURI)
         {
         }
     }

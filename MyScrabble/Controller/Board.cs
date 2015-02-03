@@ -512,7 +512,7 @@ namespace MyScrabble.Controller
             //extending range of the word including tiles placed in previous moves
             if (wordLeftMostIndex >= 1)
             {
-                while (_boardArray[wordLeftMostIndex - 1, row] != null)
+                while (wordLeftMostIndex > 0 && _boardArray[wordLeftMostIndex - 1, row] != null)
                 {
                     wordLeftMostIndex -= 1;
                 }
@@ -528,7 +528,7 @@ namespace MyScrabble.Controller
 
             if (wordRightMostIndex <= BOARD_SIZE - 2)
             {
-                while (_boardArray[wordRightMostIndex + 1, row] != null)
+                while (wordRightMostIndex < BOARD_SIZE - 1 && _boardArray[wordRightMostIndex + 1, row] != null)
                 {
                     wordRightMostIndex += 1;
                 }
@@ -585,7 +585,7 @@ namespace MyScrabble.Controller
             //extending range of the word including tiles placed in previous moves
             if(wordTopMostIndex >= 1)
             {
-                while (_boardArray[column, wordTopMostIndex - 1] != null)
+                while (wordTopMostIndex > 0 && _boardArray[column, wordTopMostIndex - 1] != null)
                 {
                     wordTopMostIndex -= 1;
                 }
@@ -603,7 +603,7 @@ namespace MyScrabble.Controller
             //extending range of the word including tiles placed in previous moves
             if (wordBottomMostIndex <= BOARD_SIZE - 2)
             {
-                while (_boardArray[column, wordBottomMostIndex + 1] != null)
+                while (wordBottomMostIndex < BOARD_SIZE - 1 && _boardArray[column, wordBottomMostIndex + 1] != null)
                 {
                     wordBottomMostIndex += 1;
                 }
@@ -1120,6 +1120,14 @@ namespace MyScrabble.Controller
             }
 
             return tilesOnBoardFromAnchor;
+        }
+
+        public List<Tile> GetTilesOnBoardFromCurrentMove()
+        {
+            List<Tile> tilesFromCurrentMoveOnBoard =
+                _boardArray.Cast<Tile>().Where(tile => tile.WasMoveMade == false).ToList<Tile>();
+
+            return tilesFromCurrentMoveOnBoard;
         }
     }
 

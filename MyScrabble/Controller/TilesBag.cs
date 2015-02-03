@@ -59,17 +59,107 @@ namespace MyScrabble.Controller
                 _tilesList.Add(new TileE());
             }
 
+            for (int i = 0; i < 2; i++)
+            {
+                _tilesList.Add(new TileF());
+            }
+
+            for (int i = 0; i < 3; i++)
+            {
+                _tilesList.Add(new TileG());
+            }
+
+            for (int i = 0; i < 2; i++)
+            {
+                _tilesList.Add(new TileH());
+            }
+
+            for (int i = 0; i < 9; i++)
+            {
+                _tilesList.Add(new TileI());
+            }
+
+            _tilesList.Add(new TileJ());
+
+            _tilesList.Add(new TileK());
+
+            for (int i = 0; i < 4; i++)
+            {
+                _tilesList.Add(new TileL());
+            }
+
+            for (int i = 0; i < 2; i++)
+            {
+                _tilesList.Add(new TileM());
+            }
+
+            for (int i = 0; i < 6; i++)
+            {
+                _tilesList.Add(new TileN());
+            }
+
+            for (int i = 0; i < 8; i++)
+            {
+                _tilesList.Add(new TileO());
+            }
+
+            for (int i = 0; i < 2; i++)
+            {
+                _tilesList.Add(new TileP());
+            }
+
+            _tilesList.Add(new TileQ());
+
+            for (int i = 0; i < 6; i++)
+            {
+                _tilesList.Add(new TileR());
+            }
+
+            for (int i = 0; i < 4; i++)
+            {
+                _tilesList.Add(new TileS());
+            }
+
+            for (int i = 0; i < 6; i++)
+            {
+                _tilesList.Add(new TileT());
+            }
+
+            for (int i = 0; i < 4; i++)
+            {
+                _tilesList.Add(new TileU());
+            }
+
+            for (int i = 0; i < 2; i++)
+            {
+                _tilesList.Add(new TileV());
+            }
+
+            for (int i = 0; i < 2; i++)
+            {
+                _tilesList.Add(new TileW());
+            }
+
+            _tilesList.Add(new TileX());
+
+            for (int i = 0; i < 2; i++)
+            {
+                _tilesList.Add(new TileY());
+            }
+
+            _tilesList.Add(new TileZ());
+            
+
             //TODO: not all tiles have been added yet
             //TODO: the amounts of tiles may be not correct - just for tests
         }
 
-        public Tile GetRandomTile()
+        public Tile GetRandomTile(Random random)
         {
             Tile tileToReturn = null;
 
             if (_tilesList.Count > 0)
             {
-                Random random = new Random();
 
                 int tileIndex = random.Next(0, _tilesList.Count);
 

@@ -260,7 +260,17 @@ namespace MyScrabble.Controller
         private void GetBestMoveFromAnchorTile(TilesRack tilesRack, Board board, WordOrientation wordOrientation, 
             Tile anchorTile, string subsetFromTilesRack)
         {
-            List<Tile> tilesOnBoardFromAnchor = board.GetTilesOnBoardFromAnchor(anchorTile, wordOrientation);
+            List<Tile> tilesOnBoardFromAnchor;
+
+            try
+            {
+                tilesOnBoardFromAnchor = board.GetTilesOnBoardFromAnchor(anchorTile, wordOrientation);
+            }
+            catch (Exception)
+            {
+                
+                return;
+            }
 
             string stringFromTilesFromAnchor = BuildStringFromTiles(tilesOnBoardFromAnchor);
 
@@ -301,9 +311,15 @@ namespace MyScrabble.Controller
 
                 foreach (Point wordStartPosition in wordStartPositions)
                 {
-                    AssignPositionsOnBoardToTilesInMove(word, tilesInMove, wordStartPosition, wordOrientation,
+                    try
+                    {
+                        AssignPositionsOnBoardToTilesInMove(word, tilesInMove, wordStartPosition, wordOrientation,
                         stringFromTilesFromAnchor, substringStartPositions[startPositionIndex], board);
-
+                    }
+                    catch (Exception)
+                    {
+                        return;
+                    }
 
                     if (board.FormsNoInvalidWordsInAnyDirection(tilesInMove, new ScrabbleDictionary()))
                     {
