@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Windows;
 
 using MyScrabble.Model;
 using MyScrabble.Utilities;
+using MyScrabble.View;
 
 namespace MyScrabble.Controller
 {
@@ -19,6 +21,7 @@ namespace MyScrabble.Controller
         private WordOrientation bestMoveWordOrientation;
         private string bestMoveSubstringFromAnchor = null;
         private int bestWordSubstringFromAnchorIndex = -1;
+
 
         protected override List<Tile> GenerateFirstMove(TilesRack tilesRack, Board board)
         {
@@ -223,11 +226,33 @@ namespace MyScrabble.Controller
 
             ResetBestMove();
 
-            GetBestMoveInGivenOrientation(tilesRack, board, subsetsOfTilesInTilesRack, anchorTiles,
-                WordOrientation.Horizontal);
+            WordOrientation firstCheckedWordOrientation = GetRandomWordOrientation();
 
-            GetBestMoveInGivenOrientation(tilesRack, board, subsetsOfTilesInTilesRack, anchorTiles,
-                WordOrientation.Vertical);
+            try
+            {
+                if (firstCheckedWordOrientation == WordOrientation.Horizontal)
+                {
+                    GetBestMoveInGivenOrientation(tilesRack, board, subsetsOfTilesInTilesRack, anchorTiles,
+                    WordOrientation.Horizontal);
+
+                    GetBestMoveInGivenOrientation(tilesRack, board, subsetsOfTilesInTilesRack, anchorTiles,
+                    WordOrientation.Vertical);
+                }
+                else
+                {
+                    GetBestMoveInGivenOrientation(tilesRack, board, subsetsOfTilesInTilesRack, anchorTiles,
+                    WordOrientation.Vertical);
+
+                    GetBestMoveInGivenOrientation(tilesRack, board, subsetsOfTilesInTilesRack, anchorTiles,
+                    WordOrientation.Horizontal);
+                }
+               
+                
+            }
+            catch (OperationCanceledException)
+            {
+            }
+            
 
             AssignPositionsOnBoardToTilesInMove(wordOfBestMove, bestMove, bestMoveStartPosition, 
                 bestMoveWordOrientation, bestMoveSubstringFromAnchor, bestWordSubstringFromAnchorIndex, board);
@@ -287,8 +312,10 @@ namespace MyScrabble.Controller
 
                 foreach (string word in words)
                 {
-                    GetBestMoveFromWord(tilesRack, board, wordOrientation, word, subsetFromTilesRack, stringFromTilesFromAnchor, 
+                   
+                     GetBestMoveFromWord(tilesRack, board, wordOrientation, word, subsetFromTilesRack, stringFromTilesFromAnchor,
                         tilesOnBoardFromAnchor);
+                      
                 }
             }
         }
@@ -334,6 +361,11 @@ namespace MyScrabble.Controller
                             bestMoveWordOrientation = wordOrientation;
                             bestMoveSubstringFromAnchor = stringFromTilesFromAnchor;
                             bestWordSubstringFromAnchorIndex = substringStartPositions[startPositionIndex];
+
+                            if (MainWindow.backgroundWorker.CancellationPending)
+                            {
+                                throw new OperationCanceledException();
+                            }
                         }
 
 

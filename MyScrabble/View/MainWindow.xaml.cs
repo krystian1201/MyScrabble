@@ -16,7 +16,7 @@ namespace MyScrabble.View
         private readonly AIPlayerRandom _aiRandomPlayer;
         private readonly AIPlayerBrute _aiBrutePlayer;
         private readonly Player _humanPlayer;
-        private BackgroundWorker backgroundWorker = new BackgroundWorker();
+        public static BackgroundWorker backgroundWorker = new BackgroundWorker();
 
         public MainWindow()
         {
@@ -91,11 +91,11 @@ namespace MyScrabble.View
         private void AIBruteForcePlayerMakeMoveButton_Click(object sender, RoutedEventArgs e)
         {
 
-            //List<Object> backGroundWorkerArgs = new List<object>() { Player2TilesRackUC.TilesRack, boardUC.Board };
+            List<Object> backGroundWorkerArgs = new List<object>() { Player2TilesRackUC.TilesRack, boardUC.Board };
 
             if (backgroundWorker.IsBusy != true)
             {
-                backgroundWorker.RunWorkerAsync();
+                backgroundWorker.RunWorkerAsync(backGroundWorkerArgs);
             }
             
         }
@@ -135,22 +135,21 @@ namespace MyScrabble.View
         private void bw_DoWork_GenerateMoveAIBrutePlayer(object sender, DoWorkEventArgs e)
         {
             List<object> bwArguments = e.Argument as List<object>;
-            //TilesRack tilesRack = (TilesRack)bwArguments[0];
-            //Board board = (Board)bwArguments[1];
+            TilesRack tilesRack = (TilesRack)bwArguments[0];
+            Board board = (Board)bwArguments[1];
 
             List<Tile> tilesInMove =
-                _aiBrutePlayer.GenerateMove(Player2TilesRackUC.TilesRack, boardUC.Board);
+                _aiBrutePlayer.GenerateMove(tilesRack, board);
 
-            //e.Result = tilesInMove;
-            e.Result = 2;
+            e.Result = tilesInMove;
+ 
         }
 
         private void bw_RunWorkerCompleted_AIBrutePlayer(object sender, RunWorkerCompletedEventArgs e)
         {
-            //List<Tile> tilesInMove = (List<Tile>)e.Result;
-            List<Tile> tilesInMove = new List<Tile>();
-            int result = (int) e.Result;
-
+            List<Tile> tilesInMove = (List<Tile>)e.Result;
+            
+            
             if (tilesInMove == null || tilesInMove.Count == 0)
             {
                 throw new Exception("No tiles in move");
