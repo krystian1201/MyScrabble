@@ -37,7 +37,7 @@ namespace MyScrabble.Controller
                 throw new Exception("No tiles in move");
             }
 
-            return tilesInMove;
+            return new List<Tile>();
         }
 
         protected abstract List<Tile> GenerateFirstMove(TilesRack tilesRack, Board board);
