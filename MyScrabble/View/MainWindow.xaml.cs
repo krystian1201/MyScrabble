@@ -16,7 +16,7 @@ namespace MyScrabble.View
         private readonly AIPlayerRandom _aiRandomPlayer;
         private readonly AIPlayerBrute _aiBrutePlayer;
         private readonly Player _humanPlayer;
-        private BackgroundWorker backgroundWorker = new BackgroundWorker();
+      
 
         public MainWindow()
         {
@@ -34,9 +34,6 @@ namespace MyScrabble.View
             _aiBrutePlayer = new AIPlayerBrute();
             _humanPlayer = new Player();
 
-            backgroundWorker.WorkerSupportsCancellation = true;
-            backgroundWorker.DoWork += new DoWorkEventHandler(bw_DoWork_GenerateMoveAIBrutePlayer);
-            backgroundWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bw_RunWorkerCompleted_AIBrutePlayer);
         }
 
         private void DoneButton_Click(object sender, RoutedEventArgs e)
@@ -90,14 +87,24 @@ namespace MyScrabble.View
 
         private void AIBruteForcePlayerMakeMoveButton_Click(object sender, RoutedEventArgs e)
         {
+            List<Tile> tilesInMove =
+                _aiBrutePlayer.GenerateMove(Player2TilesRackUC.TilesRack, boardUC.Board);
 
-            //List<Object> backGroundWorkerArgs = new List<object>() { Player2TilesRackUC.TilesRack, boardUC.Board };
-
-            if (backgroundWorker.IsBusy != true)
+            if (tilesInMove == null || tilesInMove.Count == 0)
             {
-                backgroundWorker.RunWorkerAsync();
+                throw new Exception("No tiles in move");
             }
-            
+
+            int moveScore = boardUC.Board.GetScoreOfMove(tilesInMove);
+            _aiBrutePlayer.UpdateTotalScoreWithLastMoveScore(moveScore);
+            UpdatePlayer2ScoreLabels(moveScore, _aiBrutePlayer.TotalScore);
+
+            boardUC.Board.MakeAMoveAI(tilesInMove);
+
+            Player2TilesRackUC.TilesRack.RemoveTiles(tilesInMove);
+            Player2TilesRackUC.RefillTilesFromTilesBag();
+
+            UpdateTilesBagListBox();
         }
 
         private void UpdatePlayer1ScoreLabels(int lastMoveScore, int totalScore)
@@ -124,48 +131,6 @@ namespace MyScrabble.View
             }
         }
 
-        private void ButtonStopAIBrutePlayerSearch_Click(object sender, RoutedEventArgs e)
-        {
-            if (backgroundWorker.WorkerSupportsCancellation == true)
-            {
-                backgroundWorker.CancelAsync();
-            }
-        }
-
-        private void bw_DoWork_GenerateMoveAIBrutePlayer(object sender, DoWorkEventArgs e)
-        {
-            List<object> bwArguments = e.Argument as List<object>;
-            //TilesRack tilesRack = (TilesRack)bwArguments[0];
-            //Board board = (Board)bwArguments[1];
-
-            List<Tile> tilesInMove =
-                _aiBrutePlayer.GenerateMove(Player2TilesRackUC.TilesRack, boardUC.Board);
-
-            //e.Result = tilesInMove;
-            e.Result = 2;
-        }
-
-        private void bw_RunWorkerCompleted_AIBrutePlayer(object sender, RunWorkerCompletedEventArgs e)
-        {
-            //List<Tile> tilesInMove = (List<Tile>)e.Result;
-            List<Tile> tilesInMove = new List<Tile>();
-            int result = (int) e.Result;
-
-            if (tilesInMove == null || tilesInMove.Count == 0)
-            {
-                throw new Exception("No tiles in move");
-            }
-
-            int moveScore = boardUC.Board.GetScoreOfMove(tilesInMove);
-            _aiBrutePlayer.UpdateTotalScoreWithLastMoveScore(moveScore);
-            UpdatePlayer2ScoreLabels(moveScore, _aiBrutePlayer.TotalScore);
-
-            boardUC.Board.MakeAMoveAI(tilesInMove);
-
-            Player2TilesRackUC.TilesRack.RemoveTiles(tilesInMove);
-            Player2TilesRackUC.RefillTilesFromTilesBag();
-
-            UpdateTilesBagListBox();
-        }
+       
     }
 }
