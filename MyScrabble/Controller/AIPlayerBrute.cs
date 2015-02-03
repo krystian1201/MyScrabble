@@ -4,13 +4,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows;
+
 using MyScrabble.Model;
-using MyScrabble.Model.Tiles;
+using MyScrabble.Utilities;
 
 namespace MyScrabble.Controller
 {
     class AIPlayerBrute : BaseAIPlayer
     {
+        private int highestScore = 0;
+        private List<Tile> bestMove = null;
+        private string wordOfBestMove = null;
+        private Point bestMoveStartPosition = new Point(-1, -1);
+        private WordOrientation bestMoveWordOrientation;
+        private string bestMoveSubstringFromAnchor = null;
+        private int bestWordSubstringFromAnchorIndex = -1;
+
         protected override List<Tile> GenerateFirstMove(TilesRack tilesRack, Board board)
         {
             List<Tile> tilesInTilesRack = tilesRack.TilesArray.ToList<Tile>();
@@ -34,8 +43,6 @@ namespace MyScrabble.Controller
             return tilesInMove;
         }
 
-        
-
 
         private List<string> GetAllSubsetsOfTiles(List<Tile> tilesInTilesRack, int minLength, int maxLength)
         {
@@ -55,7 +62,7 @@ namespace MyScrabble.Controller
 
                 for (int tileIndex = 0; tileIndex < maxSubsetLength; tileIndex++)
                 {
-                    if (bitArray[tileIndex])
+                    if (bitArray[tileIndex] && tilesInTilesRack[tileIndex] != null)
                     {
                         subsetStringBuilder.Append(tilesInTilesRack[tileIndex].Letter);
                     }
@@ -207,7 +214,172 @@ namespace MyScrabble.Controller
 
         protected override List<Tile> GenerateSecondAndAboveMove(TilesRack tilesRack, Board board)
         {
-            throw new NotImplementedException();
+            List<Tile> tilesInTilesRack = tilesRack.TilesArray.ToList<Tile>();
+
+            List<string> subsetsOfTilesInTilesRack = GetAllSubsetsOfTiles(tilesInTilesRack, 1, 7);
+
+            //any tile on board can be "anchor" tile
+            List<Tile> anchorTiles = board.GetTilesOnBoard();
+
+            ResetBestMove();
+
+            GetBestMoveInGivenOrientation(tilesRack, board, subsetsOfTilesInTilesRack, anchorTiles,
+                WordOrientation.Horizontal);
+
+            GetBestMoveInGivenOrientation(tilesRack, board, subsetsOfTilesInTilesRack, anchorTiles,
+                WordOrientation.Vertical);
+
+            AssignPositionsOnBoardToTilesInMove(wordOfBestMove, bestMove, bestMoveStartPosition, 
+                bestMoveWordOrientation, bestMoveSubstringFromAnchor, bestWordSubstringFromAnchorIndex, board);
+
+            return bestMove;
+        }
+
+        private void ResetBestMove()
+        {
+             highestScore = 0;
+             bestMove = null;
+             wordOfBestMove = null;
+             bestMoveStartPosition = new Point(-1, -1);
+             bestMoveSubstringFromAnchor = null;
+             bestWordSubstringFromAnchorIndex = -1;
+        }
+
+        private void GetBestMoveInGivenOrientation(TilesRack tilesRack, Board board, List<string> subsetsOfTilesInTilesRack, 
+            List<Tile> anchorTiles, WordOrientation wordOrientation)
+        {
+            foreach (string subsetFromTilesRack in subsetsOfTilesInTilesRack)
+            {
+                foreach (Tile anchorTile in anchorTiles)
+                {
+                    GetBestMoveFromAnchorTile(tilesRack, board, wordOrientation, anchorTile, subsetFromTilesRack);
+                }
+            }
+        }
+
+        private void GetBestMoveFromAnchorTile(TilesRack tilesRack, Board board, WordOrientation wordOrientation, 
+            Tile anchorTile, string subsetFromTilesRack)
+        {
+            List<Tile> tilesOnBoardFromAnchor = board.GetTilesOnBoardFromAnchor(anchorTile, wordOrientation);
+
+            string stringFromTilesFromAnchor = BuildStringFromTiles(tilesOnBoardFromAnchor);
+
+            string stringFromTilesRackAndAnchorTiles =
+                subsetFromTilesRack + stringFromTilesFromAnchor;
+
+            string alphabetizedString = _aiDictionary.AlphabetizeString(stringFromTilesRackAndAnchorTiles);
+
+
+
+            if (_aiDictionary.AlphabetizedWordsPermutations.ContainsKey(alphabetizedString))
+            {
+                List<string> words = _aiDictionary.AlphabetizedWordsPermutations[alphabetizedString];
+
+                foreach (string word in words)
+                {
+                    GetBestMoveFromWord(tilesRack, board, wordOrientation, word, subsetFromTilesRack, stringFromTilesFromAnchor, 
+                        tilesOnBoardFromAnchor);
+                }
+            }
+        }
+
+        private void GetBestMoveFromWord(TilesRack tilesRack, Board board, WordOrientation wordOrientation, string word, 
+            string subsetFromTilesRack, string stringFromTilesFromAnchor, List<Tile> tilesOnBoardFromAnchor)
+        {
+
+            if (word.Contains(stringFromTilesFromAnchor))
+            {
+                List<int> substringStartPositions;
+
+                List<Point> wordStartPositions =
+                    GetStartTilePositionsForMoveSecondAndAbove(word, stringFromTilesFromAnchor,
+                        wordOrientation, tilesOnBoardFromAnchor, out substringStartPositions);
+
+                List<Tile> tilesInMove = GetTilesFromTilesRackInWord(subsetFromTilesRack, tilesRack);
+
+                int startPositionIndex = 0;
+
+                foreach (Point wordStartPosition in wordStartPositions)
+                {
+                    AssignPositionsOnBoardToTilesInMove(word, tilesInMove, wordStartPosition, wordOrientation,
+                        stringFromTilesFromAnchor, substringStartPositions[startPositionIndex], board);
+
+
+                    if (board.FormsNoInvalidWordsInAnyDirection(tilesInMove, new ScrabbleDictionary()))
+                    {
+                        int moveScore = board.GetScoreOfMove(tilesInMove);
+
+                        if (moveScore > highestScore)
+                        {
+                            highestScore = moveScore;
+                            bestMove = CopyTilesList(tilesInMove);
+                            wordOfBestMove = word;
+                            bestMoveStartPosition = wordStartPosition;
+                            bestMoveWordOrientation = wordOrientation;
+                            bestMoveSubstringFromAnchor = stringFromTilesFromAnchor;
+                            bestWordSubstringFromAnchorIndex = substringStartPositions[startPositionIndex];
+                        }
+
+
+                        startPositionIndex++;
+                    }
+
+                    board.RemoveTiles(tilesInMove);
+                }
+            }
+
+        }
+
+        private List<Point> GetStartTilePositionsForMoveSecondAndAbove(string word, string substring,
+            WordOrientation wordOrientation, List<Tile> tilesOnBoardFromAnchor, out List<int> indexesOfSubstring)
+        {
+            if (!word.Contains(substring))
+            {
+                throw new ArgumentException("Word does not contain the substring");
+            }
+
+            if (String.IsNullOrEmpty(substring))
+            {
+                throw new ArgumentException("Substring cannot be empty - the word must be formed in a crossword fashion");
+            }
+
+            indexesOfSubstring = word.AllIndexesOf(substring).ToList();
+            
+
+            if (wordOrientation == WordOrientation.Horizontal)
+            {
+                List<Point> startTilePositions = new List<Point>();
+
+                foreach (int indexOfSubstring in indexesOfSubstring)
+                {
+                    Point startTilePosition =
+                        new Point(tilesOnBoardFromAnchor.Min(tile => tile.PositionOnBoard.Value.X) - indexOfSubstring,
+                              tilesOnBoardFromAnchor.First().PositionOnBoard.Value.Y);
+
+                    startTilePositions.Add(startTilePosition);
+                }
+
+                return startTilePositions;
+
+            }
+
+            if (wordOrientation == WordOrientation.Vertical)
+            {
+                List<Point> startTilePositions = new List<Point>();
+
+                foreach (int indexOfSubstring in indexesOfSubstring)
+                {
+                    Point startTilePosition =
+                        new Point(tilesOnBoardFromAnchor.First().PositionOnBoard.Value.X,
+                              tilesOnBoardFromAnchor.Min(tile => tile.PositionOnBoard.Value.Y) - indexOfSubstring);
+
+                    startTilePositions.Add(startTilePosition);
+                }
+
+                return startTilePositions;
+            }
+
+            throw new Exception("Incorrect word orientation");
         }
     }
 }

@@ -137,7 +137,7 @@ namespace MyScrabble.Controller
 
                 Tile anchorTile = GetRandomAnchorTile(board);
 
-                tilesOnBoardFromAnchor = GetTilesOnBoardFromAnchor(anchorTile, board, wordOrientation);
+                tilesOnBoardFromAnchor = board.GetTilesOnBoardFromAnchor(anchorTile, wordOrientation);
 
 
                 int randomNumberOfTiles = GetRandomNumberOfTilesToChoseFromTilesRack(tilesRack);
@@ -179,27 +179,7 @@ namespace MyScrabble.Controller
             return randomTileOnBoard;
         }
 
-        private List<Tile> GetTilesOnBoardFromAnchor(Tile anchorTile, Board board, WordOrientation wordOrientation)
-        {
-
-            List<Tile> tilesOnBoardFromAnchor = null;
-
-            if (wordOrientation == WordOrientation.Horizontal)
-            {
-                tilesOnBoardFromAnchor = board.GetTilesOfWordInRow(new List<Tile>() { anchorTile }, (int)anchorTile.PositionOnBoard.Value.Y);
-            }
-            else if (wordOrientation == WordOrientation.Vertical)
-            {
-                tilesOnBoardFromAnchor = board.GetTilesOfWordInColumn(new List<Tile>() { anchorTile }, (int)anchorTile.PositionOnBoard.Value.X);
-            }
-
-            if (tilesOnBoardFromAnchor == null || tilesOnBoardFromAnchor.Count == 0)
-            {
-                throw new Exception("The anchor position seems to be invalid");
-            }
-
-            return tilesOnBoardFromAnchor;
-        }
+        
 
 
         private int GetRandomNumberOfTilesToChoseFromTilesRack(TilesRack tilesRack)

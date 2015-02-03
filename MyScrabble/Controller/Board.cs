@@ -1099,6 +1099,28 @@ namespace MyScrabble.Controller
             
             return new Point(-1, -1);
         }
+
+        public List<Tile> GetTilesOnBoardFromAnchor(Tile anchorTile, WordOrientation wordOrientation)
+        {
+
+            List<Tile> tilesOnBoardFromAnchor = null;
+
+            if (wordOrientation == WordOrientation.Horizontal)
+            {
+                tilesOnBoardFromAnchor = GetTilesOfWordInRow(new List<Tile>() { anchorTile }, (int)anchorTile.PositionOnBoard.Value.Y);
+            }
+            else if (wordOrientation == WordOrientation.Vertical)
+            {
+                tilesOnBoardFromAnchor = GetTilesOfWordInColumn(new List<Tile>() { anchorTile }, (int)anchorTile.PositionOnBoard.Value.X);
+            }
+
+            if (tilesOnBoardFromAnchor == null || tilesOnBoardFromAnchor.Count == 0)
+            {
+                throw new Exception("The anchor position seems to be invalid");
+            }
+
+            return tilesOnBoardFromAnchor;
+        }
     }
 
     public enum ScoringBonus
