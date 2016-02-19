@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MyScrabble.Controller
 {
-    static class Game
+    static class GameController
     {
         private static bool isFirstMove = true;
 

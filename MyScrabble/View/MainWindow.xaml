@@ -62,7 +62,11 @@
                     AI brute force player make move
                 </TextBlock>
             </Button>
-            <Button x:Name="ButtonStopAISearch" Content="Stop AI search" Click="ButtonStopAIBrutePlayerSearch_Click"/>
+            <Button x:Name="StopBruteForceAISearch" Click="ButtonStopAIBrutePlayerSearch_Click">
+                <TextBlock TextWrapping="Wrap">
+                    "Stop brute force AI search"
+                </TextBlock>
+             </Button>
 
         </StackPanel>
 

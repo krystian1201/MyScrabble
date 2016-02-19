@@ -23,7 +23,7 @@ namespace MyScrabble.Controller
         private int bestWordSubstringFromAnchorIndex = -1;
 
 
-        protected override List<Tile> GenerateFirstMove(TilesRack tilesRack, Board board)
+        protected override List<Tile> GenerateFirstMove(TilesRack tilesRack, BoardController board)
         {
             List<Tile> tilesInTilesRack = tilesRack.TilesArray.ToList<Tile>();
 
@@ -37,8 +37,8 @@ namespace MyScrabble.Controller
 
             string word = BuildStringFromTiles(tilesInMove);
 
-            WordOrientation wordOrientation = board.GetWordOrientationFromTiles(tilesInMove);
-            Point wordStartPosition = board.GetWordStartPositionFromTiles(tilesInMove, wordOrientation);
+            WordOrientation wordOrientation = MoveWordsHelper.GetWordOrientationFromTiles(tilesInMove);
+            Point wordStartPosition = MoveWordsHelper.GetWordStartPositionFromTiles(tilesInMove, wordOrientation);
             
 
             AssignPositionsOnBoardToTilesInMove(word, tilesInMove, wordStartPosition, wordOrientation, "", null, board);
@@ -117,7 +117,7 @@ namespace MyScrabble.Controller
             return wordsFromTilesSubsets;
         }
 
-        private List<Tile> FindHighestScoringMoveForFirstMove(List<string> wordsFromTilesSubsets, TilesRack tilesRack, Board board)
+        private List<Tile> FindHighestScoringMoveForFirstMove(List<string> wordsFromTilesSubsets, TilesRack tilesRack, BoardController board)
         {
             int highestScore = 0;
             List<Tile> bestMove = null;
@@ -136,7 +136,7 @@ namespace MyScrabble.Controller
                 {
                     AssignPositionsOnBoardToTilesInMove(word, tilesInMove, wordStartPosition, wordOrientation, "", null, board);
 
-                    int moveScore = board.GetScoreOfMove(tilesInMove);
+                    int moveScore = ScoringController.GetScoreOfMove(tilesInMove);
 
                     if (moveScore > highestScore)
                     {
@@ -151,8 +151,6 @@ namespace MyScrabble.Controller
 
             return bestMove;
         }
-
-       
 
         private List<Point> GetAllWordStartPositionsForFirstMove(string word, WordOrientation wordOrientation)
         {
@@ -214,15 +212,14 @@ namespace MyScrabble.Controller
             return copiedList;
         }
 
-
-        protected override List<Tile> GenerateSecondAndAboveMove(TilesRack tilesRack, Board board)
+        protected override List<Tile> GenerateSecondAndAboveMove(TilesRack tilesRack, BoardController board)
         {
             List<Tile> tilesInTilesRack = tilesRack.TilesArray.ToList<Tile>();
 
             List<string> subsetsOfTilesInTilesRack = GetAllSubsetsOfTiles(tilesInTilesRack, 1, 7);
 
             //any tile on board can be "anchor" tile
-            List<Tile> anchorTiles = board.GetTilesOnBoard();
+            List<Tile> anchorTiles = board.GetTilesAlreadyOnBoard();
 
             ResetBestMove();
 
@@ -270,7 +267,7 @@ namespace MyScrabble.Controller
              bestWordSubstringFromAnchorIndex = -1;
         }
 
-        private void GetBestMoveInGivenOrientation(TilesRack tilesRack, Board board, List<string> subsetsOfTilesInTilesRack, 
+        private void GetBestMoveInGivenOrientation(TilesRack tilesRack, BoardController board, List<string> subsetsOfTilesInTilesRack, 
             List<Tile> anchorTiles, WordOrientation wordOrientation)
         {
             foreach (string subsetFromTilesRack in subsetsOfTilesInTilesRack)
@@ -282,7 +279,7 @@ namespace MyScrabble.Controller
             }
         }
 
-        private void GetBestMoveFromAnchorTile(TilesRack tilesRack, Board board, WordOrientation wordOrientation, 
+        private void GetBestMoveFromAnchorTile(TilesRack tilesRack, BoardController board, WordOrientation wordOrientation, 
             Tile anchorTile, string subsetFromTilesRack)
         {
             List<Tile> tilesOnBoardFromAnchor;
@@ -320,7 +317,7 @@ namespace MyScrabble.Controller
             }
         }
 
-        private void GetBestMoveFromWord(TilesRack tilesRack, Board board, WordOrientation wordOrientation, string word, 
+        private void GetBestMoveFromWord(TilesRack tilesRack, BoardController board, WordOrientation wordOrientation, string word, 
             string subsetFromTilesRack, string stringFromTilesFromAnchor, List<Tile> tilesOnBoardFromAnchor)
         {
 
@@ -348,9 +345,9 @@ namespace MyScrabble.Controller
                         return;
                     }
 
-                    if (board.FormsNoInvalidWordsInAnyDirection(tilesInMove, new ScrabbleDictionary()))
+                    if (MoveValidator.FormsNoInvalidWordsInAnyDirection(tilesInMove, new ScrabbleDictionary()))
                     {
-                        int moveScore = board.GetScoreOfMove(tilesInMove);
+                        int moveScore = ScoringController.GetScoreOfMove(tilesInMove);
 
                         if (moveScore > highestScore)
                         {

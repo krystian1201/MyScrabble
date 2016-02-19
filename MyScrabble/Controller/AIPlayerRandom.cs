@@ -15,7 +15,7 @@ namespace MyScrabble.Controller
     {
         readonly Random random = new Random();
 
-        protected override List<Tile> GenerateFirstMove(TilesRack tilesRack, Board board)
+        protected override List<Tile> GenerateFirstMove(TilesRack tilesRack, BoardController board)
         {
 
             //At this point we already know that the tiles chosen randomly
@@ -86,7 +86,7 @@ namespace MyScrabble.Controller
         }
 
 
-        protected override List<Tile> GenerateSecondAndAboveMove(TilesRack tilesRack, Board board)
+        protected override List<Tile> GenerateSecondAndAboveMove(TilesRack tilesRack, BoardController board)
         {
             List<Tile> tilesOnBoardFromAnchor;
             List<Tile> tilesInMove;
@@ -120,7 +120,7 @@ namespace MyScrabble.Controller
                 }
 
 
-                if (!board.FormsNoInvalidWordsInAnyDirection(tilesInMove, scrabbleDictionary))
+                if (!MoveValidator.FormsNoInvalidWordsInAnyDirection(tilesInMove, scrabbleDictionary))
                 {
                     board.RemoveTiles(tilesInMove);
                     areInvalidWordsInSomeDirection = true;
@@ -134,7 +134,7 @@ namespace MyScrabble.Controller
         }
 
 
-        private string GetRandomValidWordForMoveSecondAndAbove(TilesRack tilesRack, Board board, out WordOrientation wordOrientation, 
+        private string GetRandomValidWordForMoveSecondAndAbove(TilesRack tilesRack, BoardController board, out WordOrientation wordOrientation, 
                                                             out List<Tile> tilesInMove, out List<Tile> tilesOnBoardFromAnchor)
         {
             string word;
@@ -161,9 +161,9 @@ namespace MyScrabble.Controller
         }
 
 
-        private Tile GetRandomAnchorTile(Board board)
+        private Tile GetRandomAnchorTile(BoardController board)
         {
-            List<Tile> tilesOnBoard = board.GetTilesOnBoard();
+            List<Tile> tilesOnBoard = board.GetTilesAlreadyOnBoard();
 
             if (tilesOnBoard.Count < 2)
             {
@@ -181,13 +181,10 @@ namespace MyScrabble.Controller
 
                 randomTileOnBoard = tilesOnBoard[randomTileOnBoardIndex];
             }
-            while (board.IsTileTotallySurrounded(randomTileOnBoard));
+            while (TilesPositionsHelper.IsTileTotallySurrounded(randomTileOnBoard));
 
             return randomTileOnBoard;
         }
-
-        
-
 
         private int GetRandomNumberOfTilesToChoseFromTilesRack(TilesRack tilesRack)
         {
@@ -200,11 +197,11 @@ namespace MyScrabble.Controller
 
             //first move -> 2..7 letters
             //second move and above -> 1..7 letters
-            if (Game.IsFirstMove)
+            if (GameController.IsFirstMove)
             {
                 randomNumberOfTiles = random.Next(2, numberOfTilesInTilesRack + 1);
             }
-            else if (!Game.IsFirstMove)
+            else if (!GameController.IsFirstMove)
             {
                 randomNumberOfTiles = random.Next(1, numberOfTilesInTilesRack + 1);
             }
@@ -356,10 +353,5 @@ namespace MyScrabble.Controller
 
             return startTilePosition;
         }
-
-
-        
-       
     }
-
 }

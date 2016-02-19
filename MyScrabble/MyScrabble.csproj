@@ -53,10 +53,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Constants\BoardConstants.cs" />
     <Compile Include="Controller\AIPlayerBrute.cs" />
     <Compile Include="Controller\AIPlayerRandom.cs" />
-    <Compile Include="Controller\Game.cs" />
+    <Compile Include="Controller\BoardControllerHelpers\BonusScoringMatrixFactory.cs" />
+    <Compile Include="Controller\GameController.cs" />
     <Compile Include="Controller\BaseAIPlayer.cs" />
+    <Compile Include="Controller\BoardControllerHelpers\MoveWordsHelper.cs" />
+    <Compile Include="Controller\MoveValidator.cs" />
+    <Compile Include="Controller\ScoringController.cs" />
+    <Compile Include="Controller\BoardControllerHelpers\TilesPositionsHelper.cs" />
     <Compile Include="Controller\TilesFactory.cs" />
     <Compile Include="Controller\ScrabbleDictionary.cs" />
     <Compile Include="Controller\TilesRack.cs" />
@@ -107,7 +113,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Controller\Board.cs" />
+    <Compile Include="Controller\BoardController.cs" />
     <Compile Include="Controller\Player.cs" />
     <Compile Include="Model\Tiles\TileB.cs" />
     <Compile Include="Model\Tiles\TileC.cs" />

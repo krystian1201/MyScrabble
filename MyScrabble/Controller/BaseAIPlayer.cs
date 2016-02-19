@@ -1,11 +1,12 @@
 ﻿
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Windows;
 using MyScrabble.Model;
+
+using MyScrabble.Constants;
 
 namespace MyScrabble.Controller
 {
@@ -19,15 +20,15 @@ namespace MyScrabble.Controller
 
         }
 
-        public List<Tile> GenerateMove(TilesRack tilesRack, Board board)
+        public List<Tile> GenerateMove(TilesRack tilesRack, BoardController board)
         {
             List<Tile> tilesInMove = null;
 
-            if (Game.IsFirstMove)
+            if (GameController.IsFirstMove)
             {
                 tilesInMove = GenerateFirstMove(tilesRack, board);
             }
-            else if (!Game.IsFirstMove)
+            else if (!GameController.IsFirstMove)
             {
                 tilesInMove = GenerateSecondAndAboveMove(tilesRack, board);
             }
@@ -40,9 +41,9 @@ namespace MyScrabble.Controller
             return tilesInMove;
         }
 
-        protected abstract List<Tile> GenerateFirstMove(TilesRack tilesRack, Board board);
+        protected abstract List<Tile> GenerateFirstMove(TilesRack tilesRack, BoardController board);
 
-        protected abstract List<Tile> GenerateSecondAndAboveMove(TilesRack tilesRack, Board board);
+        protected abstract List<Tile> GenerateSecondAndAboveMove(TilesRack tilesRack, BoardController board);
 
 
         protected WordOrientation GetRandomWordOrientation()
@@ -66,7 +67,7 @@ namespace MyScrabble.Controller
 
         protected void AssignPositionsOnBoardToTilesInMove(string word, List<Tile> tilesInMove,
            Point startTilePosition, WordOrientation wordOrientation,
-           string substring, int? substringIndex, Board board)
+           string substring, int? substringIndex, BoardController board)
         {
 
             if (!word.Contains(substring))
@@ -101,7 +102,7 @@ namespace MyScrabble.Controller
                 {
                     int xCoordinate = (int) (startTilePosition.X + letterIndex);
 
-                    if (xCoordinate > Board.BOARD_SIZE - 1 || xCoordinate < 0)
+                    if (xCoordinate > BoardConstants.BOARD_SIZE - 1 || xCoordinate < 0)
                     {
                         List<Tile> tilesPlacedOnBoard = board.GetTilesOnBoardFromCurrentMove();
                         board.RemoveTiles(tilesPlacedOnBoard);
@@ -115,7 +116,7 @@ namespace MyScrabble.Controller
                 {
                     int yCoordinate = (int)(startTilePosition.Y + letterIndex);
 
-                    if (yCoordinate > Board.BOARD_SIZE - 1 || yCoordinate < 0)
+                    if (yCoordinate > BoardConstants.BOARD_SIZE - 1 || yCoordinate < 0)
                     {
                         List<Tile> tilesPlacedOnBoard = board.GetTilesOnBoardFromCurrentMove();
                         board.RemoveTiles(tilesPlacedOnBoard);

@@ -11,13 +11,14 @@ using System.Text;
 
 using MyScrabble.Controller;
 using MyScrabble.Model;
+using MyScrabble.Constants;
 
 namespace MyScrabble.View
 {
 
     public partial class BoardUC : UserControl
     {
-        public Board Board { get; private set; }
+        public BoardController Controller { get; private set; }
 
         //otherwise the project doesn't compile
         //"no default constructor for BoardUC"
@@ -34,7 +35,10 @@ namespace MyScrabble.View
             BoardGrid.Drop += BoardGrid_Drop;
 
             
-            Board = new Board(this);
+            Controller = new BoardController(this);
+
+            MoveWordsHelper.BoardArray = Controller.BoardArray;
+            TilesPositionsHelper.BoardArray = Controller.BoardArray;
         }
 
 
@@ -42,7 +46,7 @@ namespace MyScrabble.View
         //----------------------------------------------------------------------------------------------------------------------------------------------------------------------//
         private void DefineGridRowsAndColumns()
         {
-            for (int i = 0; i < Board.BOARD_SIZE; i++)
+            for (int i = 0; i < BoardConstants.BOARD_SIZE; i++)
             {
                 BoardGrid.ColumnDefinitions.Add(new ColumnDefinition());
                 BoardGrid.RowDefinitions.Add(new RowDefinition());
@@ -56,9 +60,9 @@ namespace MyScrabble.View
             Thickness marginThickness = new Thickness(1.0);
 
 
-            for (int row = 0; row < Board.BOARD_SIZE; row++)
+            for (int row = 0; row < BoardConstants.BOARD_SIZE; row++)
             {
-                for (int column = 0; column < Board.BOARD_SIZE; column++)
+                for (int column = 0; column < BoardConstants.BOARD_SIZE; column++)
                 {
                     Rectangle rectangleToAdd =
                         CreateRectangleToAddToGrid(row, column, strokeColor, fillColor, marginThickness);
@@ -99,9 +103,9 @@ namespace MyScrabble.View
         {
             List<Rectangle> redCells = new List<Rectangle>();
 
-            for (int row = 0; row < Board.BOARD_SIZE; row += Board.BOARD_SIZE / 2)
+            for (int row = 0; row < BoardConstants.BOARD_SIZE; row += BoardConstants.BOARD_SIZE / 2)
             {
-                for (int column = 0; column < Board.BOARD_SIZE; column += Board.BOARD_SIZE / 2)
+                for (int column = 0; column < BoardConstants.BOARD_SIZE; column += BoardConstants.BOARD_SIZE / 2)
                 {
                     redCells.Add(GetCellByRowAndColumn(row, column));
                 }
@@ -118,12 +122,12 @@ namespace MyScrabble.View
         {
             List<Rectangle> redHazyCells = new List<Rectangle>();
 
-            for (int rowColumn = 1; rowColumn < Board.BOARD_SIZE / 2 - 2; rowColumn++)
+            for (int rowColumn = 1; rowColumn < BoardConstants.BOARD_SIZE / 2 - 2; rowColumn++)
             {
                 redHazyCells.Add(GetCellByRowAndColumn(rowColumn, rowColumn));
-                redHazyCells.Add(GetCellByRowAndColumn(rowColumn, Board.BOARD_SIZE - rowColumn - 1));
-                redHazyCells.Add(GetCellByRowAndColumn(Board.BOARD_SIZE - rowColumn - 1, rowColumn));
-                redHazyCells.Add(GetCellByRowAndColumn(Board.BOARD_SIZE - rowColumn - 1, Board.BOARD_SIZE - rowColumn - 1));
+                redHazyCells.Add(GetCellByRowAndColumn(rowColumn, BoardConstants.BOARD_SIZE - rowColumn - 1));
+                redHazyCells.Add(GetCellByRowAndColumn(BoardConstants.BOARD_SIZE - rowColumn - 1, rowColumn));
+                redHazyCells.Add(GetCellByRowAndColumn(BoardConstants.BOARD_SIZE - rowColumn - 1, BoardConstants.BOARD_SIZE - rowColumn - 1));
             }
 
             redHazyCells.Add(GetCellByRowAndColumn(7, 7));
@@ -136,17 +140,17 @@ namespace MyScrabble.View
         {
             List<Rectangle> blueCells = new List<Rectangle>();
 
-            for (int row = 1; row < Board.BOARD_SIZE; row += Board.BOARD_SIZE / 4 + 1)
+            for (int row = 1; row < BoardConstants.BOARD_SIZE; row += BoardConstants.BOARD_SIZE / 4 + 1)
             {
                 blueCells.Add(GetCellByRowAndColumn(row, 5));
-                blueCells.Add(GetCellByRowAndColumn(row, Board.BOARD_SIZE - 1 - 5));
+                blueCells.Add(GetCellByRowAndColumn(row, BoardConstants.BOARD_SIZE - 1 - 5));
             }
 
             blueCells.Add(GetCellByRowAndColumn(5, 1));
-            blueCells.Add(GetCellByRowAndColumn(Board.BOARD_SIZE - 1 - 5, 1));
+            blueCells.Add(GetCellByRowAndColumn(BoardConstants.BOARD_SIZE - 1 - 5, 1));
 
-            blueCells.Add(GetCellByRowAndColumn(5, Board.BOARD_SIZE - 1 - 1));
-            blueCells.Add(GetCellByRowAndColumn(Board.BOARD_SIZE - 1 - 5, Board.BOARD_SIZE - 1 - 1));
+            blueCells.Add(GetCellByRowAndColumn(5, BoardConstants.BOARD_SIZE - 1 - 1));
+            blueCells.Add(GetCellByRowAndColumn(BoardConstants.BOARD_SIZE - 1 - 5, BoardConstants.BOARD_SIZE - 1 - 1));
 
 
             blueCells.ForEach(rectangle => rectangle.Fill = new SolidColorBrush(Colors.Blue));
@@ -157,37 +161,37 @@ namespace MyScrabble.View
         {
             List<Rectangle> hazyBlueCells = new List<Rectangle>();
 
-            for (int column = 0; column < Board.BOARD_SIZE; column += Board.BOARD_SIZE / 2)
+            for (int column = 0; column < BoardConstants.BOARD_SIZE; column += BoardConstants.BOARD_SIZE / 2)
             {
                 hazyBlueCells.Add(GetCellByRowAndColumn(3, column));
-                hazyBlueCells.Add(GetCellByRowAndColumn(Board.BOARD_SIZE - 1 - 3, column));
+                hazyBlueCells.Add(GetCellByRowAndColumn(BoardConstants.BOARD_SIZE - 1 - 3, column));
             }
 
-            for (int row = 0; row < Board.BOARD_SIZE; row += Board.BOARD_SIZE / 2)
+            for (int row = 0; row < BoardConstants.BOARD_SIZE; row += BoardConstants.BOARD_SIZE / 2)
             {
                 hazyBlueCells.Add(GetCellByRowAndColumn(row, 3));
-                hazyBlueCells.Add(GetCellByRowAndColumn(row, Board.BOARD_SIZE - 1 - 3));
+                hazyBlueCells.Add(GetCellByRowAndColumn(row, BoardConstants.BOARD_SIZE - 1 - 3));
             }
 
-            for (int column = 2; column < Board.BOARD_SIZE / 2; column += 4)
+            for (int column = 2; column < BoardConstants.BOARD_SIZE / 2; column += 4)
             {
-                hazyBlueCells.Add(GetCellByRowAndColumn(Board.BOARD_SIZE / 2 - 1, column));
-                hazyBlueCells.Add(GetCellByRowAndColumn(Board.BOARD_SIZE / 2 + 1, column));
+                hazyBlueCells.Add(GetCellByRowAndColumn(BoardConstants.BOARD_SIZE / 2 - 1, column));
+                hazyBlueCells.Add(GetCellByRowAndColumn(BoardConstants.BOARD_SIZE / 2 + 1, column));
 
-                hazyBlueCells.Add(GetCellByRowAndColumn(Board.BOARD_SIZE / 2 - 1, Board.BOARD_SIZE - 1 - column));
-                hazyBlueCells.Add(GetCellByRowAndColumn(Board.BOARD_SIZE / 2 + 1, Board.BOARD_SIZE - 1 - column));
+                hazyBlueCells.Add(GetCellByRowAndColumn(BoardConstants.BOARD_SIZE / 2 - 1, BoardConstants.BOARD_SIZE - 1 - column));
+                hazyBlueCells.Add(GetCellByRowAndColumn(BoardConstants.BOARD_SIZE / 2 + 1, BoardConstants.BOARD_SIZE - 1 - column));
             }
 
 
             //TODO: here, for row = 6 and the first statement we get an exception
             //the key already was added
-            for (int row = 2; row < Board.BOARD_SIZE / 2; row += 4)
+            for (int row = 2; row < BoardConstants.BOARD_SIZE / 2; row += 4)
             {
-                hazyBlueCells.Add(GetCellByRowAndColumn(row, Board.BOARD_SIZE / 2 - 1));
-                hazyBlueCells.Add(GetCellByRowAndColumn(row, Board.BOARD_SIZE / 2 + 1));
+                hazyBlueCells.Add(GetCellByRowAndColumn(row, BoardConstants.BOARD_SIZE / 2 - 1));
+                hazyBlueCells.Add(GetCellByRowAndColumn(row, BoardConstants.BOARD_SIZE / 2 + 1));
 
-                hazyBlueCells.Add(GetCellByRowAndColumn(Board.BOARD_SIZE - 1 - row, Board.BOARD_SIZE / 2 - 1));
-                hazyBlueCells.Add(GetCellByRowAndColumn(Board.BOARD_SIZE - 1 - row, Board.BOARD_SIZE / 2 + 1));
+                hazyBlueCells.Add(GetCellByRowAndColumn(BoardConstants.BOARD_SIZE - 1 - row, BoardConstants.BOARD_SIZE / 2 - 1));
+                hazyBlueCells.Add(GetCellByRowAndColumn(BoardConstants.BOARD_SIZE - 1 - row, BoardConstants.BOARD_SIZE / 2 + 1));
             }
 
             hazyBlueCells.ForEach(rectangle => rectangle.Fill = new SolidColorBrush(Color.FromArgb(100, 0, 0, 255)));
@@ -202,13 +206,13 @@ namespace MyScrabble.View
             const string columnOutOfRangeExceptionMsg =
                 "column cannot be less than 0 or greater than board size";
 
-            if (row >= Board.BOARD_SIZE || row < 0)
+            if (row >= BoardConstants.BOARD_SIZE || row < 0)
             {
                 throw new
                     ArgumentOutOfRangeException("row", row, rowOutOfRangeExceptionMsg);
             }
 
-            if (column >= Board.BOARD_SIZE || column < 0)
+            if (column >= BoardConstants.BOARD_SIZE || column < 0)
             {
                 throw new
                     ArgumentOutOfRangeException("column", column, columnOutOfRangeExceptionMsg);
@@ -225,7 +229,7 @@ namespace MyScrabble.View
         public void InitializeBoardSideMarkers()
         {
 
-            for (int row = 0; row < Board.BOARD_SIZE; row++)
+            for (int row = 0; row < BoardConstants.BOARD_SIZE; row++)
             {
                 BoardLeftSideMarksGrid.RowDefinitions.Add(new RowDefinition());
                 Label boardSideMarkLabel = CreateBoardSideLabel(row, BoardSide.Left);
@@ -237,7 +241,7 @@ namespace MyScrabble.View
                 BoardRightSideMarksGrid.Children.Add(boardSideMarkLabel);
             }
 
-            for (int column = 0; column < Board.BOARD_SIZE; column++)
+            for (int column = 0; column < BoardConstants.BOARD_SIZE; column++)
             {
                 BoardTopSideMarksGrid.ColumnDefinitions.Add(new ColumnDefinition());
                 Label boardSideMarkLabel = CreateBoardSideLabel(column, BoardSide.Top);
@@ -314,7 +318,7 @@ namespace MyScrabble.View
                 int row = Grid.GetRow(uiElement);
 
 
-                if (Board.IsThePlaceOnBoardFree(column, row))
+                if (TilesPositionsHelper.IsThePlaceOnBoardFree(column, row))
                 {
                     TileUC tileUC = (TileUC)dragEventArgs.Data.GetData("TileUC");
 
@@ -356,7 +360,7 @@ namespace MyScrabble.View
 
 
             //Controller-logic side
-            Board.PlaceATileOnBoard(tileUC.Tile, xPosition, yPosition);
+            Controller.PlaceATileOnBoard(tileUC.Tile, xPosition, yPosition);
         }
 
         private void RemoveTileFromBoard(TileUC tileUC)
@@ -365,7 +369,7 @@ namespace MyScrabble.View
             BoardGrid.Children.Remove(tileUC); 
 
             //Controller-logic side
-            Board.RemoveATile(tileUC.Tile);
+            Controller.RemoveATile(tileUC.Tile);
         }
 
         private void RemoveTileFromTilesRack(TileUC tileUC)
@@ -402,7 +406,9 @@ namespace MyScrabble.View
 
         public List<Tile> MakeAMoveHuman()
         {
-            List<string> validationMessages = Board.ValidateMove();
+            List<Tile> tilesInMove = Controller.GetTilesOnBoardFromCurrentMove();
+
+            List<string> validationMessages = MoveValidator.ValidateMove(tilesInMove);
 
             if (validationMessages.Count > 0)
             {
@@ -417,7 +423,7 @@ namespace MyScrabble.View
             //you cannot change position of a tile after move was made
             MakeTileUCsInMoveNonDraggable();
 
-            return Board.MakeAMoveHuman();
+            return Controller.MakeAMoveHuman();
         }
 
         private void ShowMoveValidationMessages(List<string> validationMessages)
