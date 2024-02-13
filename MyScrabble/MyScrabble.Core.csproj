@@ -57,6 +57,7 @@
     <Compile Include="Constants\BoardConstants.cs" />
     <Compile Include="Controller\AIPlayerBrute.cs" />
     <Compile Include="Controller\AIPlayerRandom.cs" />
+    <Compile Include="Controller\BoardController.cs" />
     <Compile Include="Controller\BoardControllerHelpers\BonusScoringMatrixFactory.cs" />
     <Compile Include="Controller\GameController.cs" />
     <Compile Include="Controller\BaseAIPlayer.cs" />
