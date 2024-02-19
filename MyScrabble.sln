@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyScrabble.Core.UnitTests",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyScrabble.API", "MyScrabble.API\MyScrabble.API.csproj", "{1F52C78A-6E26-4035-BB16-1EDA6BCB5EC5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyScrabble.WPF", "MyScrabble.WPF\MyScrabble.WPF.csproj", "{F62AB970-B567-42DE-94AB-E9D62F62F631}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{1F52C78A-6E26-4035-BB16-1EDA6BCB5EC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1F52C78A-6E26-4035-BB16-1EDA6BCB5EC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1F52C78A-6E26-4035-BB16-1EDA6BCB5EC5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F62AB970-B567-42DE-94AB-E9D62F62F631}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F62AB970-B567-42DE-94AB-E9D62F62F631}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F62AB970-B567-42DE-94AB-E9D62F62F631}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F62AB970-B567-42DE-94AB-E9D62F62F631}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
