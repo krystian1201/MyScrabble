@@ -191,3 +191,8 @@ FakesAssemblies/
 
 # Visual Studio 6 workspace options file
 *.opt
+/.vs/ProjectEvaluation
+/.vs/MyScrabble/v17/TestStore/0
+/.vs/MyScrabble/DesignTimeBuild/.dtbcache.v2
+/.vs/MyScrabble/FileContentIndex/08eebeab-42f2-46ea-8361-166ddee5e640.vsidx
+/.vs/MyScrabble/FileContentIndex/b7034b0e-ca4b-41a2-a432-ad7a7c7df21f.vsidx
