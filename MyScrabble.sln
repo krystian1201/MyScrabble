@@ -5,9 +5,9 @@ VisualStudioVersion = 17.7.34031.279
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyScrabble.Core", "MyScrabble\MyScrabble.Core.csproj", "{7B8816D5-75A2-4518-B8B0-52CF46659FDA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyScrabbleTest", "UIHelperMethodsTest\MyScrabbleTest.csproj", "{A9A006F0-F4A3-4D19-A318-184FB1FBA351}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyScrabble.Core.UnitTests", "UIHelperMethodsTest\MyScrabble.Core.UnitTests.csproj", "{A9A006F0-F4A3-4D19-A318-184FB1FBA351}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyScrabble.API", "MyScrabble.API\MyScrabble.API.csproj", "{1F52C78A-6E26-4035-BB16-1EDA6BCB5EC5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyScrabble.API", "MyScrabble.API\MyScrabble.API.csproj", "{1F52C78A-6E26-4035-BB16-1EDA6BCB5EC5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
